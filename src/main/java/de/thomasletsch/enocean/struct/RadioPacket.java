@@ -8,6 +8,8 @@ public class RadioPacket extends BasicPacket {
     public static final byte RADIO_TYPE_VLD = (byte) 0xD2;
 
     private String senderId;
+    private int repeaterCount;
+    
     private byte subTelNum;
     private int destinationId;
     private byte dBm;
@@ -67,6 +69,7 @@ public class RadioPacket extends BasicPacket {
     public void setData(byte[] poData) {
         super.setData(poData);
     	senderId = String.format("%1$02X:%2$02X:%3$02X:%4$02X", poData[2], poData[3], poData[4], poData[5]);
+    	repeaterCount = (poData[6] & 0x0F);
     }
 
     public byte getSubTelNum() {
@@ -95,6 +98,10 @@ public class RadioPacket extends BasicPacket {
     
     public String getSenderId() {
     	return senderId;
+    }
+
+    public int getRepeaterCount() {
+        return repeaterCount;
     }
 
     public byte getSecurityLevel() {
