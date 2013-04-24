@@ -4,21 +4,32 @@ import java.nio.ByteBuffer;
 
 public class RadioPacket extends BasicPacket {
 
-    public static final byte RADIO_TYPE_RPS = (byte) 0xF6;
-    public static final byte RADIO_TYPE_1BS = (byte) 0xD5;
     public static final byte RADIO_TYPE_4BS = (byte) 0xA5;
     public static final byte RADIO_TYPE_VLD = (byte) 0xD2;
 
-    private byte[] data;
-
+    private String senderId;
     private byte subTelNum;
-
     private int destinationId;
-
     private byte dBm;
-
     private byte securityLevel;
+    
+    public static RadioPacket ResolvedPacket( UnknownPacket loPacket) {
+    	RadioPacket loNew = null;
+		try {
+			loNew = new RadioPacket( loPacket.toBytes() );
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return loNew;
+    }
 
+    public RadioPacket(byte[] buffer) throws Exception {
+    	readFrom( buffer );
+        setData( super.getData() );
+    }
+
+    
     /**
      * @param subTelNum
      *            Number of subTelegram. Send = 3, receive = 1..x
@@ -29,10 +40,9 @@ public class RadioPacket extends BasicPacket {
      * @param securityLevel
      *            Security Level. 0 = unencrypted, x = type of encryption
      */
-    public RadioPacket(byte[] data, byte subTelNum, int destinationId, byte dBm, byte securityLevel) {
+    public RadioPacket(byte[] poData, byte subTelNum, int destinationId, byte dBm, byte securityLevel) {
         this(subTelNum, destinationId, dBm, securityLevel);
-        this.data = data;
-        setDataLength((short) data.length);
+        setData( poData );
     }
 
     /**
@@ -54,8 +64,9 @@ public class RadioPacket extends BasicPacket {
         setOptionalDataLength((byte) 7);
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setData(byte[] poData) {
+        super.setData(poData);
+    	senderId = String.format("%1$02X:%2$02X:%3$02X:%4$02X", poData[2], poData[3], poData[4], poData[5]);
     }
 
     public byte getSubTelNum() {
@@ -81,6 +92,10 @@ public class RadioPacket extends BasicPacket {
     public void setdBm(byte dBm) {
         this.dBm = dBm;
     }
+    
+    public String getSenderId() {
+    	return senderId;
+    }
 
     public byte getSecurityLevel() {
         return securityLevel;
@@ -88,11 +103,6 @@ public class RadioPacket extends BasicPacket {
 
     public void setSecurityLevel(byte securityLevel) {
         this.securityLevel = securityLevel;
-    }
-
-    @Override
-    protected byte[] getData() {
-        return data;
     }
 
     @Override
@@ -106,7 +116,7 @@ public class RadioPacket extends BasicPacket {
     }
 
     protected void readData(ByteBuffer dataBytes) {
-        data = dataBytes.array();
+        setData( dataBytes.array() );
     }
 
     protected void readOptionalData(ByteBuffer optionalDataBytes) {

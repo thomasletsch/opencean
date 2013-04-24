@@ -44,11 +44,11 @@ public class ESP3Host {
         	case GET_SYNC_STATE:
         		if ( loReadbyte == BasicPacket.SYNC_BYTE) {
         			loState = ENOCEAN_MSG_STATE.GET_HEADER_STATE; 
-	                logger.info("sync byte received.. ");
+	                //logger.info("sync byte received.. ");
         		}
         		else
         		{
-	                logger.info("invalid byte received.. ");
+	                logger.warning("invalid byte received.. ");
 	                loReceiveBuffer.clear();
         		}
         		break;
@@ -56,11 +56,11 @@ public class ESP3Host {
         	case GET_HEADER_STATE:
         		if ( loReceiveBuffer.getArray().length == (BasicPacket.POS_HEADER_START + BasicPacket.HEADER_LENGTH)) {
         			loState = ENOCEAN_MSG_STATE.CHECK_CRC8H_STATE; 
-	                logger.info("header received.. ");
+	                //logger.info("header received.. ");
         		}
         		else if( loReceiveBuffer.getArray().length > (BasicPacket.POS_HEADER_START + BasicPacket.HEADER_LENGTH)) 
         		{
-	                logger.info("invalid header, too long. reset and start over. ");
+	                logger.warning("invalid header, too long. reset and start over. ");
         			loState = ENOCEAN_MSG_STATE.GET_SYNC_STATE; 
 	                loReceiveBuffer.clear();
         		}
@@ -74,11 +74,11 @@ public class ESP3Host {
 
 	                if ( loUnknownPacket.isHeaderCrc8Correct() ) {
 	        			loState = ENOCEAN_MSG_STATE.GET_DATA_STATE;
-		                logger.info("header crc8 ok.. ");
+		                //logger.info("header crc8 ok.. ");
 	                }
 	                else
 	                {
-		                logger.info("invalid CRC8H, reset and start over. ");
+		                logger.warning("invalid CRC8H, reset and start over. ");
 	        			loState = ENOCEAN_MSG_STATE.GET_SYNC_STATE; 
 		                loReceiveBuffer.clear();
 	                }
@@ -95,7 +95,7 @@ public class ESP3Host {
         		if (loReceiveBuffer.getArray().length >= (BasicPacket.POS_DATA_START + 
         				loUnknownPacket.getDataLength() + loUnknownPacket.getOptionalDataLength())) {
         			loState = ENOCEAN_MSG_STATE.CHECK_CRC8D_STATE; 
-	                logger.info("data ok.. ");
+	                //logger.info("data ok.. ");
         		}
         		break;
         		
@@ -104,11 +104,13 @@ public class ESP3Host {
         		try {
 	                logger.info(loUnknownPacket.BuffertoString(loReceiveBuffer.getArray() ));
         			
-        			
 					loUnknownPacket.readMessage(loReceiveBuffer);
 
 	                if ( loUnknownPacket.isDataCrc8Correct() ) {
-		                logger.info("wow, message correct..... ");
+		                //logger.info("wow, message correct..... ");
+		                
+		                BasicPacket loResolved = loUnknownPacket.GetResolvedPacket();
+		                logger.info(loResolved.toString());
 		                
 	        			loState = ENOCEAN_MSG_STATE.GET_SYNC_STATE; 
 		                loReceiveBuffer.clear();

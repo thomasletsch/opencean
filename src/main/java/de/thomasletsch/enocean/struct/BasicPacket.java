@@ -36,20 +36,15 @@ public abstract class BasicPacket {
      * Event message
      */
     public static final byte PACKET_TYPE_EVENT = 0x04;
-
     public static final byte PACKET_TYPE_COMMON_COMMAND = 0x05;
-
     public static final byte PACKET_TYPE_SMART_ACK_COMMAND = 0x06;
 
     /**
      * Remote management command
      */
     public static final byte PACKET_TYPE_REMOTE_MAN_COMMAND = 0x07;
-
     public static final int POS_HEADER_START = 1;
-
     public static final int POS_DATA_START = 6;
-
     public static final byte SYNC_BYTE = 0x55;
 
     private byte packetType = 0x00;
@@ -59,6 +54,7 @@ public abstract class BasicPacket {
     private byte crc8d;
     private byte[] data;
     private byte[] optionaldata;
+
 
     public byte[] toBytes() {
         ByteArrayWrapper message = new ByteArrayWrapper();
@@ -127,6 +123,18 @@ public abstract class BasicPacket {
 
     protected byte[] getData() {
     	return data;
+    }
+    protected void setData(byte[] poData) {
+    	data = poData;
+    	setDataLength( (short) poData.length );
+    }
+
+    // This field corresponds also to R-ORG
+    protected byte getChoice() {
+    	if ( data == null || data.length == 0) {
+    		return 0;
+    	}
+    	return data[0];
     }
 
     protected byte[] getOptionalData() {
