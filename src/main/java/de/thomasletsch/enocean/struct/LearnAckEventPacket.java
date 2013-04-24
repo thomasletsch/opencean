@@ -58,11 +58,12 @@ public class LearnAckEventPacket extends EventPacket {
         return wrapper.getArray();
     }
 
-    @Override
-    protected void readData(ByteBuffer dataBytes) {
-        super.readData(dataBytes);
-        responseTime = dataBytes.getShort();
-        confirmCode = dataBytes.get();
+    public void readMessage(ByteArrayWrapper dataBytes) throws Exception {
+        super.readMessage(dataBytes);
+        ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
+
+        responseTime = bb.getShort();
+        confirmCode = bb.get();
     }
 
     @Override

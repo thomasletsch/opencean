@@ -5,12 +5,17 @@ public class ByteArrayWrapper {
     private byte[] array;
 
     public ByteArrayWrapper() {
-        array = new byte[0];
+    	clear();
     }
 
     public ByteArrayWrapper(byte[] array) {
         this.array = array;
     }
+    
+    public void clear() {
+        array = new byte[0];
+    }
+    
 
     public void setInt(int i, int pos) {
         array[pos] = (byte) ((i >> 24) & 0xFF);

@@ -1,7 +1,5 @@
 package de.thomasletsch.enocean.struct;
 
-import java.nio.ByteBuffer;
-
 public class EventPacket extends BasicPacket {
 
     public static final byte EVENT_CODE_SA_RECLAIM_NOT_SUCCESSFUL = 0x01;
@@ -50,13 +48,5 @@ public class EventPacket extends BasicPacket {
         return new byte[] {};
     }
 
-    @Override
-    protected void readData(ByteBuffer dataBytes) {
-        eventCode = dataBytes.get();
-    }
-
-    @Override
-    protected void readOptionalData(ByteBuffer optionalDataBytes) {
-    }
 
 }

@@ -4,9 +4,10 @@ import java.nio.ByteBuffer;
 
 public class RadioPacket extends BasicPacket {
 
-    public static final byte RADIO_TYPE_VLD = (byte) 0xD2;
-
+    public static final byte RADIO_TYPE_RPS = (byte) 0xF6;
+    public static final byte RADIO_TYPE_1BS = (byte) 0xD5;
     public static final byte RADIO_TYPE_4BS = (byte) 0xA5;
+    public static final byte RADIO_TYPE_VLD = (byte) 0xD2;
 
     private byte[] data;
 
@@ -104,12 +105,10 @@ public class RadioPacket extends BasicPacket {
         return wrapper.getArray();
     }
 
-    @Override
     protected void readData(ByteBuffer dataBytes) {
         data = dataBytes.array();
     }
 
-    @Override
     protected void readOptionalData(ByteBuffer optionalDataBytes) {
         subTelNum = optionalDataBytes.get();
         destinationId = optionalDataBytes.getInt();

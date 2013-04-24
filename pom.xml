@@ -17,6 +17,8 @@
 			<groupId>com.neuronrobotics</groupId>
 			<artifactId>nrjavaserial</artifactId>
 			<version>3.8.8</version>
+			<systemPath>/Users/evert/src/java-enocean-library/nrjavaserial-3.8.8.jar</systemPath>
+			<scope>system</scope>
 		</dependency>
 
 		<dependency>

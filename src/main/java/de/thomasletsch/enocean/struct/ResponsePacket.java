@@ -37,12 +37,10 @@ public class ResponsePacket extends BasicPacket {
         return new byte[] {};
     }
 
-    @Override
     protected void readData(ByteBuffer dataBytes) {
         returnCode = dataBytes.get();
     }
 
-    @Override
     protected void readOptionalData(ByteBuffer optionalDataBytes) {
     }
 

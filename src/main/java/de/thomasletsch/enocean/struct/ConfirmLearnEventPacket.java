@@ -65,17 +65,18 @@ public class ConfirmLearnEventPacket extends EventPacket {
     public ConfirmLearnEventPacket() {
     }
 
-    @Override
-    protected void readData(ByteBuffer dataBytes) {
-        super.readData(dataBytes);
-        postMasterPrio = dataBytes.get();
-        manufactorerIdHigh = dataBytes.get();
-        manufactorerIdLow = dataBytes.get();
-        eep = (dataBytes.get() << 16) | (dataBytes.get() << 8) | (dataBytes.get() & 0xFF);
-        rssi = dataBytes.get();
-        postMasterId = dataBytes.getInt();
-        smartAckClientId = dataBytes.getInt();
-        hopCount = dataBytes.get();
+    public void readMessage(ByteArrayWrapper dataBytes) throws Exception {
+        super.readMessage(dataBytes);
+        
+        ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
+        postMasterPrio = bb.get();
+        manufactorerIdHigh = bb.get();
+        manufactorerIdLow = bb.get();
+        eep = (bb.get() << 16) | (bb.get() << 8) | (bb.get() & 0xFF);
+        rssi = bb.get();
+        postMasterId = bb.getInt();
+        smartAckClientId = bb.getInt();
+        hopCount = bb.get();
     }
 
     @Override

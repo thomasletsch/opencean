@@ -1,6 +1,7 @@
 package de.thomasletsch.enocean.struct;
 
 import java.nio.ByteBuffer;
+import java.math.BigInteger;
 
 public abstract class BasicPacket {
 
@@ -11,10 +12,10 @@ public abstract class BasicPacket {
      * 
      * 8..127: Reserved for EnOcean
      * 
-     * 128..255: Manufactorer specific commands and messages
+     * 128..255: Manufacturer specific commands and messages
      */
 
-    private static final int HEADER_LENGTH = 3;
+    public static final int HEADER_LENGTH = 4;
 
     /**
      * Radio telegram
@@ -49,17 +50,19 @@ public abstract class BasicPacket {
 
     public static final int POS_DATA_START = 6;
 
-    private byte syncByte = 0x55;
+    public static final byte SYNC_BYTE = 0x55;
 
     private byte packetType = 0x00;
-
     private short dataLength;
-
     private byte optionalDataLength;
+    private byte crc8h;
+    private byte crc8d;
+    private byte[] data;
+    private byte[] optionaldata;
 
     public byte[] toBytes() {
         ByteArrayWrapper message = new ByteArrayWrapper();
-        message.addByte(syncByte);
+        message.addByte(SYNC_BYTE);
         message.addBytes(getDataLengthBytes());
         message.addByte(getOptionalDataLength());
         message.addByte(getPacketType());
@@ -70,33 +73,65 @@ public abstract class BasicPacket {
         return message.getArray();
     }
 
-    public void readFrom(byte[] bytes) {
-        ByteBuffer bb = ByteBuffer.wrap(bytes);
-        syncByte = bb.get();
-        byte[] headerBytes = new byte[HEADER_LENGTH];
-        bb.get(headerBytes);
-        readHeader(ByteBuffer.wrap(headerBytes));
-        byte[] dataBytes = new byte[dataLength];
-        bb.get(dataBytes);
-        readData(ByteBuffer.wrap(dataBytes));
-        byte[] optionalDataBytes = new byte[optionalDataLength];
-        bb.get(optionalDataBytes);
-        readOptionalData(ByteBuffer.wrap(optionalDataBytes));
+    public void readFrom(byte[] bytes) throws Exception {
+        ByteArrayWrapper loReceiveBuffer = new ByteArrayWrapper(bytes);
+        readMessage(loReceiveBuffer);
     }
 
-    protected void readHeader(ByteBuffer headerBytes) {
-        dataLength = headerBytes.getShort();
-        optionalDataLength = headerBytes.get();
-        packetType = headerBytes.get();
+    public void readHeader(ByteArrayWrapper headerBytes) throws Exception {
+        ByteBuffer bb = ByteBuffer.wrap(headerBytes.getArray());
+
+        if ( bb.capacity() >= POS_DATA_START) {
+            //syncByte first
+            bb.get();
+            dataLength = bb.getShort();
+            optionalDataLength = bb.get();
+            packetType = bb.get();
+            crc8h = bb.get();
+        }
+        else
+        {
+        	throw new Exception(String.format("Invalid header length, should be %d but is %d", POS_DATA_START, bb.capacity()));
+        }
     }
 
-    protected abstract void readData(ByteBuffer dataBytes);
+    public void readMessage(ByteArrayWrapper dataBytes) throws Exception {
+    	
+        ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
+        if ( bb.capacity() >= 6 ) {
 
-    protected abstract void readOptionalData(ByteBuffer optionalDataBytes);
+        	byte[] loHeader = new byte[POS_DATA_START];
+	        bb.get( loHeader );
+	        
+	    	readHeader( new ByteArrayWrapper(loHeader) );
+	
+	        if ( bb.capacity() >= getDataLength() ) {
+		        data = new byte[ getDataLength() ];
+		        bb.get(data);
+		        
+		        optionaldata = new byte[ getOptionalDataLength() ];
+		        bb.get(optionaldata);
+		        
+		        crc8d = bb.get();
+	        }
+	        else
+	        {
+	        	throw new Exception(String.format("Invalid data length. Expecting %d, found %d", getDataLength(), bb.capacity() ));
+	        }
+        }
+        else
+        {
+        	throw new Exception(String.format("Invalid header length, should be %d", POS_DATA_START));
+        }
+    }
 
-    protected abstract byte[] getData();
+    protected byte[] getData() {
+    	return data;
+    }
 
-    protected abstract byte[] getOptionalData();
+    protected byte[] getOptionalData() {
+    	return optionaldata;
+    }
 
     public byte getPacketType() {
         return packetType;
@@ -110,11 +145,11 @@ public abstract class BasicPacket {
         this.dataLength = dataLength;
     }
 
-    protected int getDataLength() {
+    public int getDataLength() {
         return dataLength;
     }
 
-    protected byte getOptionalDataLength() {
+    public byte getOptionalDataLength() {
         return optionalDataLength;
     }
 
@@ -136,6 +171,10 @@ public abstract class BasicPacket {
         crc8.update(getPacketType());
         return (byte) crc8.getValue();
     }
+    
+    public boolean isHeaderCrc8Correct() {
+    	return (getHeaderCrc8() == crc8h);
+    }
 
     private byte getDataCrc8() {
         CRC8 crc8 = new CRC8();
@@ -144,4 +183,13 @@ public abstract class BasicPacket {
         return (byte) crc8.getValue();
     }
 
+    public boolean isDataCrc8Correct() {
+    	return (getDataCrc8() == crc8d);
+    }
+
+    public String BuffertoString(byte[] bytes) {
+        BigInteger bi = new BigInteger(1, bytes);
+        return String.format("%0" + (bytes.length << 1) + "X", bi);
+    }
+    
 }

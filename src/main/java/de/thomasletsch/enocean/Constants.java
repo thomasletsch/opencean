@@ -10,6 +10,6 @@ public class Constants {
     /**
      * Timeout between request and response in ms
      */
-    public static final int TIMEOUT_RESPONSE = 500;
+    public static final int TIMEOUT_RESPONSE = 5000;
 
 }
