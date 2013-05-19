@@ -1,7 +1,8 @@
-package de.thomasletsch.enocean.struct;
+package org.enocean.java.struct;
 
 import static org.junit.Assert.assertEquals;
 
+import org.enocean.java.struct.CRC8;
 import org.junit.Test;
 
 public class CRC8Test {

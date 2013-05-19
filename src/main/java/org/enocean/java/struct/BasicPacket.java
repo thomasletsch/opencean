@@ -1,4 +1,4 @@
-package de.thomasletsch.enocean.struct;
+package org.enocean.java.struct;
 
 import java.nio.ByteBuffer;
 import java.math.BigInteger;

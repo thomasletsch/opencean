@@ -1,4 +1,4 @@
-package de.thomasletsch.enocean;
+package org.enocean.java;
 
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
@@ -12,10 +12,10 @@ public class Application {
     private static Logger logger = Logger.getLogger("enocean");
 
     public static void main(String[] args) throws Exception {
-    	
-    	logger.info( "starting..");
-    	
-        String port = "/dev/tty.usbserial-FTVQTKRM";
+
+        logger.info("starting..");
+
+        String port = "/dev/ttyUSB0";
         final SerialPort serialPort;
         CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(port);
         CommPort commPort = portIdentifier.open("java-enocean-library", Constants.TIMEOUT_RESPONSE);
@@ -23,6 +23,7 @@ public class Application {
         serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
+
             @Override
             public void run() {
                 serialPort.close();
@@ -33,10 +34,10 @@ public class Application {
         // DataOutputStream outs = new
         // DataOutputStream(serial.getOutputStream());
         // outs.write(b);
-        
+
         ESP3Host loMessageHost = new ESP3Host();
-        
+
         loMessageHost.receiveRadio(ins);
-        
+
     }
 }

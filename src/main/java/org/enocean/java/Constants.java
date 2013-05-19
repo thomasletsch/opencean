@@ -1,4 +1,4 @@
-package de.thomasletsch.enocean;
+package org.enocean.java;
 
 public class Constants {
 

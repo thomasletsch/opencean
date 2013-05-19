@@ -1,6 +1,6 @@
-package de.thomasletsch.enocean;
+package org.enocean.java;
 
-import de.thomasletsch.enocean.struct.BasicPacket;
+import org.enocean.java.struct.BasicPacket;
 
 public interface Receiver {
 

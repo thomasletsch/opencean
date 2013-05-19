@@ -1,13 +1,14 @@
-package de.thomasletsch.enocean;
+package org.enocean.java;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.thomasletsch.enocean.struct.BasicPacket;
-import de.thomasletsch.enocean.struct.ByteArrayWrapper;
-import de.thomasletsch.enocean.struct.UnknownPacket;
+import org.enocean.java.struct.BasicPacket;
+import org.enocean.java.struct.ByteArrayWrapper;
+import org.enocean.java.struct.UnknownPacket;
+
 
 public class ESP3Host {
     private static Logger logger = Logger.getLogger("ESP3Host");

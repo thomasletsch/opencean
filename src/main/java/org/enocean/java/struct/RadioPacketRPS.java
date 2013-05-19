@@ -1,4 +1,4 @@
-package de.thomasletsch.enocean.struct;
+package org.enocean.java.struct;
 
 public class RadioPacketRPS extends RadioPacket {
 
