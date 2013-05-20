@@ -1,4 +1,4 @@
-package org.enocean.java.struct;
+package org.enocean.java.packets;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

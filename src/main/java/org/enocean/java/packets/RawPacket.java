@@ -1,8 +1,6 @@
-package org.enocean.java;
+package org.enocean.java.packets;
 
-import org.enocean.java.struct.ByteArrayWrapper;
-import org.enocean.java.struct.Header;
-import org.enocean.java.struct.Payload;
+import org.enocean.java.utils.CircularByteBuffer;
 
 public class RawPacket {
 

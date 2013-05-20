@@ -1,4 +1,4 @@
-package org.enocean.java.struct;
+package org.enocean.java.packets;
 
 public class RadioPacketRPS extends RadioPacket {
 
@@ -164,17 +164,17 @@ public class RadioPacketRPS extends RadioPacket {
     }
 
     @Override
-    public void setData(byte[] poData) {
-        super.setData(poData);
+    public void setData(byte[] data) {
+        super.setData(data);
 
-        byte dataByte = poData[1];
+        byte dataByte = data[1];
         secondAction = SecondActionState.values()[(dataByte & 0x01)];
         rocker2 = RockerActionState.values()[(dataByte & 0x0E) >> 1];
         energyBow = EnergyBowState.values()[(dataByte & 0x10) >> 4];
         rocker1 = RockerActionState.values()[(dataByte & 0xE0) >> 5];
 
 
-        byte statusByte = poData[6];
+        byte statusByte = data[6];
         nu = NUState.values()[(statusByte & 0x10) >> 4];
         t21 = T21State.values()[(statusByte & 0x20) >> 5];
     }

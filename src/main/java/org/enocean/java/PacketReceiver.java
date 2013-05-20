@@ -1,6 +1,8 @@
 package org.enocean.java;
 
-import org.enocean.java.struct.BasicPacket;
+import org.enocean.java.packets.BasicPacket;
+import org.enocean.java.packets.RawPacket;
+import org.enocean.java.utils.CircularByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package org.enocean.java.struct;
+package org.enocean.java.utils;
 
 import java.util.zip.Checksum;
 

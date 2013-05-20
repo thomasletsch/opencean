@@ -1,4 +1,4 @@
-package org.enocean.java;
+package org.enocean.java.utils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -1,7 +1,9 @@
-package org.enocean.java.struct;
+package org.enocean.java.packets;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+
+import org.enocean.java.utils.CRC8;
 
 public abstract class BasicPacket {
 
@@ -124,9 +126,9 @@ public abstract class BasicPacket {
     protected byte[] getData() {
         return data;
     }
-    protected void setData(byte[] poData) {
-        data = poData;
-        setDataLength( (short) poData.length );
+    protected void setData(byte[] data) {
+        this.data = data;
+        setDataLength( (short) data.length );
     }
 
     // This field corresponds also to R-ORG

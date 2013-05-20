@@ -34,13 +34,7 @@ public class Application {
         });
 
         DataInputStream ins = new DataInputStream(serialPort.getInputStream());
-        // DataOutputStream outs = new
-        // DataOutputStream(serial.getOutputStream());
-        // outs.write(b);
-
-        ESP3Host loMessageHost = new ESP3Host();
-
-        loMessageHost.receiveRadio(ins);
-
+        ESP3Host esp3Host = new ESP3Host();
+        esp3Host.receiveRadio(ins);
     }
 }

@@ -1,7 +1,7 @@
 package org.enocean.java;
 
-import org.enocean.java.struct.BasicPacket;
-import org.enocean.java.struct.ResponsePacket;
+import org.enocean.java.packets.BasicPacket;
+import org.enocean.java.packets.ResponsePacket;
 
 public interface Sender {
 

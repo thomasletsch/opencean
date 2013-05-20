@@ -1,20 +1,29 @@
 package org.enocean.java;
 
 import java.io.DataInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.enocean.java.struct.BasicPacket;
+import org.enocean.java.packets.BasicPacket;
+import org.enocean.java.utils.CircularByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ESP3Host {
     private static Logger logger = LoggerFactory.getLogger(ESP3Host.class);
 
-    public void sendRadio() {
+    private List<EnoceanMessageListener> listeners = new ArrayList<EnoceanMessageListener>();
 
+    public void addListener(EnoceanMessageListener listener) {
+        listeners.add(listener);
     }
 
-    enum ENOCEAN_MSG_STATE {
-        GET_SYNC_STATE, GET_HEADER_STATE, CHECK_CRC8H_STATE, GET_DATA_STATE, CHECK_CRC8D_STATE
+    public void removeListener(EnoceanMessageListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void sendRadio() {
+
     }
 
     public void receiveRadio(final DataInputStream inputStream) {
@@ -27,7 +36,7 @@ public class ESP3Host {
                 while (true) {
                     try {
                         byte readByte = inputStream.readByte();
-                        logger.info("Received " + readByte);
+                        logger.debug("Received " + readByte);
                         buffer.put(readByte);
                     } catch (Exception e) {
                         logger.error("", e);
@@ -42,12 +51,19 @@ public class ESP3Host {
                 BasicPacket receivedPacket = receiver.receive();
                 if (receivedPacket != null) {
                     logger.info(receivedPacket.toString());
+                    notifyListeners(receivedPacket);
                 } else {
                     logger.info("Sync byte received, but header not valid.");
                 }
             } catch (Exception e) {
                 logger.error("Error", e);
             }
+        }
+    }
+
+    private void notifyListeners(BasicPacket receivedPacket) {
+        for(EnoceanMessageListener listener : this.listeners) {
+            listener.receivePacket(receivedPacket);
         }
     }
 

@@ -1,4 +1,4 @@
-package org.enocean.java.struct;
+package org.enocean.java.packets;
 
 public class RadioPacket1BS extends RadioPacket {
 
@@ -73,10 +73,10 @@ public class RadioPacket1BS extends RadioPacket {
 
 
     @Override
-    public void setData(byte[] poData) {
-        super.setData(poData);
-
-        byte dataByte = poData[1];
+    public void setData(byte[] data) {
+        super.setData(data);
+        setSenderId(String.format("%1$02X:%2$02X:%3$02X:%4$02X", data[2], data[3], data[4], data[5]));
+        byte dataByte = data[1];
         contact = ContactState.values()[(dataByte & 0x01)];
         learnButton = LearnButtonState.values()[(dataByte & 0x08) >> 3];
     }

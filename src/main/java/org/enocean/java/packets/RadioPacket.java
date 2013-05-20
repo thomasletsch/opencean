@@ -1,4 +1,4 @@
-package org.enocean.java.struct;
+package org.enocean.java.packets;
 
 import java.nio.ByteBuffer;
 
@@ -38,9 +38,9 @@ public class RadioPacket extends BasicPacket {
      * @param securityLevel
      *            Security Level. 0 = unencrypted, x = type of encryption
      */
-    public RadioPacket(byte[] poData, byte subTelNum, int destinationId, byte dBm, byte securityLevel) {
+    public RadioPacket(byte[] data, byte subTelNum, int destinationId, byte dBm, byte securityLevel) {
         this(subTelNum, destinationId, dBm, securityLevel);
-        setData(poData);
+        setData(data);
     }
 
     /**
@@ -65,10 +65,11 @@ public class RadioPacket extends BasicPacket {
     }
 
     @Override
-    public void setData(byte[] poData) {
-        super.setData(poData);
-        senderId = String.format("%1$02X:%2$02X:%3$02X:%4$02X", poData[2], poData[3], poData[4], poData[5]);
-        repeaterCount = (poData[6] & 0x0F);
+    public void setData(byte[] data) {
+        super.setData(data);
+        int length = data.length;
+        setSenderId(String.format("%1$02X:%2$02X:%3$02X:%4$02X", data[length - 5], data[length - 4], data[length - 3], data[length - 2]));
+        repeaterCount = (data[6] & 0x0F);
     }
 
     public byte getSubTelNum() {
@@ -97,6 +98,10 @@ public class RadioPacket extends BasicPacket {
 
     public String getSenderId() {
         return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
     public int getRepeaterCount() {
@@ -130,5 +135,10 @@ public class RadioPacket extends BasicPacket {
         destinationId = optionalDataBytes.getInt();
         dBm = optionalDataBytes.get();
         securityLevel = optionalDataBytes.get();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[ sender:" + getSenderId() + "]";
     }
 }
