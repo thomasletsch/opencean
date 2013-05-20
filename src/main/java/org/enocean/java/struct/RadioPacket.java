@@ -9,51 +9,49 @@ public class RadioPacket extends BasicPacket {
 
     private String senderId;
     private int repeaterCount;
-    
+
     private byte subTelNum;
     private int destinationId;
     private byte dBm;
     private byte securityLevel;
-    
-    public static RadioPacket ResolvedPacket( UnknownPacket loPacket) {
-    	RadioPacket loNew = null;
-		try {
-			loNew = new RadioPacket( loPacket.toBytes() );
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return loNew;
+
+    public static RadioPacket ResolvedPacket(UnknownPacket loPacket) {
+        RadioPacket loNew = null;
+        loNew = new RadioPacket(loPacket.toBytes());
+        return loNew;
     }
 
-    public RadioPacket(byte[] buffer) throws Exception {
-    	readFrom( buffer );
-        setData( super.getData() );
+    public RadioPacket(byte[] buffer) {
+        readFrom(buffer);
+        setData(super.getData());
     }
 
-    
     /**
      * @param subTelNum
      *            Number of subTelegram. Send = 3, receive = 1..x
      * @param destinationId
-     *            Destination Id (4 byte). Broadcast Radio = FF FF FF FF, ADT radio: Destination ID (address)
+     *            Destination Id (4 byte). Broadcast Radio = FF FF FF FF, ADT
+     *            radio: Destination ID (address)
      * @param dBm
-     *            Send case: FF, Receive case: best RSSI value of all received subtelegrams (value decimal without minus)
+     *            Send case: FF, Receive case: best RSSI value of all received
+     *            subtelegrams (value decimal without minus)
      * @param securityLevel
      *            Security Level. 0 = unencrypted, x = type of encryption
      */
     public RadioPacket(byte[] poData, byte subTelNum, int destinationId, byte dBm, byte securityLevel) {
         this(subTelNum, destinationId, dBm, securityLevel);
-        setData( poData );
+        setData(poData);
     }
 
     /**
      * @param subTelNum
      *            Number of subTelegram. Send = 3, receive = 1..x
      * @param destinationId
-     *            Destination Id (4 byte). Broadcast Radio = FF FF FF FF, ADT radio: Destination ID (address)
+     *            Destination Id (4 byte). Broadcast Radio = FF FF FF FF, ADT
+     *            radio: Destination ID (address)
      * @param dBm
-     *            Send case: FF, Receive case: best RSSI value of all received subtelegrams (value decimal without minus)
+     *            Send case: FF, Receive case: best RSSI value of all received
+     *            subtelegrams (value decimal without minus)
      * @param securityLevel
      *            Security Level. 0 = unencrypted, x = type of encryption
      */
@@ -66,10 +64,11 @@ public class RadioPacket extends BasicPacket {
         setOptionalDataLength((byte) 7);
     }
 
+    @Override
     public void setData(byte[] poData) {
         super.setData(poData);
-    	senderId = String.format("%1$02X:%2$02X:%3$02X:%4$02X", poData[2], poData[3], poData[4], poData[5]);
-    	repeaterCount = (poData[6] & 0x0F);
+        senderId = String.format("%1$02X:%2$02X:%3$02X:%4$02X", poData[2], poData[3], poData[4], poData[5]);
+        repeaterCount = (poData[6] & 0x0F);
     }
 
     public byte getSubTelNum() {
@@ -95,9 +94,9 @@ public class RadioPacket extends BasicPacket {
     public void setdBm(byte dBm) {
         this.dBm = dBm;
     }
-    
+
     public String getSenderId() {
-    	return senderId;
+        return senderId;
     }
 
     public int getRepeaterCount() {
@@ -123,7 +122,7 @@ public class RadioPacket extends BasicPacket {
     }
 
     protected void readData(ByteBuffer dataBytes) {
-        setData( dataBytes.array() );
+        setData(dataBytes.array());
     }
 
     protected void readOptionalData(ByteBuffer optionalDataBytes) {

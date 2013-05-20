@@ -6,158 +6,164 @@ public class RadioPacketRPS extends RadioPacket {
 
 
     public enum RockerActionState {
-    	Button_A_On(0),
-    	Button_A_Off(1),
-    	Button_B_On(2),
-    	Button_B_Off(3);
-    	
-		private final int enumvalue;
+        Button_A_On(0),
+        Button_A_Off(1),
+        Button_B_On(2),
+        Button_B_Off(3);
 
-		RockerActionState(int value) {
-			this.enumvalue = value;
-		}
+        private final int enumvalue;
 
-		RockerActionState(byte value) {
-			this.enumvalue = value;
-		}
+        RockerActionState(int value) {
+            this.enumvalue = value;
+        }
 
-		public byte toByte() {
-			return (byte) enumvalue;
-		}
-		
-		public String toString() {
-			switch ( enumvalue){
-			case 0: return "Button A On";
-			case 1: return "Button A Off";
-			case 2: return "Button B On";
-			case 3: return "Button B Off";
-			default: return "Unknown";
-			}
-		}
+        RockerActionState(byte value) {
+            this.enumvalue = value;
+        }
+
+        public byte toByte() {
+            return (byte) enumvalue;
+        }
+
+        @Override
+        public String toString() {
+            switch ( enumvalue){
+            case 0: return "Button A On";
+            case 1: return "Button A Off";
+            case 2: return "Button B On";
+            case 3: return "Button B Off";
+            default: return "Unknown";
+            }
+        }
     }
-    
 
-    
-    
+
+
+
     public enum EnergyBowState {
-    	RELEASED(0),
-    	PRESSED(1);
-    	
-		private final int enumvalue;
+        RELEASED(0),
+        PRESSED(1);
 
-		EnergyBowState(int value) {
-			this.enumvalue = value;
-		}
+        private final int enumvalue;
 
-		EnergyBowState(byte value) {
-			this.enumvalue = value;
-		}
+        EnergyBowState(int value) {
+            this.enumvalue = value;
+        }
 
-		public byte toByte() {
-			return (byte) enumvalue;
-		}
-		
-		public String toString() {
-			return ( enumvalue == 0 ) ? "Released" : "Pressed";
-		}
+        EnergyBowState(byte value) {
+            this.enumvalue = value;
+        }
+
+        public byte toByte() {
+            return (byte) enumvalue;
+        }
+
+        @Override
+        public String toString() {
+            return ( enumvalue == 0 ) ? "Released" : "Pressed";
+        }
     }
-    
 
-    
+
+
     public enum SecondActionState {
-    	NOSECONDACTION(0),
-    	SECONDACTIONVALID(1);
-    	
-		private final int enumvalue;
+        NOSECONDACTION(0),
+        SECONDACTIONVALID(1);
 
-		SecondActionState(int value) {
-			this.enumvalue = value;
-		}
+        private final int enumvalue;
 
-		SecondActionState(byte value) {
-			this.enumvalue = value;
-		}
+        SecondActionState(int value) {
+            this.enumvalue = value;
+        }
 
-		public byte toByte() {
-			return (byte) enumvalue;
-		}
-		
-		public String toString() {
-			return ( enumvalue == 0 ) ? "No Second Action" : "Second Action Valid";
-		}
+        SecondActionState(byte value) {
+            this.enumvalue = value;
+        }
+
+        public byte toByte() {
+            return (byte) enumvalue;
+        }
+
+        @Override
+        public String toString() {
+            return ( enumvalue == 0 ) ? "No Second Action" : "Second Action Valid";
+        }
     }
-    
-    
+
+
     public enum NUState {
-    	UNASSIGNEDMESSAGE(0),
-    	NORMALMESSAGE(1);
-    	
-		private final int enumvalue;
+        UNASSIGNEDMESSAGE(0),
+        NORMALMESSAGE(1);
 
-    	NUState(int value) {
-			this.enumvalue = value;
-		}
+        private final int enumvalue;
 
-    	NUState(byte value) {
-			this.enumvalue = value;
-		}
+        NUState(int value) {
+            this.enumvalue = value;
+        }
 
-		public byte toByte() {
-			return (byte) enumvalue;
-		}
-		
-		public String toString() {
-			return ( enumvalue == 0 ) ? "Unassigned" : "Normal";
-		}
+        NUState(byte value) {
+            this.enumvalue = value;
+        }
+
+        public byte toByte() {
+            return (byte) enumvalue;
+        }
+
+        @Override
+        public String toString() {
+            return ( enumvalue == 0 ) ? "Unassigned" : "Normal";
+        }
     }
-    
+
 
     public enum T21State {
-    	PTMType1(0),
-    	PTMType2(1);
-    	
-		private final int enumvalue;
+        PTMType1(0),
+        PTMType2(1);
 
-		T21State(int value) {
-			this.enumvalue = value;
-		}
+        private final int enumvalue;
 
-		T21State(byte value) {
-			this.enumvalue = value;
-		}
+        T21State(int value) {
+            this.enumvalue = value;
+        }
 
-		public byte toByte() {
-			return (byte) enumvalue;
-		}
-		
-		public String toString() {
-			return ( enumvalue == 0 ) ? "PTM Type 1" : "PTM Type 2";
-		}
+        T21State(byte value) {
+            this.enumvalue = value;
+        }
+
+        public byte toByte() {
+            return (byte) enumvalue;
+        }
+
+        @Override
+        public String toString() {
+            return ( enumvalue == 0 ) ? "PTM Type 1" : "PTM Type 2";
+        }
     }
 
     private NUState nu;
     private T21State t21;
-    
+
     private RockerActionState rocker1;
     private RockerActionState rocker2;
     private EnergyBowState energyBow;
     private SecondActionState secondAction;
-    
+
     public static RadioPacketRPS ResolvedPacket( UnknownPacket loPacket) {
-    	RadioPacketRPS loNew = null;
-		try {
-			loNew = new RadioPacketRPS( loPacket.toBytes() );
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return loNew;
+        RadioPacketRPS loNew = null;
+        try {
+            loNew = new RadioPacketRPS( loPacket.toBytes() );
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return loNew;
     }
 
-    public RadioPacketRPS(byte[] buffer) throws Exception {
-    	super( buffer );
+    public RadioPacketRPS(byte[] buffer) {
+        super( buffer );
     }
-    
+
+    @Override
     public void setData(byte[] poData) {
         super.setData(poData);
 
@@ -166,33 +172,34 @@ public class RadioPacketRPS extends RadioPacket {
         rocker2 = RockerActionState.values()[(dataByte & 0x0E) >> 1];
         energyBow = EnergyBowState.values()[(dataByte & 0x10) >> 4];
         rocker1 = RockerActionState.values()[(dataByte & 0xE0) >> 5];
-        
-        
+
+
         byte statusByte = poData[6];
         nu = NUState.values()[(statusByte & 0x10) >> 4];
         t21 = T21State.values()[(statusByte & 0x20) >> 5];
     }
 
-    
-    public String toString() {
-    	// The coding is a little strange. but only on button press do you get info on what button is pressed. on release not.
-    	
-    	//return "RPS " + getSenderId() +
-    	//		", Energy Bow " + energyBow.toString() +
-    	//		", Rocker " + rocker1.toString() +
-    	//		( secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " + rocker2.toString() : "");
 
-    	if ( energyBow == EnergyBowState.RELEASED) {
-        	return "RPS " + getSenderId() +
-        			", Energy Bow " + energyBow.toString();
-    		
-    	} else {
-        	return "RPS " + getSenderId() +
-        			", Rocker " + rocker1.toString() +
-        			( secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " + rocker2.toString() : "");
-    		
-    	}
-    	
+    @Override
+    public String toString() {
+        // The coding is a little strange. but only on button press do you get info on what button is pressed. on release not.
+
+        //return "RPS " + getSenderId() +
+        //		", Energy Bow " + energyBow.toString() +
+        //		", Rocker " + rocker1.toString() +
+        //		( secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " + rocker2.toString() : "");
+
+        if ( energyBow == EnergyBowState.RELEASED) {
+            return "RPS " + getSenderId() +
+                    ", Energy Bow " + energyBow.toString();
+
+        } else {
+            return "RPS " + getSenderId() +
+                    ", Rocker " + rocker1.toString() +
+                    ( secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " + rocker2.toString() : "");
+
+        }
+
     }
 
 }

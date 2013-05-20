@@ -5,17 +5,19 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 
 import java.io.DataInputStream;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Application {
 
-    private static Logger logger = Logger.getLogger("enocean");
+    private static Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) throws Exception {
 
         logger.info("starting..");
 
-        String port = "/dev/ttyUSB0";
+        String port = args[0];
         final SerialPort serialPort;
         CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(port);
         CommPort commPort = portIdentifier.open("java-enocean-library", Constants.TIMEOUT_RESPONSE);
@@ -26,6 +28,7 @@ public class Application {
 
             @Override
             public void run() {
+                logger.info("Closing serialPort");
                 serialPort.close();
             }
         });

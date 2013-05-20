@@ -58,7 +58,8 @@ public class LearnAckEventPacket extends EventPacket {
         return wrapper.getArray();
     }
 
-    public void readMessage(ByteArrayWrapper dataBytes) throws Exception {
+    @Override
+    public void readMessage(ByteArrayWrapper dataBytes) {
         super.readMessage(dataBytes);
         ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
 

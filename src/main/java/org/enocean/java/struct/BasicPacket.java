@@ -1,7 +1,7 @@
 package org.enocean.java.struct;
 
-import java.nio.ByteBuffer;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 public abstract class BasicPacket {
 
@@ -69,12 +69,12 @@ public abstract class BasicPacket {
         return message.getArray();
     }
 
-    public void readFrom(byte[] bytes) throws Exception {
+    public void readFrom(byte[] bytes) {
         ByteArrayWrapper loReceiveBuffer = new ByteArrayWrapper(bytes);
         readMessage(loReceiveBuffer);
     }
 
-    public void readHeader(ByteArrayWrapper headerBytes) throws Exception {
+    public void readHeader(ByteArrayWrapper headerBytes) {
         ByteBuffer bb = ByteBuffer.wrap(headerBytes.getArray());
 
         if ( bb.capacity() >= POS_DATA_START) {
@@ -87,58 +87,58 @@ public abstract class BasicPacket {
         }
         else
         {
-        	throw new Exception(String.format("Invalid header length, should be %d but is %d", POS_DATA_START, bb.capacity()));
+            throw new RuntimeException(String.format("Invalid header length, should be %d but is %d", POS_DATA_START, bb.capacity()));
         }
     }
 
-    public void readMessage(ByteArrayWrapper dataBytes) throws Exception {
-    	
+    public void readMessage(ByteArrayWrapper dataBytes) {
+
         ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
         if ( bb.capacity() >= 6 ) {
 
-        	byte[] loHeader = new byte[POS_DATA_START];
-	        bb.get( loHeader );
-	        
-	    	readHeader( new ByteArrayWrapper(loHeader) );
-	
-	        if ( bb.capacity() >= getDataLength() ) {
-		        data = new byte[ getDataLength() ];
-		        bb.get(data);
-		        
-		        optionaldata = new byte[ getOptionalDataLength() ];
-		        bb.get(optionaldata);
-		        
-		        crc8d = bb.get();
-	        }
-	        else
-	        {
-	        	throw new Exception(String.format("Invalid data length. Expecting %d, found %d", getDataLength(), bb.capacity() ));
-	        }
+            byte[] loHeader = new byte[POS_DATA_START];
+            bb.get( loHeader );
+
+            readHeader( new ByteArrayWrapper(loHeader) );
+
+            if ( bb.capacity() >= getDataLength() ) {
+                data = new byte[ getDataLength() ];
+                bb.get(data);
+
+                optionaldata = new byte[ getOptionalDataLength() ];
+                bb.get(optionaldata);
+
+                crc8d = bb.get();
+            }
+            else
+            {
+                throw new RuntimeException(String.format("Invalid data length. Expecting %d, found %d", getDataLength(), bb.capacity() ));
+            }
         }
         else
         {
-        	throw new Exception(String.format("Invalid header length, should be %d", POS_DATA_START));
+            throw new RuntimeException(String.format("Invalid header length, should be %d", POS_DATA_START));
         }
     }
 
     protected byte[] getData() {
-    	return data;
+        return data;
     }
     protected void setData(byte[] poData) {
-    	data = poData;
-    	setDataLength( (short) poData.length );
+        data = poData;
+        setDataLength( (short) poData.length );
     }
 
     // This field corresponds also to R-ORG
     protected byte getChoice() {
-    	if ( data == null || data.length == 0) {
-    		return 0;
-    	}
-    	return data[0];
+        if ( data == null || data.length == 0) {
+            return 0;
+        }
+        return data[0];
     }
 
     protected byte[] getOptionalData() {
-    	return optionaldata;
+        return optionaldata;
     }
 
     public byte getPacketType() {
@@ -179,9 +179,9 @@ public abstract class BasicPacket {
         crc8.update(getPacketType());
         return (byte) crc8.getValue();
     }
-    
+
     public boolean isHeaderCrc8Correct() {
-    	return (getHeaderCrc8() == crc8h);
+        return (getHeaderCrc8() == crc8h);
     }
 
     private byte getDataCrc8() {
@@ -192,12 +192,12 @@ public abstract class BasicPacket {
     }
 
     public boolean isDataCrc8Correct() {
-    	return (getDataCrc8() == crc8d);
+        return (getDataCrc8() == crc8d);
     }
 
     public String BuffertoString(byte[] bytes) {
         BigInteger bi = new BigInteger(1, bytes);
         return String.format("%0" + (bytes.length << 1) + "X", bi);
     }
-    
+
 }

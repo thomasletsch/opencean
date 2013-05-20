@@ -65,9 +65,10 @@ public class ConfirmLearnEventPacket extends EventPacket {
     public ConfirmLearnEventPacket() {
     }
 
-    public void readMessage(ByteArrayWrapper dataBytes) throws Exception {
+    @Override
+    public void readMessage(ByteArrayWrapper dataBytes) {
         super.readMessage(dataBytes);
-        
+
         ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
         postMasterPrio = bb.get();
         manufactorerIdHigh = bb.get();
