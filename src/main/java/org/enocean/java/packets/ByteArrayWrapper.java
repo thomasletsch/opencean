@@ -5,17 +5,16 @@ public class ByteArrayWrapper {
     private byte[] array;
 
     public ByteArrayWrapper() {
-    	clear();
+        clear();
     }
 
     public ByteArrayWrapper(byte[] array) {
         this.array = array;
     }
-    
+
     public void clear() {
         array = new byte[0];
     }
-    
 
     public void setInt(int i, int pos) {
         array[pos] = (byte) ((i >> 24) & 0xFF);
@@ -44,16 +43,18 @@ public class ByteArrayWrapper {
         array[pos] = b;
     }
 
-    public void addBytes(byte[] bytes) {
+    public ByteArrayWrapper addBytes(byte[] bytes) {
         int oldLength = array.length;
         expandArray(bytes.length);
         System.arraycopy(bytes, 0, array, oldLength, bytes.length);
+        return this;
     }
 
-    public void addByte(byte b) {
+    public ByteArrayWrapper addByte(byte b) {
         int oldLength = array.length;
         expandArray(1);
         array[oldLength] = b;
+        return this;
     }
 
     public byte[] getArray() {

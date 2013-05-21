@@ -7,8 +7,6 @@ public class RemoteCommand4BSTeachIn extends BasicPacket {
 
     public static final byte PACKET_TYPE = 0x07;
 
-    private static final int SOURCE_ID_SEND_CASE = 0x0000000;
-
     // data
     private byte rorg = RadioPacket4BS.RADIO_TYPE;
     private byte functionNumber = 0;
