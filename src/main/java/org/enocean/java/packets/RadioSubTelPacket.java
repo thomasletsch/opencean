@@ -13,7 +13,7 @@ public class RadioSubTelPacket extends RadioPacket {
     public RadioSubTelPacket(byte subTelNum, int destinationId, byte dBm, byte securityLevel, List<SubTel> subTels) {
         super(subTelNum, destinationId, dBm, securityLevel);
         this.subTels = subTels;
-        setTimeStamp((short) (System.currentTimeMillis() & 0xFFFF));
+        timeStamp = (short) (System.currentTimeMillis() & 0xFFFF);
     }
 
     public List<SubTel> getSubTels() {
@@ -25,20 +25,23 @@ public class RadioSubTelPacket extends RadioPacket {
     }
 
     @Override
-    protected byte[] getOptionalData() {
-        ByteArrayWrapper optional = new ByteArrayWrapper(super.getOptionalData());
+    protected void fillOptionalData() {
+        super.fillOptionalData();
+        ByteArrayWrapper optional = new ByteArrayWrapper(payload.getOptionalData());
         optional.addShort(timeStamp);
         for (SubTel subTel : subTels) {
             optional.addByte(subTel.getTick());
             optional.addByte(subTel.getdBm());
             optional.addByte(subTel.getStatus());
         }
-        return optional.getArray();
+        payload.setOptionalData(optional.getArray());
     }
 
     @Override
-    protected void readOptionalData(ByteBuffer optionalDataBytes) {
-        super.readOptionalData(optionalDataBytes);
+    protected void parseOptionalData() {
+        super.parseOptionalData();
+        ByteBuffer optionalDataBytes = ByteBuffer.wrap(payload.getOptionalData());
+        optionalDataBytes.position(7);
         timeStamp = optionalDataBytes.getShort();
         subTels = new ArrayList<SubTel>();
         while (optionalDataBytes.hasRemaining()) {
@@ -47,13 +50,5 @@ public class RadioSubTelPacket extends RadioPacket {
             subTel.setdBm(optionalDataBytes.get());
             subTel.setStatus(optionalDataBytes.get());
         }
-    }
-
-    public int getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(short timeStamp) {
-        this.timeStamp = timeStamp;
     }
 }

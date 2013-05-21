@@ -16,10 +16,15 @@ public class PacketReceiver {
         this.buffer = buffer;
     }
 
+    /**
+     * Waits for a sync byte first. Then checks the read header CRC8 and resets the buffer to the state after the last sync byte.
+     * 
+     * @return The received packet or null if header was incorrect (and that means no packet start was recognized)
+     */
     public BasicPacket receive() {
         seekTillSyncByte();
-        RawPacket rawPacket = new RawPacket();
         buffer.mark();
+        RawPacket rawPacket = new RawPacket();
         rawPacket.readHeader(buffer);
         if(!rawPacket.getHeader().isValid()) {
             buffer.reset();

@@ -9,33 +9,41 @@ public class Payload {
     private static Logger logger = LoggerFactory.getLogger(Payload.class);
 
     private byte[] data;
-    private byte[] optionaldata;
-    private byte crc8d;
+    private byte[] optionalData;
+    private byte crc8;
 
     public static Payload from(Header header, CircularByteBuffer buffer) {
         logger.info("Reading payload...");
         Payload payload = new Payload();
-        payload.data = new byte[header.getDataLength()];
-        buffer.get(payload.data);
-        payload.optionaldata = new byte[header.getOptionalDataLength()];
-        buffer.get(payload.optionaldata);
-        payload.crc8d = buffer.get();
+        payload.setData(new byte[header.getDataLength()]);
+        buffer.get(payload.getData());
+        payload.setOptionalData(new byte[header.getOptionalDataLength()]);
+        buffer.get(payload.getOptionalData());
+        payload.crc8 = buffer.get();
         logger.info(payload.toString());
         payload.checkCrc8();
         return payload;
     }
 
+    public Payload() {
+
+    }
+
+    public void initCRC8() {
+        crc8 = calculateCrc8();
+    }
+
     public void checkCrc8() {
-        if (calculateCrc8() != crc8d) {
-            throw new RuntimeException("Payload CRC 8 is not correct! Expected " + calculateCrc8() + ", but received " + crc8d);
+        if (calculateCrc8() != crc8) {
+            throw new RuntimeException("Payload CRC 8 is not correct! Expected " + calculateCrc8() + ", but received " + crc8);
         }
     }
 
     public byte[] toBytes() {
         ByteArrayWrapper bytes = new ByteArrayWrapper();
-        bytes.addBytes(data);
-        bytes.addBytes(optionaldata);
-        bytes.addByte(crc8d);
+        bytes.addBytes(getData());
+        bytes.addBytes(getOptionalData());
+        bytes.addByte(crc8);
         return bytes.getArray();
     }
 
@@ -43,19 +51,28 @@ public class Payload {
         return data;
     }
 
-    public byte[] getOptionaldata() {
-        return optionaldata;
+    public byte[] getOptionalData() {
+        return optionalData;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public void setOptionalData(byte[] optionalData) {
+        this.optionalData = optionalData;
     }
 
     @Override
     public String toString() {
-        return "Payload: " + "data=" + printByteArray(data) + ", optionaldata=" + printByteArray(optionaldata) + ", crc8d=" + crc8d;
+        return "Payload: " + "data=" + printByteArray(getData()) + ", optionaldata=" + printByteArray(getOptionalData()) + ", crc8d="
+                + crc8;
     }
 
     private byte calculateCrc8() {
         CRC8 crc8 = new CRC8();
-        crc8.update(data, 0, data.length);
-        crc8.update(optionaldata, 0, optionaldata.length);
+        crc8.update(getData(), 0, getData().length);
+        crc8.update(getOptionalData(), 0, getOptionalData().length);
         return (byte) crc8.getValue();
     }
 
@@ -70,4 +87,5 @@ public class Payload {
         s += "]";
         return s;
     }
+
 }

@@ -11,15 +11,15 @@ public class Header {
     private byte packetType;
     private short dataLength;
     private byte optionalDataLength;
-    private byte crc8h;
+    private byte crc8;
 
     public static Header from(CircularByteBuffer buffer) {
         logger.info("Reading header...");
         Header header = new Header();
-        header.dataLength = buffer.getShort();
-        header.optionalDataLength = buffer.get();
-        header.packetType = buffer.get();
-        header.crc8h = buffer.get();
+        header.setDataLength(buffer.getShort());
+        header.setOptionalDataLength(buffer.get());
+        header.setPacketType(buffer.get());
+        header.crc8 = buffer.get();
         logger.info(header.toString());
         return header;
     }
@@ -27,30 +27,34 @@ public class Header {
     public Header() {
     }
 
-    public Header(byte packetType, short dataLength, byte optionalDataLength, byte crc8h) {
-        this.packetType = packetType;
-        this.dataLength = dataLength;
-        this.optionalDataLength = optionalDataLength;
-        this.crc8h = crc8h;
+    public Header(byte packetType, short dataLength, byte optionalDataLength) {
+        this.setPacketType(packetType);
+        this.setDataLength(dataLength);
+        this.setOptionalDataLength(optionalDataLength);
+        this.crc8 = calculateCrc8();
     }
 
     public byte[] toBytes() {
         ByteArrayWrapper bytes = new ByteArrayWrapper();
         bytes.addByte(BasicPacket.SYNC_BYTE);
-        bytes.addShort(dataLength);
-        bytes.addByte(optionalDataLength);
-        bytes.addByte(packetType);
-        bytes.addByte(crc8h);
+        bytes.addShort(getDataLength());
+        bytes.addByte(getOptionalDataLength());
+        bytes.addByte(getPacketType());
+        bytes.addByte(crc8);
         return bytes.getArray();
     }
 
     public boolean isValid() {
-        return calculateCrc8() == crc8h;
+        return calculateCrc8() == crc8;
+    }
+
+    public void initCRC8() {
+        crc8 = calculateCrc8();
     }
 
     public void checkCrc8() {
-        if (calculateCrc8() != crc8h) {
-            throw new RuntimeException("Header CRC 8 is not correct! Expected " + calculateCrc8() + ", but received " + crc8h);
+        if (calculateCrc8() != crc8) {
+            throw new RuntimeException("Header CRC 8 is not correct! Expected " + calculateCrc8() + ", but received " + crc8);
         }
     }
 
@@ -66,9 +70,21 @@ public class Header {
         return optionalDataLength;
     }
 
+    public void setPacketType(byte packetType) {
+        this.packetType = packetType;
+    }
+
+    public void setDataLength(short dataLength) {
+        this.dataLength = dataLength;
+    }
+
+    public void setOptionalDataLength(byte optionalDataLength) {
+        this.optionalDataLength = optionalDataLength;
+    }
+
     private byte[] getDataLengthBytes() {
-        byte lowByte = (byte) (dataLength & 0xFF);
-        byte highByte = (byte) ((dataLength >> 8) & 0xFF);
+        byte lowByte = (byte) (getDataLength() & 0xFF);
+        byte highByte = (byte) ((getDataLength() >> 8) & 0xFF);
         return new byte[] { highByte, lowByte };
     }
 
@@ -76,15 +92,15 @@ public class Header {
         CRC8 crc8 = new CRC8();
         crc8.update(getDataLengthBytes()[0]);
         crc8.update(getDataLengthBytes()[1]);
-        crc8.update(optionalDataLength);
-        crc8.update(packetType);
+        crc8.update(getOptionalDataLength());
+        crc8.update(getPacketType());
         return (byte) crc8.getValue();
     }
 
     @Override
     public String toString() {
-        return "Header: " + "dataLength=" + dataLength + ", optionalDataLength=" + optionalDataLength + ", packetType=" + packetType
-                + ", crc8h=" + crc8h;
+        return "Header: " + "dataLength=" + getDataLength() + ", optionalDataLength=" + getOptionalDataLength() + ", packetType="
+                + getPacketType() + ", crc8h=" + crc8;
     }
 
 }

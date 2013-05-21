@@ -4,71 +4,64 @@ public class RadioPacketRPS extends RadioPacket {
 
     public static final byte RADIO_TYPE = (byte) 0xF6;
 
+    private NUState nu;
+    private T21State t21;
 
-    public enum RockerActionState {
-        Button_A_On(0),
-        Button_A_Off(1),
-        Button_B_On(2),
-        Button_B_Off(3);
+    private RockerActionState rocker1;
+    private RockerActionState rocker2;
+    private EnergyBowState energyBow;
+    private SecondActionState secondAction;
 
-        private final int enumvalue;
-
-        RockerActionState(int value) {
-            this.enumvalue = value;
-        }
-
-        RockerActionState(byte value) {
-            this.enumvalue = value;
-        }
-
-        public byte toByte() {
-            return (byte) enumvalue;
-        }
-
-        @Override
-        public String toString() {
-            switch ( enumvalue){
-            case 0: return "Button A On";
-            case 1: return "Button A Off";
-            case 2: return "Button B On";
-            case 3: return "Button B Off";
-            default: return "Unknown";
-            }
-        }
+    public RadioPacketRPS(RawPacket rawPacket) {
+        super(rawPacket);
     }
 
+    @Override
+    public void parseData() {
+        super.parseData();
+        byte dataByte = payload.getData()[1];
+        secondAction = SecondActionState.values()[(dataByte & 0x01)];
+        rocker2 = RockerActionState.values()[(dataByte & 0x0E) >> 1];
+        energyBow = EnergyBowState.values()[(dataByte & 0x10) >> 4];
+        rocker1 = RockerActionState.values()[(dataByte & 0xE0) >> 5];
 
-
-
-    public enum EnergyBowState {
-        RELEASED(0),
-        PRESSED(1);
-
-        private final int enumvalue;
-
-        EnergyBowState(int value) {
-            this.enumvalue = value;
-        }
-
-        EnergyBowState(byte value) {
-            this.enumvalue = value;
-        }
-
-        public byte toByte() {
-            return (byte) enumvalue;
-        }
-
-        @Override
-        public String toString() {
-            return ( enumvalue == 0 ) ? "Released" : "Pressed";
-        }
+        byte statusByte = payload.getData()[6];
+        nu = NUState.values()[(statusByte & 0x10) >> 4];
+        t21 = T21State.values()[(statusByte & 0x20) >> 5];
     }
 
+    @Override
+    public ParameterMap getAllParameterValues() {
+        ParameterMap values = super.getAllParameterValues();
+        values.put("rocker#1", rocker1.toAction());
+        values.put("rocker#2", rocker2.toAction());
+        return values;
+    }
 
+    @Override
+    public String toString() {
+        // The coding is a little strange. but only on button press do you get
+        // info on what button is pressed. on release not.
+
+        // return "RPS " + getSenderId() +
+        // ", Energy Bow " + energyBow.toString() +
+        // ", Rocker " + rocker1.toString() +
+        // ( secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " +
+        // rocker2.toString() : "");
+
+        if (energyBow == EnergyBowState.RELEASED) {
+            return "RPS " + getSenderId() + ", Energy Bow " + energyBow.toString();
+
+        } else {
+            return "RPS " + getSenderId() + ", Rocker " + rocker1.toString()
+                    + (secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " + rocker2.toString() : "");
+
+        }
+
+    }
 
     public enum SecondActionState {
-        NOSECONDACTION(0),
-        SECONDACTIONVALID(1);
+        NOSECONDACTION(0), SECONDACTIONVALID(1);
 
         private final int enumvalue;
 
@@ -86,14 +79,12 @@ public class RadioPacketRPS extends RadioPacket {
 
         @Override
         public String toString() {
-            return ( enumvalue == 0 ) ? "No Second Action" : "Second Action Valid";
+            return (enumvalue == 0) ? "No Second Action" : "Second Action Valid";
         }
     }
 
-
     public enum NUState {
-        UNASSIGNEDMESSAGE(0),
-        NORMALMESSAGE(1);
+        UNASSIGNEDMESSAGE(0), NORMALMESSAGE(1);
 
         private final int enumvalue;
 
@@ -111,14 +102,12 @@ public class RadioPacketRPS extends RadioPacket {
 
         @Override
         public String toString() {
-            return ( enumvalue == 0 ) ? "Unassigned" : "Normal";
+            return (enumvalue == 0) ? "Unassigned" : "Normal";
         }
     }
 
-
     public enum T21State {
-        PTMType1(0),
-        PTMType2(1);
+        PTMType1(0), PTMType2(1);
 
         private final int enumvalue;
 
@@ -136,70 +125,8 @@ public class RadioPacketRPS extends RadioPacket {
 
         @Override
         public String toString() {
-            return ( enumvalue == 0 ) ? "PTM Type 1" : "PTM Type 2";
+            return (enumvalue == 0) ? "PTM Type 1" : "PTM Type 2";
         }
-    }
-
-    private NUState nu;
-    private T21State t21;
-
-    private RockerActionState rocker1;
-    private RockerActionState rocker2;
-    private EnergyBowState energyBow;
-    private SecondActionState secondAction;
-
-    public static RadioPacketRPS ResolvedPacket( UnknownPacket loPacket) {
-        RadioPacketRPS loNew = null;
-        try {
-            loNew = new RadioPacketRPS( loPacket.toBytes() );
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return loNew;
-    }
-
-    public RadioPacketRPS(byte[] buffer) {
-        super( buffer );
-    }
-
-    @Override
-    public void setData(byte[] data) {
-        super.setData(data);
-
-        byte dataByte = data[1];
-        secondAction = SecondActionState.values()[(dataByte & 0x01)];
-        rocker2 = RockerActionState.values()[(dataByte & 0x0E) >> 1];
-        energyBow = EnergyBowState.values()[(dataByte & 0x10) >> 4];
-        rocker1 = RockerActionState.values()[(dataByte & 0xE0) >> 5];
-
-
-        byte statusByte = data[6];
-        nu = NUState.values()[(statusByte & 0x10) >> 4];
-        t21 = T21State.values()[(statusByte & 0x20) >> 5];
-    }
-
-
-    @Override
-    public String toString() {
-        // The coding is a little strange. but only on button press do you get info on what button is pressed. on release not.
-
-        //return "RPS " + getSenderId() +
-        //		", Energy Bow " + energyBow.toString() +
-        //		", Rocker " + rocker1.toString() +
-        //		( secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " + rocker2.toString() : "");
-
-        if ( energyBow == EnergyBowState.RELEASED) {
-            return "RPS " + getSenderId() +
-                    ", Energy Bow " + energyBow.toString();
-
-        } else {
-            return "RPS " + getSenderId() +
-                    ", Rocker " + rocker1.toString() +
-                    ( secondAction == SecondActionState.SECONDACTIONVALID ? ", Second " + rocker2.toString() : "");
-
-        }
-
     }
 
 }

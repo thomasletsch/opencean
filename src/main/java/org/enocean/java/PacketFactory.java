@@ -23,15 +23,15 @@ public class PacketFactory {
     private static RadioPacket createRadioPacket(RawPacket rawPacket) {
         switch (rawPacket.getPayload().getData()[0]) {
         case RadioPacket1BS.RADIO_TYPE:
-            return new RadioPacket1BS(rawPacket.toBytes());
+            return new RadioPacket1BS(rawPacket);
         case RadioPacketRPS.RADIO_TYPE:
-            return new RadioPacketRPS(rawPacket.toBytes());
+            return new RadioPacketRPS(rawPacket);
         case RadioPacket4BS.RADIO_TYPE:
-            return new RadioPacket4BS(rawPacket.toBytes());
+            return new RadioPacket4BS(rawPacket);
         case RadioPacketVLD.RADIO_TYPE:
-            return new RadioPacketVLD(rawPacket.toBytes());
+            return new RadioPacketVLD(rawPacket);
         default:
-            return new RadioPacket(rawPacket.toBytes());
+            return new RadioPacket(rawPacket);
         }
     }
 

@@ -62,14 +62,14 @@ public class ConfirmLearnEventPacket extends EventPacket {
      */
     private byte hopCount;
 
-    public ConfirmLearnEventPacket() {
+    public ConfirmLearnEventPacket(RawPacket rawPacket) {
+        super(rawPacket);
     }
 
     @Override
-    public void readMessage(ByteArrayWrapper dataBytes) {
-        super.readMessage(dataBytes);
-
-        ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
+    protected void parseData() {
+        super.parseData();
+        ByteBuffer bb = ByteBuffer.wrap(payload.getData());
         postMasterPrio = bb.get();
         manufactorerIdHigh = bb.get();
         manufactorerIdLow = bb.get();

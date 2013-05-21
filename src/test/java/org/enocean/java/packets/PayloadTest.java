@@ -1,4 +1,4 @@
-package org.enocean.java.struct;
+package org.enocean.java.packets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -21,7 +21,7 @@ public class PayloadTest {
     public void setupTestPayload() {
         CircularByteBuffer buffer = new CircularByteBuffer(2048);
         buffer.put(testPayload);
-        Header testHeader = new Header((byte) 1, (short) 15, (byte) 7, (byte) 43);
+        Header testHeader = new Header((byte) 1, (short) 15, (byte) 7);
         payload = Payload.from(testHeader, buffer);
     }
 

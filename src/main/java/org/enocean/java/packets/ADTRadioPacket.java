@@ -20,13 +20,16 @@ public class ADTRadioPacket extends RadioPacket {
      * @param senderId
      *            Unique device sender Id
      * @param status
-     *            Telegram control bits – used in case of repeating, switch telegram encapsulation, checksum type identification
+     *            Telegram control bits – used in case of repeating, switch
+     *            telegram encapsulation, checksum type identification
      * @param subTelNum
      *            Number of subTelegram. Send = 3, receive = 1..x
      * @param destinationId
-     *            Destination Id (4 byte). Broadcast Radio = FF FF FF FF, ADT radio: Destination ID (address)
+     *            Destination Id (4 byte). Broadcast Radio = FF FF FF FF, ADT
+     *            radio: Destination ID (address)
      * @param dBm
-     *            Send case: FF, Receive case: best RSSI value of all received subtelegrams (value decimal without minus)
+     *            Send case: FF, Receive case: best RSSI value of all received
+     *            subtelegrams (value decimal without minus)
      * @param securityLevel
      *            Security Level. 0 = unencrypted, x = type of encryption
      */
@@ -40,21 +43,25 @@ public class ADTRadioPacket extends RadioPacket {
     }
 
     @Override
-    protected byte[] getData() {
+    protected void fillData() {
+        super.fillData();
         ByteArrayWrapper data = new ByteArrayWrapper();
         data.addByte(radioType);
         data.addBytes(userData);
         data.addInt(senderId);
         data.addByte(status);
-        return data.getArray();
+        payload.setData(data.getArray());
     }
 
     @Override
-    protected void readData(ByteBuffer dataBytes) {
-        radioType = dataBytes.get();
-        dataBytes.get(userData, 1, getDataLength() - 3);
-        senderId = dataBytes.get();
-        status = dataBytes.get();
+    protected void parseData() {
+        super.parseData();
+        // TODO: rework!!!
+        ByteBuffer bb = ByteBuffer.wrap(payload.getData());
+        radioType = bb.get();
+        bb.get(userData, 1, getDataLength() - 3);
+        senderId = bb.get();
+        status = bb.get();
     }
 
 }

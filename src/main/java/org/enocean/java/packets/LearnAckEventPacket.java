@@ -37,8 +37,9 @@ public class LearnAckEventPacket extends EventPacket {
     public static final byte CONFIRM_CODE_LEARN_IN = 0x00;
 
     /**
-     * Response time for Smart Ack Client in ms in which the controller can prepare the data and send it to the postmaster. Only actual if
-     * learn return code is Learn IN
+     * Response time for Smart Ack Client in ms in which the controller can
+     * prepare the data and send it to the postmaster. Only actual if learn
+     * return code is Learn IN
      */
     private short responseTime;
 
@@ -47,7 +48,6 @@ public class LearnAckEventPacket extends EventPacket {
     public LearnAckEventPacket(byte confirmCode) {
         this.confirmCode = confirmCode;
         responseTime = (short) System.currentTimeMillis();
-        setDataLength((short) 4);
     }
 
     @Override
@@ -59,10 +59,9 @@ public class LearnAckEventPacket extends EventPacket {
     }
 
     @Override
-    public void readMessage(ByteArrayWrapper dataBytes) {
-        super.readMessage(dataBytes);
-        ByteBuffer bb = ByteBuffer.wrap(dataBytes.getArray());
-
+    protected void parseData() {
+        super.parseData();
+        ByteBuffer bb = ByteBuffer.wrap(payload.getData());
         responseTime = bb.getShort();
         confirmCode = bb.get();
     }

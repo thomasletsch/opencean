@@ -5,8 +5,9 @@ import java.nio.ByteBuffer;
 public class ConfirmLearnEventResponsePacket extends ResponsePacket {
 
     /**
-     * Response time for Smart Ack Client in ms in which the controller can prepare the data and send it to the postmaster. Only actual if
-     * learn return code is Learn IN
+     * Response time for Smart Ack Client in ms in which the controller can
+     * prepare the data and send it to the postmaster. Only actual if learn
+     * return code is Learn IN
      */
     private short responseTime;
 
@@ -21,18 +22,19 @@ public class ConfirmLearnEventResponsePacket extends ResponsePacket {
     }
 
     @Override
-    protected byte[] getResponseData() {
+    protected void fillData() {
         ByteArrayWrapper wrapper = new ByteArrayWrapper();
         wrapper.addShort(responseTime);
         wrapper.addByte(confirmCode);
-        return wrapper.getArray();
+        payload.setData(wrapper.getArray());
     }
 
     @Override
-    protected void readData(ByteBuffer dataBytes) {
-        super.readData(dataBytes);
-        responseTime = dataBytes.getShort();
-        confirmCode = dataBytes.get();
+    protected void parseData() {
+        super.parseData();
+        ByteBuffer bb = ByteBuffer.wrap(payload.getData());
+        responseTime = bb.getShort();
+        confirmCode = bb.get();
     }
 
     public short getResponseTime() {

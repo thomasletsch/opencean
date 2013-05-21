@@ -15,16 +15,20 @@ public class EventPacket extends BasicPacket {
     private byte eventCode;
 
     public EventPacket() {
-        setPacketType(PACKET_TYPE_EVENT);
-        setDataLength((short) 1);
+        super();
+    }
+
+    public EventPacket(RawPacket rawPacket) {
+        super(rawPacket);
     }
 
     @Override
-    protected byte[] getData() {
+    protected void fillData() {
+        super.fillData();
         ByteArrayWrapper wrapper = new ByteArrayWrapper();
         wrapper.addByte(eventCode);
         wrapper.addBytes(getEventData());
-        return wrapper.getArray();
+        payload.setData(wrapper.getArray());
     }
 
     public byte getEventCode() {
@@ -42,11 +46,5 @@ public class EventPacket extends BasicPacket {
     public boolean isEventCodeSupported() {
         return eventCode == EVENT_CODE_SA_RECLAIM_NOT_SUCCESSFUL;
     }
-
-    @Override
-    protected byte[] getOptionalData() {
-        return new byte[] {};
-    }
-
 
 }

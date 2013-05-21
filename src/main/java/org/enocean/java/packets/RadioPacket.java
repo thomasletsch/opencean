@@ -15,15 +15,8 @@ public class RadioPacket extends BasicPacket {
     private byte dBm;
     private byte securityLevel;
 
-    public static RadioPacket ResolvedPacket(UnknownPacket loPacket) {
-        RadioPacket loNew = null;
-        loNew = new RadioPacket(loPacket.toBytes());
-        return loNew;
-    }
-
-    public RadioPacket(byte[] buffer) {
-        readFrom(buffer);
-        setData(super.getData());
+    public RadioPacket(RawPacket rawPacket) {
+        super(rawPacket);
     }
 
     /**
@@ -40,7 +33,7 @@ public class RadioPacket extends BasicPacket {
      */
     public RadioPacket(byte[] data, byte subTelNum, int destinationId, byte dBm, byte securityLevel) {
         this(subTelNum, destinationId, dBm, securityLevel);
-        setData(data);
+        payload.setData(data);
     }
 
     /**
@@ -60,85 +53,48 @@ public class RadioPacket extends BasicPacket {
         this.destinationId = destinationId;
         this.dBm = dBm;
         this.securityLevel = securityLevel;
-        setPacketType(PACKET_TYPE_RADIO);
-        setOptionalDataLength((byte) 7);
+        header.setPacketType(PACKET_TYPE_RADIO);
     }
 
     @Override
-    public void setData(byte[] data) {
-        super.setData(data);
+    protected void parseData() {
+        byte[] data = payload.getData();
         int length = data.length;
-        setSenderId(String.format("%1$02X:%2$02X:%3$02X:%4$02X", data[length - 5], data[length - 4], data[length - 3], data[length - 2]));
+        senderId = String.format("%1$02X:%2$02X:%3$02X:%4$02X", data[length - 5], data[length - 4], data[length - 3], data[length - 2]);
         repeaterCount = (data[6] & 0x0F);
     }
 
-    public byte getSubTelNum() {
-        return subTelNum;
-    }
-
-    public void setSubTelNum(byte subTelNum) {
-        this.subTelNum = subTelNum;
-    }
-
-    public int getDestinationId() {
-        return destinationId;
-    }
-
-    public void setDestinationId(int destinationId) {
-        this.destinationId = destinationId;
-    }
-
-    public byte getdBm() {
-        return dBm;
-    }
-
-    public void setdBm(byte dBm) {
-        this.dBm = dBm;
-    }
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
-
-    public int getRepeaterCount() {
-        return repeaterCount;
-    }
-
-    public byte getSecurityLevel() {
-        return securityLevel;
-    }
-
-    public void setSecurityLevel(byte securityLevel) {
-        this.securityLevel = securityLevel;
+    public ParameterMap getAllParameterValues() {
+        ParameterMap result = new ParameterMap();
+        return result;
     }
 
     @Override
-    protected byte[] getOptionalData() {
+    protected void fillOptionalData() {
         ByteArrayWrapper wrapper = new ByteArrayWrapper();
         wrapper.addByte(subTelNum);
         wrapper.addInt(destinationId);
         wrapper.addByte(dBm);
         wrapper.addByte(securityLevel);
-        return wrapper.getArray();
+        payload.setOptionalData(wrapper.getArray());
     }
 
-    protected void readData(ByteBuffer dataBytes) {
-        setData(dataBytes.array());
-    }
-
-    protected void readOptionalData(ByteBuffer optionalDataBytes) {
+    @Override
+    protected void parseOptionalData() {
+        ByteBuffer optionalDataBytes = ByteBuffer.wrap(payload.getOptionalData());
         subTelNum = optionalDataBytes.get();
         destinationId = optionalDataBytes.getInt();
         dBm = optionalDataBytes.get();
         securityLevel = optionalDataBytes.get();
     }
 
+    public String getSenderId() {
+        return senderId;
+    }
+
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[ sender:" + getSenderId() + "]";
+        return getClass().getSimpleName() + "[ sender:" + senderId + ", repeaterCount=" + repeaterCount + "]";
     }
+
 }

@@ -1,4 +1,4 @@
-package org.enocean.java.struct;
+package org.enocean.java.utils;
 
 import static org.junit.Assert.assertEquals;
 

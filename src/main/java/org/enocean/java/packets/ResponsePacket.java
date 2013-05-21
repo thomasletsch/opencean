@@ -1,14 +1,12 @@
 package org.enocean.java.packets;
 
-import java.nio.ByteBuffer;
 
 public class ResponsePacket extends BasicPacket {
 
     private byte returnCode;
 
     public ResponsePacket() {
-        setPacketType(PACKET_TYPE_RESPONSE);
-        setDataLength((short) 1);
+        header.setPacketType(PACKET_TYPE_RESPONSE);
     }
 
     public ResponsePacket(byte returnCode) {
@@ -25,23 +23,16 @@ public class ResponsePacket extends BasicPacket {
     }
 
     @Override
-    protected byte[] getData() {
+    protected void fillData() {
         ByteArrayWrapper data = new ByteArrayWrapper();
         data.addByte(getReturnCode());
         data.addBytes(getResponseData());
-        return data.getArray();
+        payload.setData(data.getArray());
     }
 
     @Override
-    protected byte[] getOptionalData() {
-        return new byte[] {};
-    }
-
-    protected void readData(ByteBuffer dataBytes) {
-        returnCode = dataBytes.get();
-    }
-
-    protected void readOptionalData(ByteBuffer optionalDataBytes) {
+    protected void parseData() {
+        returnCode = payload.getData()[0];
     }
 
 }
