@@ -3,9 +3,7 @@ package org.enocean.java.packets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.enocean.java.packets.BasicPacket;
-import org.enocean.java.packets.Header;
-import org.enocean.java.utils.CircularByteBuffer;
+import org.enocean.java.EnoceanBufferedDummieConnector;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,14 +14,14 @@ public class HeaderTest {
 
     @Before
     public void setupTestHeader() {
-        CircularByteBuffer buffer = new CircularByteBuffer(2048);
-        buffer.put(testHeader);
+        EnoceanBufferedDummieConnector buffer = new EnoceanBufferedDummieConnector(2048);
+        buffer.write(testHeader);
         header = Header.from(buffer);
     }
 
     @Test
     public void testToBytes() {
-        assertEquals("Lenth", testHeader.length + 1, header.toBytes().length);
+        assertEquals("Lenth", testHeader.length, header.toBytes().length);
     }
 
     @Test
@@ -38,7 +36,7 @@ public class HeaderTest {
 
     @Test
     public void testGetPacketType() {
-        assertEquals(BasicPacket.PACKET_TYPE_RADIO, header.getPacketType());
+        assertEquals(RadioPacket.PACKET_TYPE, header.getPacketType());
     }
 
     @Test

@@ -10,6 +10,6 @@ public class ReturnCodes {
 
     public static final byte WRONG_PARAM = 0x03;
 
-    public static final byte OPERATION_DENIED = 0x03;
+    public static final byte OPERATION_DENIED = 0x04;
 
 }

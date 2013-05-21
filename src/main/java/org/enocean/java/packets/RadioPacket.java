@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 
 public class RadioPacket extends BasicPacket {
 
+    public static final byte PACKET_TYPE = 0x01;
+
     public static final byte RADIO_TYPE_4BS = (byte) 0xA5;
     public static final byte RADIO_TYPE_VLD = (byte) 0xD2;
 
@@ -17,6 +19,10 @@ public class RadioPacket extends BasicPacket {
 
     public RadioPacket(RawPacket rawPacket) {
         super(rawPacket);
+    }
+
+    public RadioPacket() {
+        header.setPacketType(PACKET_TYPE);
     }
 
     /**
@@ -53,7 +59,7 @@ public class RadioPacket extends BasicPacket {
         this.destinationId = destinationId;
         this.dBm = dBm;
         this.securityLevel = securityLevel;
-        header.setPacketType(PACKET_TYPE_RADIO);
+        header.setPacketType(PACKET_TYPE);
     }
 
     @Override
@@ -94,7 +100,7 @@ public class RadioPacket extends BasicPacket {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[ sender:" + senderId + ", repeaterCount=" + repeaterCount + "]";
+        return getClass().getSimpleName() + "[sender=" + senderId + ", repeaterCount=" + repeaterCount + "]";
     }
 
 }

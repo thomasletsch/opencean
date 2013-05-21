@@ -1,7 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.common.ProtocolConnector;
 import org.enocean.java.utils.CRC8;
-import org.enocean.java.utils.CircularByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,13 +13,13 @@ public class Header {
     private byte optionalDataLength;
     private byte crc8;
 
-    public static Header from(CircularByteBuffer buffer) {
+    public static Header from(ProtocolConnector connector) {
         logger.info("Reading header...");
         Header header = new Header();
-        header.setDataLength(buffer.getShort());
-        header.setOptionalDataLength(buffer.get());
-        header.setPacketType(buffer.get());
-        header.crc8 = buffer.get();
+        header.setDataLength(connector.getShort());
+        header.setOptionalDataLength(connector.get());
+        header.setPacketType(connector.get());
+        header.crc8 = connector.get();
         logger.info(header.toString());
         return header;
     }
@@ -36,7 +36,6 @@ public class Header {
 
     public byte[] toBytes() {
         ByteArrayWrapper bytes = new ByteArrayWrapper();
-        bytes.addByte(BasicPacket.SYNC_BYTE);
         bytes.addShort(getDataLength());
         bytes.addByte(getOptionalDataLength());
         bytes.addByte(getPacketType());

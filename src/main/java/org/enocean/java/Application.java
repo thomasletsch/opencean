@@ -1,11 +1,8 @@
 package org.enocean.java;
 
-import gnu.io.CommPort;
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-
-import java.io.DataInputStream;
-
+import org.enocean.java.common.ProtocolConnector;
+import org.enocean.java.packets.BasicPacket;
+import org.enocean.java.packets.RemoteCommand4BSTeachIn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,27 +11,13 @@ public class Application {
     private static Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) throws Exception {
-
         logger.info("starting..");
-
         String port = args[0];
-        final SerialPort serialPort;
-        CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(port);
-        CommPort commPort = portIdentifier.open("java-enocean-library", Constants.TIMEOUT_RESPONSE);
-        serialPort = (SerialPort) commPort;
-        serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            @Override
-            public void run() {
-                logger.info("Closing serialPort");
-                serialPort.close();
-            }
-        });
-
-        DataInputStream ins = new DataInputStream(serialPort.getInputStream());
-        ESP3Host esp3Host = new ESP3Host();
-        esp3Host.receiveRadio(ins);
+        ProtocolConnector connector = new EnoceanSerialConnector();
+        connector.connect(port);
+        ESP3Host esp3Host = new ESP3Host(connector);
+        BasicPacket packet = new RemoteCommand4BSTeachIn();
+        esp3Host.sendRadio(packet);
+        esp3Host.receiveRadio();
     }
 }

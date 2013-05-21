@@ -15,16 +15,6 @@ public abstract class BasicPacket {
     public static final int HEADER_LENGTH = 4;
 
     /**
-     * Radio telegram
-     */
-    public static final byte PACKET_TYPE_RADIO = 0x01;
-
-    /**
-     * Response to any Packet
-     */
-    public static final byte PACKET_TYPE_RESPONSE = 0x02;
-
-    /**
      * Radio subtelegram
      */
     public static final byte PACKET_TYPE_RADIO_SUB_TEL = 0x03;
@@ -71,9 +61,11 @@ public abstract class BasicPacket {
     }
 
     protected void fillData() {
+        payload.setData(new byte[] {});
     }
 
     protected void fillOptionalData() {
+        payload.setOptionalData(new byte[] {});
     }
 
     protected void parseData() {
@@ -83,6 +75,8 @@ public abstract class BasicPacket {
     }
 
     public byte[] toBytes() {
+        fillPayload();
+        fillHeader();
         ByteArrayWrapper message = new ByteArrayWrapper();
         message.addByte(SYNC_BYTE);
         message.addBytes(header.toBytes());

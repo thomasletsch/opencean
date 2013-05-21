@@ -1,16 +1,20 @@
 package org.enocean.java.packets;
 
-
 public class ResponsePacket extends BasicPacket {
+
+    public static final byte PACKET_TYPE = 0x02;
 
     private byte returnCode;
 
+    public ResponsePacket(RawPacket rawPacket) {
+        super(rawPacket);
+    }
+
     public ResponsePacket() {
-        header.setPacketType(PACKET_TYPE_RESPONSE);
+        header.setPacketType(PACKET_TYPE);
     }
 
     public ResponsePacket(byte returnCode) {
-        this();
         this.returnCode = returnCode;
     }
 
@@ -33,6 +37,11 @@ public class ResponsePacket extends BasicPacket {
     @Override
     protected void parseData() {
         returnCode = payload.getData()[0];
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "[returnCode=" + returnCode + "]";
     }
 
 }

@@ -1,14 +1,15 @@
-package org.enocean.java.utils;
+package org.enocean.java;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import org.enocean.java.common.ProtocolConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CircularByteBuffer {
+public class EnoceanBufferedDummieConnector implements ProtocolConnector {
 
-    private static Logger logger = LoggerFactory.getLogger(CircularByteBuffer.class);
+    private static Logger logger = LoggerFactory.getLogger(EnoceanBufferedDummieConnector.class);
 
     private static final int WAIT_MS = 10;
 
@@ -27,10 +28,11 @@ public class CircularByteBuffer {
      */
     private int timeOut = 100;
 
-    public CircularByteBuffer(int size) {
+    public EnoceanBufferedDummieConnector(int size) {
         buffer = new byte[size];
     }
 
+    @Override
     public byte get() {
         waitForData();
         byte result = buffer[readPos];
@@ -66,6 +68,7 @@ public class CircularByteBuffer {
         }
     }
 
+    @Override
     public short getShort() {
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.order(ByteOrder.BIG_ENDIAN);
@@ -74,6 +77,7 @@ public class CircularByteBuffer {
         return bb.getShort(0);
     }
 
+    @Override
     public void get(byte[] data) {
         for (int i = 0; i < data.length; i++) {
             data[i] = get();
@@ -89,22 +93,37 @@ public class CircularByteBuffer {
         }
     }
 
-    public void put(byte[] data) {
+    @Override
+    public void write(byte[] data) {
         for (byte element : data) {
             put(element);
         }
     }
 
+    @Override
     public void mark() {
         markedPos = readPos;
     }
 
+    @Override
     public void reset() {
         readPos = markedPos;
     }
 
     private boolean isEmpty() {
         return currentSize <= 0;
+    }
+
+    @Override
+    public void connect(String device) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void disconnect() {
+        // TODO Auto-generated method stub
+
     }
 
 }

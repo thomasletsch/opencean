@@ -1,7 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.common.ProtocolConnector;
 import org.enocean.java.utils.CRC8;
-import org.enocean.java.utils.CircularByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,14 +12,14 @@ public class Payload {
     private byte[] optionalData;
     private byte crc8;
 
-    public static Payload from(Header header, CircularByteBuffer buffer) {
+    public static Payload from(Header header, ProtocolConnector connector) {
         logger.info("Reading payload...");
         Payload payload = new Payload();
         payload.setData(new byte[header.getDataLength()]);
-        buffer.get(payload.getData());
+        connector.get(payload.getData());
         payload.setOptionalData(new byte[header.getOptionalDataLength()]);
-        buffer.get(payload.getOptionalData());
-        payload.crc8 = buffer.get();
+        connector.get(payload.getOptionalData());
+        payload.crc8 = connector.get();
         logger.info(payload.toString());
         payload.checkCrc8();
         return payload;
@@ -71,8 +71,12 @@ public class Payload {
 
     private byte calculateCrc8() {
         CRC8 crc8 = new CRC8();
-        crc8.update(getData(), 0, getData().length);
-        crc8.update(getOptionalData(), 0, getOptionalData().length);
+        if (data != null) {
+            crc8.update(data, 0, data.length);
+        }
+        if (optionalData != null) {
+            crc8.update(optionalData, 0, optionalData.length);
+        }
         return (byte) crc8.getValue();
     }
 

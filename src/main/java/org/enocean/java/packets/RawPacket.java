@@ -1,6 +1,6 @@
 package org.enocean.java.packets;
 
-import org.enocean.java.utils.CircularByteBuffer;
+import org.enocean.java.common.ProtocolConnector;
 
 public class RawPacket {
 
@@ -8,12 +8,12 @@ public class RawPacket {
 
     private Payload payload;
 
-    public void readHeader(CircularByteBuffer inputStream) {
-        header = Header.from(inputStream);
+    public void readHeader(ProtocolConnector connector) {
+        header = Header.from(connector);
     }
 
-    public void readPayload(CircularByteBuffer buffer) {
-        payload = Payload.from(header, buffer);
+    public void readPayload(ProtocolConnector connector) {
+        payload = Payload.from(header, connector);
     }
 
     public byte[] toBytes() {
