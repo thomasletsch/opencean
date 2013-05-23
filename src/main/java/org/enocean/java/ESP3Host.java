@@ -3,10 +3,10 @@ package org.enocean.java;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.enocean.java.address.EnoceanParameterAddress;
 import org.enocean.java.common.ParameterAddress;
 import org.enocean.java.common.ParameterValueChangeListener;
 import org.enocean.java.common.ProtocolConnector;
-import org.enocean.java.common.StandardParameterAddress;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.ParameterMap;
 import org.enocean.java.packets.RadioPacket;
@@ -23,6 +23,7 @@ public class ESP3Host {
 
     public ESP3Host(ProtocolConnector connector) {
         this.connector = connector;
+        messageListeners.add(new LogginListener());
     }
 
     public void addListener(EnoceanMessageListener listener) {
@@ -64,7 +65,7 @@ public class ESP3Host {
             ParameterMap values = radioPacket.getAllParameterValues();
             for (String parameterId : values.keySet()) {
                 for (ParameterValueChangeListener listener : valueChangeListeners) {
-                    ParameterAddress parameterAddress = new StandardParameterAddress(radioPacket.getSenderId(), parameterId);
+                    ParameterAddress parameterAddress = new EnoceanParameterAddress(radioPacket.getSenderId(), parameterId);
                     listener.valueChanged(parameterAddress, values.get(parameterId));
                 }
             }

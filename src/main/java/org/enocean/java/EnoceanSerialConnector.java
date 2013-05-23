@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import org.enocean.java.common.ProtocolConnector;
+import org.enocean.java.utils.CircularByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,8 @@ public class EnoceanSerialConnector implements ProtocolConnector {
     SerialPort serialPort = null;
     Thread readerThread = null;
 
+    private CircularByteBuffer buffer;
+
     public EnoceanSerialConnector() {
     }
 
@@ -46,9 +49,25 @@ public class EnoceanSerialConnector implements ProtocolConnector {
             out = new DataOutputStream(serialPort.getOutputStream());
 
             out.flush();
-            if (in.markSupported()) {
-                in.reset();
-            }
+
+            buffer = new CircularByteBuffer(2048);
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            byte readByte = in.readByte();
+                            logger.debug("Received " + readByte);
+                            buffer.put(readByte);
+                        } catch (Exception e) {
+                            logger.error("", e);
+                        }
+                    }
+                }
+            };
+            new Thread(runnable).start();
+
             Runtime.getRuntime().addShutdownHook(new Thread() {
 
                 @Override
@@ -87,43 +106,27 @@ public class EnoceanSerialConnector implements ProtocolConnector {
 
     @Override
     public byte get() {
-        try {
-            return in.readByte();
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read", e);
-        }
+        return buffer.get();
     }
 
     @Override
     public short getShort() {
-        try {
-            return in.readShort();
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read", e);
-        }
+        return buffer.getShort();
     }
 
     @Override
     public void get(byte[] data) {
-        try {
-            in.read(data);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read", e);
-        }
+        buffer.get(data);
     }
 
     @Override
     public void mark() {
-        in.mark(READ_LIMIT);
+        buffer.mark();
     }
 
     @Override
     public void reset() {
-        try {
-            in.reset();
-        } catch (IOException e) {
-            throw new RuntimeException("Could not reset", e);
-        }
+        buffer.reset();
     }
 
     @Override

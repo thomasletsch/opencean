@@ -1,6 +1,7 @@
 package org.enocean.java.packets;
 
 import org.enocean.java.common.ProtocolConnector;
+import org.enocean.java.utils.ByteArrayUtils;
 import org.enocean.java.utils.CRC8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +14,14 @@ public class Payload {
     private byte crc8;
 
     public static Payload from(Header header, ProtocolConnector connector) {
-        logger.info("Reading payload...");
+        logger.debug("Reading payload...");
         Payload payload = new Payload();
         payload.setData(new byte[header.getDataLength()]);
         connector.get(payload.getData());
         payload.setOptionalData(new byte[header.getOptionalDataLength()]);
         connector.get(payload.getOptionalData());
         payload.crc8 = connector.get();
-        logger.info(payload.toString());
-        payload.checkCrc8();
+        logger.debug(payload.toString());
         return payload;
     }
 
@@ -31,6 +31,10 @@ public class Payload {
 
     public void initCRC8() {
         crc8 = calculateCrc8();
+    }
+
+    public boolean isValid() {
+        return calculateCrc8() == crc8;
     }
 
     public void checkCrc8() {
@@ -65,8 +69,8 @@ public class Payload {
 
     @Override
     public String toString() {
-        return "Payload: " + "data=" + printByteArray(getData()) + ", optionaldata=" + printByteArray(getOptionalData()) + ", crc8d="
-                + crc8;
+        return "Payload: " + "data=" + ByteArrayUtils.printByteArray(getData()) + ", optionaldata="
+                + ByteArrayUtils.printByteArray(getOptionalData()) + ", crc8d=" + crc8;
     }
 
     private byte calculateCrc8() {
@@ -78,18 +82,6 @@ public class Payload {
             crc8.update(optionalData, 0, optionalData.length);
         }
         return (byte) crc8.getValue();
-    }
-
-    private String printByteArray(byte[] data) {
-        String s = "[";
-        for (int i = 0; i < data.length; i++) {
-            if (i != 0) {
-                s += ", ";
-            }
-            s += data[i];
-        }
-        s += "]";
-        return s;
     }
 
 }

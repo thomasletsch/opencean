@@ -14,13 +14,13 @@ public class Header {
     private byte crc8;
 
     public static Header from(ProtocolConnector connector) {
-        logger.info("Reading header...");
+        logger.debug("Reading header...");
         Header header = new Header();
         header.setDataLength(connector.getShort());
         header.setOptionalDataLength(connector.get());
         header.setPacketType(connector.get());
         header.crc8 = connector.get();
-        logger.info(header.toString());
+        logger.debug(header.toString());
         return header;
     }
 

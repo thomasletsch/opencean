@@ -33,13 +33,18 @@ public class PacketReceiver {
             return null;
         }
         rawPacket.readPayload(connector);
+        if (!rawPacket.getPayload().isValid()) {
+            logger.warn("Payload CRC not correct! Package received: " + rawPacket);
+            connector.reset();
+            return null;
+        }
         BasicPacket packet = PacketFactory.createFrom(rawPacket);
         return packet;
     }
 
     private void seekTillSyncByte() {
         while (!(connector.get() == BasicPacket.SYNC_BYTE)) {
-            logger.warn("Waiting for sync byte");
+            logger.debug("Waiting for sync byte");
         }
     }
 

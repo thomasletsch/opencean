@@ -2,6 +2,8 @@ package org.enocean.java.packets;
 
 import java.nio.ByteBuffer;
 
+import org.enocean.java.address.EnoceanId;
+
 public class RadioPacket extends BasicPacket {
 
     public static final byte PACKET_TYPE = 0x01;
@@ -9,11 +11,12 @@ public class RadioPacket extends BasicPacket {
     public static final byte RADIO_TYPE_4BS = (byte) 0xA5;
     public static final byte RADIO_TYPE_VLD = (byte) 0xD2;
 
-    private String senderId;
+    private EnoceanId senderId;
     private int repeaterCount;
+    private byte status;
 
     private byte subTelNum;
-    private int destinationId;
+    private EnoceanId destinationId;
     private byte dBm;
     private byte securityLevel;
 
@@ -56,7 +59,7 @@ public class RadioPacket extends BasicPacket {
      */
     protected RadioPacket(byte subTelNum, int destinationId, byte dBm, byte securityLevel) {
         this.subTelNum = subTelNum;
-        this.destinationId = destinationId;
+        this.destinationId = EnoceanId.fromInt(destinationId);
         this.dBm = dBm;
         this.securityLevel = securityLevel;
         header.setPacketType(PACKET_TYPE);
@@ -66,8 +69,9 @@ public class RadioPacket extends BasicPacket {
     protected void parseData() {
         byte[] data = payload.getData();
         int length = data.length;
-        senderId = String.format("%1$02X:%2$02X:%3$02X:%4$02X", data[length - 5], data[length - 4], data[length - 3], data[length - 2]);
-        repeaterCount = (data[6] & 0x0F);
+        senderId = EnoceanId.fromByteArray(data, length - 5);
+        status = data[length - 1];
+        repeaterCount = (status & 0x0F);
     }
 
     public ParameterMap getAllParameterValues() {
@@ -79,7 +83,7 @@ public class RadioPacket extends BasicPacket {
     protected void fillOptionalData() {
         ByteArrayWrapper wrapper = new ByteArrayWrapper();
         wrapper.addByte(subTelNum);
-        wrapper.addInt(destinationId);
+        wrapper.addBytes(destinationId.toBytes());
         wrapper.addByte(dBm);
         wrapper.addByte(securityLevel);
         payload.setOptionalData(wrapper.getArray());
@@ -89,18 +93,18 @@ public class RadioPacket extends BasicPacket {
     protected void parseOptionalData() {
         ByteBuffer optionalDataBytes = ByteBuffer.wrap(payload.getOptionalData());
         subTelNum = optionalDataBytes.get();
-        destinationId = optionalDataBytes.getInt();
+        destinationId = EnoceanId.fromInt(optionalDataBytes.getInt());
         dBm = optionalDataBytes.get();
         securityLevel = optionalDataBytes.get();
     }
 
-    public String getSenderId() {
+    public EnoceanId getSenderId() {
         return senderId;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[sender=" + senderId + ", repeaterCount=" + repeaterCount + "]";
+        return super.toString() + ", [sender=" + senderId + ", repeaterCount=" + repeaterCount + "]";
     }
 
 }

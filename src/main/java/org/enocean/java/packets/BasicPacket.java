@@ -1,5 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.utils.ByteArrayUtils;
+
 public abstract class BasicPacket {
 
     /*
@@ -96,4 +98,9 @@ public abstract class BasicPacket {
         return header.getOptionalDataLength();
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[header=" + header + ", payload=" + payload + "], raw="
+                + ByteArrayUtils.printByteArray(toBytes());
+    }
 }

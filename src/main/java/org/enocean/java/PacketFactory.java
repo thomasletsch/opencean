@@ -30,7 +30,11 @@ public class PacketFactory {
         case RadioPacketRPS.RADIO_TYPE:
             return new RadioPacketRPS(rawPacket);
         case RadioPacket4BS.RADIO_TYPE:
-            return new RadioPacket4BS(rawPacket);
+            if (rawPacket.getPayload().getData().length == RadioPacket4BS.DATA_LENGTH) {
+                return new RadioPacket4BS(rawPacket);
+            } else {
+                return new RadioPacket(rawPacket);
+            }
         case RadioPacketVLD.RADIO_TYPE:
             return new RadioPacketVLD(rawPacket);
         default:
