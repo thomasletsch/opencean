@@ -3,6 +3,7 @@ package org.enocean.java;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.enocean.java.common.ParameterValueChangeListener;
 import org.enocean.java.common.ProtocolConnector;
 import org.enocean.java.packets.BasicPacket;
 import org.slf4j.Logger;
@@ -15,10 +16,17 @@ public class ESP3Host {
 
     final ProtocolConnector connector;
 
+    private ParameterChangeNotifier parameterChangeNotifier;
+
     public ESP3Host(ProtocolConnector connector) {
         this.connector = connector;
         messageListeners.add(new LoggingListener());
-        messageListeners.add(new ParameterChangeNotifierListener());
+        parameterChangeNotifier = new ParameterChangeNotifier();
+        messageListeners.add(parameterChangeNotifier);
+    }
+
+    public void addParameterChangeListener(ParameterValueChangeListener listener) {
+        parameterChangeNotifier.addParameterValueChangeListener(listener);
     }
 
     public void addListener(EnoceanMessageListener listener) {

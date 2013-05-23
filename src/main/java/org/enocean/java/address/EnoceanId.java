@@ -18,6 +18,15 @@ public class EnoceanId {
         return new EnoceanId(ByteArrayUtils.toByteArray(idInt));
     }
 
+    public static EnoceanId fromString(String idString) {
+        String[] numbers = idString.trim().split("[:]");
+        return new EnoceanId(new byte[] { parseByte(numbers[0]), parseByte(numbers[1]), parseByte(numbers[2]), parseByte(numbers[3]) });
+    }
+
+    private static byte parseByte(String number) {
+        return (byte) Integer.parseInt(number, 16);
+    }
+
     public EnoceanId(byte[] id) {
         this.id = id;
     }

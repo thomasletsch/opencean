@@ -27,4 +27,9 @@ public class EnoceanParameterAddress implements ParameterAddress {
         return deviceId.toString();
     }
 
+    @Override
+    public String toString() {
+        return "EnoceanParameter: " + getAsString();
+    }
+
 }

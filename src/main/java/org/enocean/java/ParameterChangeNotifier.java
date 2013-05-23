@@ -11,7 +11,7 @@ import org.enocean.java.eep.Value;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacket;
 
-public class ParameterChangeNotifierListener implements EnoceanMessageListener {
+public class ParameterChangeNotifier implements EnoceanMessageListener {
 
     private List<ParameterValueChangeListener> valueChangeListeners = new ArrayList<ParameterValueChangeListener>();
     private ValueRetriever valueRetriever = new ValueRetriever();
