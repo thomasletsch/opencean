@@ -14,7 +14,7 @@ public class TemperaturSensorTest {
         EEPParser sensor = new TemperaturSensor(0, 40);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 255);
-        assertEquals(new BigDecimal(40), sensor.parsePacket(packet).getValue());
+        assertEquals(new BigDecimal(00), sensor.parsePacket(packet).getValue());
     }
 
     @Test
@@ -22,7 +22,7 @@ public class TemperaturSensorTest {
         EEPParser sensor = new TemperaturSensor(0, 40);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 0);
-        assertEquals(new BigDecimal(0), sensor.parsePacket(packet).getValue());
+        assertEquals(new BigDecimal(40), sensor.parsePacket(packet).getValue());
     }
 
     @Test
@@ -30,7 +30,7 @@ public class TemperaturSensorTest {
         EEPParser sensor = new TemperaturSensor(0, 40);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 112);
-        assertEquals(new BigDecimal("17.6"), sensor.parsePacket(packet).getValue());
+        assertEquals(new BigDecimal("22.4"), sensor.parsePacket(packet).getValue());
     }
 
 }

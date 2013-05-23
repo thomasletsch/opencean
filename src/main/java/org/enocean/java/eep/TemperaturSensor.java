@@ -8,8 +8,8 @@ import org.enocean.java.packets.RadioPacket4BS;
 
 public class TemperaturSensor implements EEPParser {
 
-    private static final float RANGE_MIN = 0;
-    private static final float RANGE_MAX = 255;
+    private static final float RANGE_MIN = 255;
+    private static final float RANGE_MAX = 0;
 
     public static final EEPId EEP_ID = new EEPId("A5:02:05");
 
@@ -36,7 +36,8 @@ public class TemperaturSensor implements EEPParser {
     }
 
     private void calculateCurrentValue(byte source) {
-        int multiplier = source & 0xFF;
-        currentValue = new BigDecimal(scaleMin + multiplier * ((scaleMax - scaleMin) / (RANGE_MAX - RANGE_MIN)), new MathContext(3));
+        int rawValue = source & 0xFF;
+        float multiplier = (scaleMax - scaleMin) / (RANGE_MAX - RANGE_MIN);
+        currentValue = new BigDecimal(multiplier * (rawValue - RANGE_MIN) + scaleMin, new MathContext(3));
     }
 }

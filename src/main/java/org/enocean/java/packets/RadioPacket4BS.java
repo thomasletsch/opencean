@@ -1,5 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.utils.Bits;
+
 public class RadioPacket4BS extends RadioPacket {
 
     public static final byte RADIO_TYPE = (byte) 0xA5;
@@ -48,8 +50,13 @@ public class RadioPacket4BS extends RadioPacket {
         this.db1 = db1;
     }
 
+    public boolean isTeachInMode() {
+        return Bits.getBit(db0, 4);
+    }
+
     @Override
     public String toString() {
-        return super.toString() + String.format(", [db0=%02X, db1=%02X, db2=%02X, db3=%02X]", db0, db1, db2, db3);
+        return super.toString()
+                + String.format(", [db0=%02X, db1=%02X, db2=%02X, db3=%02X, teachIn=%s]", db0, db1, db2, db3, isTeachInMode());
     }
 }
