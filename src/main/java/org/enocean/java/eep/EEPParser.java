@@ -1,9 +1,11 @@
 package org.enocean.java.eep;
 
+import java.util.Map;
+
 import org.enocean.java.packets.BasicPacket;
 
 public interface EEPParser {
 
-    Value parsePacket(BasicPacket packet);
+    Map<String, Value> parsePacket(BasicPacket packet);
 
 }

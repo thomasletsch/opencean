@@ -74,11 +74,6 @@ public class RadioPacket extends BasicPacket {
         repeaterCount = (status & 0x0F);
     }
 
-    public ParameterMap getAllParameterValues() {
-        ParameterMap result = new ParameterMap();
-        return result;
-    }
-
     @Override
     protected void fillOptionalData() {
         ByteArrayWrapper wrapper = new ByteArrayWrapper();

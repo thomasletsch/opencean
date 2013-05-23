@@ -1,5 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.eep.ContactState;
+
 public class RadioPacket1BS extends RadioPacket {
 
     public static final byte RADIO_TYPE = (byte) 0xD5;
