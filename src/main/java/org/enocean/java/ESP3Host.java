@@ -22,8 +22,8 @@ public class ESP3Host {
 
     public ESP3Host(ProtocolConnector connector) {
         this.connector = connector;
-        messageListeners.add(new LoggingListener());
         parameterChangeNotifier = new ParameterChangeNotifier();
+        parameterChangeNotifier.addParameterValueChangeListener(new LoggingListener());
         messageListeners.add(parameterChangeNotifier);
     }
 
