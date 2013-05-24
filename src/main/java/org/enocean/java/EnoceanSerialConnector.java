@@ -61,7 +61,8 @@ public class EnoceanSerialConnector implements ProtocolConnector {
                             logger.debug("Received " + readByte);
                             buffer.put(readByte);
                         } catch (Exception e) {
-                            logger.error("", e);
+                            logger.error("Error while reading from COM port. Stopping.", e);
+                            throw new RuntimeException(e);
                         }
                     }
                 }

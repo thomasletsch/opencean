@@ -3,8 +3,10 @@ package org.enocean.java;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.enocean.java.address.EnoceanId;
 import org.enocean.java.common.ParameterValueChangeListener;
 import org.enocean.java.common.ProtocolConnector;
+import org.enocean.java.eep.EEPId;
 import org.enocean.java.packets.BasicPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,10 @@ public class ESP3Host {
         messageListeners.add(new LoggingListener());
         parameterChangeNotifier = new ParameterChangeNotifier();
         messageListeners.add(parameterChangeNotifier);
+    }
+
+    public void addDeviceProfile(EnoceanId id, EEPId epp) {
+        parameterChangeNotifier.addDeviceProfile(id, epp);
     }
 
     public void addParameterChangeListener(ParameterValueChangeListener listener) {

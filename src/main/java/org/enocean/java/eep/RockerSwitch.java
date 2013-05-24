@@ -11,6 +11,10 @@ public class RockerSwitch implements EEPParser {
 
     public static final EEPId EEP_ID = new EEPId("F6:02:01");
     public static final String PARAMETER_ID = "BUTTON_";
+    public static final String B_DOWN = "B_DOWN";
+    public static final String B_UP = "B_UP";
+    public static final String A_DOWN = "A_DOWN";
+    public static final String A_UP = "A_UP";
 
     private NUState nu;
     private T21State t21;
@@ -41,16 +45,16 @@ public class RockerSwitch implements EEPParser {
                 }
             }
             if (buttonAUp != null) {
-                map.put(PARAMETER_ID + "A_UP", buttonAUp);
+                map.put(PARAMETER_ID + A_UP, buttonAUp);
             }
             if (buttonADown != null) {
-                map.put(PARAMETER_ID + "A_DOWN", buttonADown);
+                map.put(PARAMETER_ID + A_DOWN, buttonADown);
             }
             if (buttonBUp != null) {
-                map.put(PARAMETER_ID + "B_UP", buttonBUp);
+                map.put(PARAMETER_ID + B_UP, buttonBUp);
             }
             if (buttonBDown != null) {
-                map.put(PARAMETER_ID + "B_DOWN", buttonBDown);
+                map.put(PARAMETER_ID + B_DOWN, buttonBDown);
             }
 
             byte statusByte = radioPacketRPS.getStatusByte();
