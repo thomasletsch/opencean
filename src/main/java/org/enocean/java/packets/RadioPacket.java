@@ -86,6 +86,9 @@ public class RadioPacket extends BasicPacket {
 
     @Override
     protected void parseOptionalData() {
+        if (header.getOptionalDataLength() == 0) {
+            return;
+        }
         ByteBuffer optionalDataBytes = ByteBuffer.wrap(payload.getOptionalData());
         subTelNum = optionalDataBytes.get();
         destinationId = EnoceanId.fromInt(optionalDataBytes.getInt());

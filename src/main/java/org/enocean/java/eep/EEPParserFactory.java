@@ -10,6 +10,7 @@ public class EEPParserFactory {
     public EEPParserFactory() {
         parser.put(TemperaturSensor.EEP_ID, new TemperaturSensor(0, 40));
         parser.put(RockerSwitch.EEP_ID, new RockerSwitch());
+        parser.put(SingleInputContact.EEP_ID, new SingleInputContact());
     }
 
     public EEPParser getParserFor(EEPId profile) {

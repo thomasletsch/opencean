@@ -9,6 +9,14 @@ public class RawPacket {
 
     private Payload payload;
 
+    public RawPacket() {
+    }
+
+    public RawPacket(Header header, Payload payload) {
+        this.header = header;
+        this.payload = payload;
+    }
+
     public void readHeader(ProtocolConnector connector) {
         header = Header.from(connector);
     }

@@ -1,13 +1,11 @@
 package org.enocean.java.packets;
 
-import org.enocean.java.eep.ContactState;
 
 public class RadioPacket1BS extends RadioPacket {
 
     public static final byte RADIO_TYPE = (byte) 0xD5;
 
     private LearnButtonState learnButton;
-    private ContactState contact;
 
     public RadioPacket1BS(RawPacket rawPacket) {
         super(rawPacket);
@@ -16,14 +14,16 @@ public class RadioPacket1BS extends RadioPacket {
     @Override
     public void parseData() {
         super.parseData();
-        byte dataByte = payload.getData()[1];
-        contact = ContactState.values()[(dataByte & 0x01)];
-        learnButton = LearnButtonState.values()[(dataByte & 0x08) >> 3];
+        learnButton = LearnButtonState.values()[(getDataByte() & 0x08) >> 3];
+    }
+
+    public byte getDataByte() {
+        return payload.getData()[1];
     }
 
     @Override
     public String toString() {
-        return "1BS " + getSenderId() + ", Learn Button " + learnButton.toString() + ", Contact " + contact.toString();
+        return super.toString() + String.format(", [dataByte=%02X, learnButton=%s]", getDataByte(), learnButton);
     }
 
 }
