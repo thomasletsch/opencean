@@ -5,6 +5,7 @@ import java.math.MathContext;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.enocean.java.address.EnoceanParameterAddress;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacket4BS;
 
@@ -29,13 +30,14 @@ public class TemperaturSensor implements EEPParser {
     }
 
     @Override
-    public Map<String, Value> parsePacket(BasicPacket packet) {
-        Map<String, Value> map = new HashMap<String, Value>();
+    public Map<EnoceanParameterAddress, Value> parsePacket(BasicPacket packet) {
+        Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
         if (packet instanceof RadioPacket4BS) {
             RadioPacket4BS radioPacket4BS = (RadioPacket4BS) packet;
             byte source = radioPacket4BS.getDb1();
             calculateCurrentValue(source);
-            map.put(PARAMETER_ID, new NumberWithUnit(Unit.DEGREE_CELSIUS, currentValue));
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.DEGREE_CELSIUS,
+                    currentValue));
         }
         return map;
     }

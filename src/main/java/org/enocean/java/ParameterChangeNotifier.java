@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.enocean.java.address.EnoceanId;
 import org.enocean.java.address.EnoceanParameterAddress;
-import org.enocean.java.common.ParameterAddress;
 import org.enocean.java.common.ParameterValueChangeListener;
 import org.enocean.java.eep.EEPId;
 import org.enocean.java.eep.EEPParser;
@@ -38,17 +37,16 @@ public class ParameterChangeNotifier implements EnoceanMessageListener {
     public void receivePacket(BasicPacket packet) {
         if (packet instanceof RadioPacket) {
             RadioPacket radioPacket = (RadioPacket) packet;
-            Map<String, Value> values = retrieveValue(radioPacket);
-            for (String parameterId : values.keySet()) {
+            Map<EnoceanParameterAddress, Value> values = retrieveValue(radioPacket);
+            for (EnoceanParameterAddress address : values.keySet()) {
                 for (ParameterValueChangeListener listener : valueChangeListeners) {
-                    ParameterAddress parameterAddress = new EnoceanParameterAddress(radioPacket.getSenderId(), parameterId);
-                    listener.valueChanged(parameterAddress, values.get(parameterId));
+                    listener.valueChanged(address, values.get(address));
                 }
             }
         }
     }
 
-    private Map<String, Value> retrieveValue(RadioPacket radioPacket) {
+    private Map<EnoceanParameterAddress, Value> retrieveValue(RadioPacket radioPacket) {
         if (deviceToEEP.containsKey(radioPacket.getSenderId())) {
             EEPId profile = deviceToEEP.get(radioPacket.getSenderId());
             EEPParser parser = parserFactory.getParserFor(profile);
@@ -56,7 +54,7 @@ public class ParameterChangeNotifier implements EnoceanMessageListener {
                 return parser.parsePacket(radioPacket);
             }
         }
-        return new HashMap<String, Value>();
+        return new HashMap<EnoceanParameterAddress, Value>();
     }
 
 }

@@ -1,10 +1,11 @@
 package org.enocean.java.common;
 
 /**
- * A parameter is part of a physical device that holds a specific value. It can be r/w or r/o.
+ * A parameter is part of a physical device that holds a specific value. It can
+ * be r/w or r/o.
  * 
  * @author Thomas Letsch (contact@thomas-letsch.de)
- *
+ * 
  */
 public interface ParameterAddress {
 
@@ -13,5 +14,7 @@ public interface ParameterAddress {
     String getParameterId();
 
     String getDeviceId();
+
+    String getChannelId();
 
 }

@@ -5,6 +5,7 @@ import org.enocean.java.common.ParameterAddress;
 public class EnoceanParameterAddress implements ParameterAddress {
 
     private EnoceanId deviceId;
+    private String channelId;
     private String parameterId;
 
     public EnoceanParameterAddress(EnoceanId enoceanId, String parameterId) {
@@ -12,14 +13,33 @@ public class EnoceanParameterAddress implements ParameterAddress {
         this.parameterId = parameterId;
     }
 
+    public EnoceanParameterAddress(EnoceanId enoceanId, String channelId, String parameterId) {
+        this.deviceId = enoceanId;
+        this.channelId = channelId;
+        this.parameterId = parameterId;
+    }
+
     @Override
     public String getAsString() {
-        return deviceId + "#" + parameterId;
+        String str = "{" + "id=\"" + deviceId + "\"";
+        if (channelId != null) {
+            str += ", channel=\"" + channelId + "\"";
+        }
+        if (parameterId != null) {
+            str += ", parameter=\"" + parameterId + "\"";
+        }
+        str += "}";
+        return str;
     }
 
     @Override
     public String getParameterId() {
         return parameterId;
+    }
+
+    @Override
+    public String getChannelId() {
+        return channelId;
     }
 
     @Override
@@ -41,6 +61,7 @@ public class EnoceanParameterAddress implements ParameterAddress {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((deviceId == null) ? 0 : deviceId.hashCode());
+        result = prime * result + ((channelId == null) ? 0 : channelId.hashCode());
         result = prime * result + ((parameterId == null) ? 0 : parameterId.hashCode());
         return result;
     }

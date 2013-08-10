@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 
 import org.enocean.java.PacketFactory;
+import org.enocean.java.address.EnoceanParameterAddress;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.Header;
 import org.enocean.java.packets.Payload;
@@ -19,9 +20,9 @@ public class SingleInputContactTest {
         RawPacket rawPacket = createRawPacket((byte) 0);
         BasicPacket basicPacket = PacketFactory.createFrom(rawPacket);
         SingleInputContact sic = new SingleInputContact();
-        Map<String, Value> values = sic.parsePacket(basicPacket);
+        Map<EnoceanParameterAddress, Value> values = sic.parsePacket(basicPacket);
         assertEquals("size", 1, values.size());
-        assertEquals(ContactState.OPEN, values.get(SingleInputContact.PARAMETER_ID));
+        assertEquals(ContactState.OPEN, values.entrySet().iterator().next().getValue());
     }
 
     @Test
@@ -29,9 +30,9 @@ public class SingleInputContactTest {
         RawPacket rawPacket = createRawPacket((byte) 1);
         BasicPacket basicPacket = PacketFactory.createFrom(rawPacket);
         SingleInputContact sic = new SingleInputContact();
-        Map<String, Value> values = sic.parsePacket(basicPacket);
+        Map<EnoceanParameterAddress, Value> values = sic.parsePacket(basicPacket);
         assertEquals("size", 1, values.size());
-        assertEquals(ContactState.CLOSED, values.get(SingleInputContact.PARAMETER_ID));
+        assertEquals(ContactState.CLOSED, values.entrySet().iterator().next().getValue());
     }
 
     private RawPacket createRawPacket(byte dataByte) {

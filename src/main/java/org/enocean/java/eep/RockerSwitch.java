@@ -3,6 +3,7 @@ package org.enocean.java.eep;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.enocean.java.address.EnoceanParameterAddress;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacketRPS;
 import org.enocean.java.utils.Bits;
@@ -10,11 +11,12 @@ import org.enocean.java.utils.Bits;
 public class RockerSwitch implements EEPParser {
 
     public static final EEPId EEP_ID = new EEPId("F6:02:01");
-    public static final String PARAMETER_ID = "BUTTON_";
-    public static final String B_DOWN = "B_DOWN";
-    public static final String B_UP = "B_UP";
-    public static final String A_DOWN = "A_DOWN";
-    public static final String A_UP = "A_UP";
+    public static final String BUTTON_I = "I";
+    public static final String BUTTON_O = "O";
+    public static final String PRESSED = "PRESSED";
+    public static final String RELEASED = "RELEASED";
+    private static final String CHANNEL_A = "A";
+    private static final String CHANNEL_B = "B";
 
     private NUState nu;
     private T21State t21;
@@ -26,8 +28,8 @@ public class RockerSwitch implements EEPParser {
     private EnergyBowState energyBow;
 
     @Override
-    public Map<String, Value> parsePacket(BasicPacket packet) {
-        Map<String, Value> map = new HashMap<String, Value>();
+    public Map<EnoceanParameterAddress, Value> parsePacket(BasicPacket packet) {
+        Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
         if (packet instanceof RadioPacketRPS) {
             RadioPacketRPS radioPacketRPS = (RadioPacketRPS) packet;
             byte dataByte = radioPacketRPS.getDataByte();
@@ -45,16 +47,16 @@ public class RockerSwitch implements EEPParser {
                 }
             }
             if (buttonAUp != null) {
-                map.put(PARAMETER_ID + A_UP, buttonAUp);
+                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_I + "_" + PRESSED), buttonAUp);
             }
             if (buttonADown != null) {
-                map.put(PARAMETER_ID + A_DOWN, buttonADown);
+                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_O + "_" + PRESSED), buttonADown);
             }
             if (buttonBUp != null) {
-                map.put(PARAMETER_ID + B_UP, buttonBUp);
+                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_I + "_" + PRESSED), buttonBUp);
             }
             if (buttonBDown != null) {
-                map.put(PARAMETER_ID + B_DOWN, buttonBDown);
+                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_O + "_" + PRESSED), buttonBDown);
             }
 
             byte statusByte = radioPacketRPS.getStatusByte();
