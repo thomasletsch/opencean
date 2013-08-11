@@ -1,6 +1,5 @@
 package org.enocean.java.common;
 
-
 public interface ProtocolConnector {
 
     void connect(String device);

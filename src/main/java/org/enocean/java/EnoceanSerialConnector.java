@@ -23,12 +23,10 @@ public class EnoceanSerialConnector implements ProtocolConnector {
 
     private static final Logger logger = LoggerFactory.getLogger(EnoceanSerialConnector.class);
 
-    private static final int READ_LIMIT = 2048;
-
     DataInputStream in = null;
     DataOutputStream out = null;
     SerialPort serialPort = null;
-    Thread readerThread = null;
+    EnoceanByteStreamPipe byteStreamPipe = null;
 
     private CircularByteBuffer buffer;
 
@@ -51,32 +49,16 @@ public class EnoceanSerialConnector implements ProtocolConnector {
             out.flush();
 
             buffer = new CircularByteBuffer(2048);
-            Runnable runnable = new Runnable() {
+            byteStreamPipe = new EnoceanByteStreamPipe(in, buffer);
+            new Thread(byteStreamPipe).start();
 
-                @Override
-                public void run() {
-                    while (true) {
-                        try {
-                            byte readByte = in.readByte();
-                            logger.debug("Received " + readByte);
-                            buffer.put(readByte);
-                        } catch (Exception e) {
-                            logger.error("Error while reading from COM port. Stopping.", e);
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            };
-            new Thread(runnable).start();
-
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-
-                @Override
-                public void run() {
-                    logger.info("Closing serialPort");
-                    serialPort.close();
-                }
-            });
+            // Runtime.getRuntime().addShutdownHook(new Thread() {
+            //
+            // @Override
+            // public void run() {
+            // disconnect();
+            // }
+            // });
 
         } catch (Exception e) {
             throw new RuntimeException("Could not init comm port", e);
@@ -86,21 +68,16 @@ public class EnoceanSerialConnector implements ProtocolConnector {
     @Override
     public void disconnect() {
         logger.debug("Interrupt serial connection");
-        readerThread.interrupt();
+        byteStreamPipe.stop();
 
         logger.debug("Close serial stream");
         try {
             out.close();
+            serialPort.close();
+            buffer.stop();
         } catch (IOException e) {
+            logger.warn("Could not fully shut down EnOcean driver", e);
         }
-
-        // Evert: very frustrating, I cannot get the thread to gracefully
-        // shutdown when copying a new jar on a running install.
-        // somehow the serialport does not get released...
-
-        // logger.debug("Close serial connection");
-        // serialPort.removeEventListener();
-        // serialPort.close();
 
         logger.debug("Ready");
     }
@@ -139,4 +116,5 @@ public class EnoceanSerialConnector implements ProtocolConnector {
             throw new RuntimeException("Could not write", e);
         }
     }
+
 }

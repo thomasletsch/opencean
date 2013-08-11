@@ -22,6 +22,8 @@ public class CircularByteBuffer {
 
     private byte[] buffer;
 
+    private boolean running = true;
+
     public CircularByteBuffer(int size) {
         buffer = new byte[size];
     }
@@ -38,7 +40,7 @@ public class CircularByteBuffer {
     }
 
     private void waitForData() {
-        while (isEmpty()) {
+        while (isEmpty() && running) {
             try {
                 Thread.sleep(WAIT_MS);
             } catch (Exception e) {
@@ -80,6 +82,10 @@ public class CircularByteBuffer {
 
     private boolean isEmpty() {
         return currentSize <= 0;
+    }
+
+    public void stop() {
+        running = false;
     }
 
 }

@@ -60,8 +60,8 @@ public class EnoceanParameterAddress implements ParameterAddress {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((deviceId == null) ? 0 : deviceId.hashCode());
         result = prime * result + ((channelId == null) ? 0 : channelId.hashCode());
+        result = prime * result + ((deviceId == null) ? 0 : deviceId.hashCode());
         result = prime * result + ((parameterId == null) ? 0 : parameterId.hashCode());
         return result;
     }
@@ -78,6 +78,13 @@ public class EnoceanParameterAddress implements ParameterAddress {
             return false;
         }
         EnoceanParameterAddress other = (EnoceanParameterAddress) obj;
+        if (channelId == null) {
+            if (other.channelId != null) {
+                return false;
+            }
+        } else if (!channelId.equals(other.channelId)) {
+            return false;
+        }
         if (deviceId == null) {
             if (other.deviceId != null) {
                 return false;
