@@ -100,6 +100,10 @@ public class RadioPacket extends BasicPacket {
         return senderId;
     }
 
+    public byte getStatus() {
+        return status;
+    }
+
     @Override
     public String toString() {
         return super.toString() + ", [sender=" + senderId + ", repeaterCount=" + repeaterCount + "]";

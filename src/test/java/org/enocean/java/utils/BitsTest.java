@@ -11,25 +11,25 @@ public class BitsTest {
     @Test
     public void getBitFirstBit() {
         byte b = 1;
-        assertTrue(Bits.getBit(b, 0));
+        assertTrue(Bits.isBitSet(b, 0));
     }
 
     @Test
     public void getBitSecondBit() {
         byte b = 2;
-        assertTrue(Bits.getBit(b, 1));
+        assertTrue(Bits.isBitSet(b, 1));
     }
 
     @Test
     public void getBitFirstBitFalse() {
         byte b = 2;
-        assertFalse(Bits.getBit(b, 0));
+        assertFalse(Bits.isBitSet(b, 0));
     }
 
     @Test
     public void getBitSecondBitFalse() {
         byte b = 1;
-        assertFalse(Bits.getBit(b, 1));
+        assertFalse(Bits.isBitSet(b, 1));
     }
 
     @Test

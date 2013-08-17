@@ -7,24 +7,29 @@ import org.enocean.java.address.EnoceanParameterAddress;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacketRPS;
 import org.enocean.java.utils.Bits;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RockerSwitch implements EEPParser {
 
-    public static final EEPId EEP_ID = new EEPId("F6:02:01");
+    private static Logger logger = LoggerFactory.getLogger(RockerSwitch.class);
+
+    public static final EEPId EEP_ID_1 = new EEPId("F6:02:01");
+    public static final EEPId EEP_ID_2 = new EEPId("F6:02:01");
     public static final String BUTTON_I = "I";
     public static final String BUTTON_O = "O";
     public static final String PRESSED = "PRESSED";
     public static final String RELEASED = "RELEASED";
-    private static final String CHANNEL_A = "A";
-    private static final String CHANNEL_B = "B";
+    public static final String CHANNEL_A = "A";
+    public static final String CHANNEL_B = "B";
 
     private NUState nu;
     private T21State t21;
 
-    private ButtonState buttonAUp;
-    private ButtonState buttonADown;
-    private ButtonState buttonBUp;
-    private ButtonState buttonBDown;
+    private ButtonState buttonAO;
+    private ButtonState buttonAI;
+    private ButtonState buttonBO;
+    private ButtonState buttonBI;
     private EnergyBowState energyBow;
 
     @Override
@@ -32,59 +37,70 @@ public class RockerSwitch implements EEPParser {
         Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
         if (packet instanceof RadioPacketRPS) {
             RadioPacketRPS radioPacketRPS = (RadioPacketRPS) packet;
+            byte statusByte = radioPacketRPS.getStatus();
             byte dataByte = radioPacketRPS.getDataByte();
             energyBow = EnergyBowState.values()[(dataByte & 0x10) >> 4];
+            nu = NUState.values()[(statusByte & 0x10) >> 4];
+            t21 = T21State.values()[(statusByte & 0x20) >> 5];
             if (energyBow.equals(EnergyBowState.RELEASED)) {
                 releaseButton();
+                addButtonStateToParameters(map, radioPacketRPS);
             } else {
+                if (NUState.UNASSIGNEDMESSAGE.equals(nu)) {
+                    logger.info("NU = 0 => unassigned pressed button message received. Not supported!");
+                    return map;
+                }
                 resetButtons();
                 byte rocker1 = (byte) ((dataByte & 0xE0) >> 5);
                 parseButtonStates(rocker1);
-                boolean secondAction = Bits.getBit(dataByte, 0);
+                addButtonStateToParameters(map, radioPacketRPS);
+                boolean secondAction = Bits.isBitSet(dataByte, 0);
                 if (secondAction) {
+                    resetButtons();
                     byte rocker2 = (byte) ((dataByte & 0x0E) >> 1);
                     parseButtonStates(rocker2);
+                    addButtonStateToParameters(map, radioPacketRPS);
                 }
             }
-            if (buttonAUp != null) {
-                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_I + "_" + PRESSED), buttonAUp);
-            }
-            if (buttonADown != null) {
-                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_O + "_" + PRESSED), buttonADown);
-            }
-            if (buttonBUp != null) {
-                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_I + "_" + PRESSED), buttonBUp);
-            }
-            if (buttonBDown != null) {
-                map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_O + "_" + PRESSED), buttonBDown);
-            }
 
-            byte statusByte = radioPacketRPS.getStatusByte();
-            nu = NUState.values()[(statusByte & 0x10) >> 4];
-            t21 = T21State.values()[(statusByte & 0x20) >> 5];
         }
         return map;
     }
 
+    private void addButtonStateToParameters(Map<EnoceanParameterAddress, Value> map, RadioPacketRPS radioPacketRPS) {
+        if (buttonAO != null) {
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_O), buttonAO);
+        }
+        if (buttonAI != null) {
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_I), buttonAI);
+        }
+        if (buttonBO != null) {
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_O), buttonBO);
+        }
+        if (buttonBI != null) {
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_I), buttonBI);
+        }
+    }
+
     private void resetButtons() {
-        buttonAUp = null;
-        buttonBUp = null;
-        buttonADown = null;
-        buttonBDown = null;
+        buttonAO = null;
+        buttonBO = null;
+        buttonAI = null;
+        buttonBI = null;
     }
 
     private void releaseButton() {
-        if (buttonAUp != null) {
-            buttonAUp = ButtonState.RELEASED;
+        if (buttonAO != null) {
+            buttonAO = ButtonState.RELEASED;
         }
-        if (buttonADown != null) {
-            buttonADown = ButtonState.RELEASED;
+        if (buttonAI != null) {
+            buttonAI = ButtonState.RELEASED;
         }
-        if (buttonBUp != null) {
-            buttonBUp = ButtonState.RELEASED;
+        if (buttonBO != null) {
+            buttonBO = ButtonState.RELEASED;
         }
-        if (buttonBDown != null) {
-            buttonBDown = ButtonState.RELEASED;
+        if (buttonBI != null) {
+            buttonBI = ButtonState.RELEASED;
         }
 
     }
@@ -92,16 +108,16 @@ public class RockerSwitch implements EEPParser {
     private void parseButtonStates(byte channelA) {
         switch (channelA) {
         case 0:
-            buttonADown = ButtonState.PRESSED;
+            buttonAI = ButtonState.PRESSED;
             break;
         case 1:
-            buttonAUp = ButtonState.PRESSED;
+            buttonAO = ButtonState.PRESSED;
             break;
         case 2:
-            buttonBDown = ButtonState.PRESSED;
+            buttonBI = ButtonState.PRESSED;
             break;
         case 3:
-            buttonBUp = ButtonState.PRESSED;
+            buttonBO = ButtonState.PRESSED;
             break;
 
         default:

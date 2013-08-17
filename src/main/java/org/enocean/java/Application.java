@@ -18,6 +18,6 @@ public class Application {
         ESP3Host esp3Host = new ESP3Host(connector);
         BasicPacket packet = new QueryIdCommand();
         esp3Host.sendRadio(packet);
-        esp3Host.receiveRadio();
+        esp3Host.start();
     }
 }

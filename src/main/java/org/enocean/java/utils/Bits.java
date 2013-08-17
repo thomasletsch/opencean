@@ -2,11 +2,15 @@ package org.enocean.java.utils;
 
 public class Bits {
 
-    public static boolean getBit(byte b, int pos) {
+    public static boolean isBitSet(byte b, int pos) {
         return ((b >> pos) & 1) == 1;
     }
 
-    public static boolean getBit(short s, int pos) {
+    public static int getBit(byte b, int pos) {
+        return ((b >> pos) & 1);
+    }
+
+    public static boolean isBitSet(short s, int pos) {
         return ((s >> pos) & 1) == 1;
     }
 

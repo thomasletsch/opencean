@@ -1,11 +1,9 @@
 package org.enocean.java.packets;
 
-
 public class RadioPacketRPS extends RadioPacket {
 
     public static final byte RADIO_TYPE = (byte) 0xF6;
     private byte dataByte;
-    private byte statusByte;
 
     public RadioPacketRPS(RawPacket rawPacket) {
         super(rawPacket);
@@ -19,10 +17,6 @@ public class RadioPacketRPS extends RadioPacket {
 
     public byte getDataByte() {
         return dataByte;
-    }
-
-    public byte getStatusByte() {
-        return statusByte;
     }
 
     @Override

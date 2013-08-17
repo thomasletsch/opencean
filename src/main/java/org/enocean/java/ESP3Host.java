@@ -11,7 +11,7 @@ import org.enocean.java.packets.BasicPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ESP3Host {
+public class ESP3Host implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(ESP3Host.class);
 
     private List<EnoceanMessageListener> messageListeners = new ArrayList<EnoceanMessageListener>();
@@ -25,6 +25,10 @@ public class ESP3Host {
         parameterChangeNotifier = new ParameterChangeNotifier();
         parameterChangeNotifier.addParameterValueChangeListener(new LoggingListener());
         messageListeners.add(parameterChangeNotifier);
+    }
+
+    public void start() {
+        new Thread(this).start();
     }
 
     public void addDeviceProfile(EnoceanId id, EEPId epp) {
@@ -47,7 +51,22 @@ public class ESP3Host {
         connector.write(packet.toBytes());
     }
 
-    public void receiveRadio() {
+    private void notifyListeners(BasicPacket receivedPacket) {
+        for (EnoceanMessageListener listener : this.messageListeners) {
+            listener.receivePacket(receivedPacket);
+        }
+    }
+
+    public void sendRadioSubTel() {
+
+    }
+
+    public void receiveRadioSubTel() {
+
+    }
+
+    @Override
+    public void run() {
         logger.info("starting receiveRadio.. ");
         PacketReceiver receiver = new PacketReceiver(connector);
         while (true) {
@@ -63,20 +82,6 @@ public class ESP3Host {
                 logger.error("Error", e);
             }
         }
-    }
-
-    private void notifyListeners(BasicPacket receivedPacket) {
-        for (EnoceanMessageListener listener : this.messageListeners) {
-            listener.receivePacket(receivedPacket);
-        }
-    }
-
-    public void sendRadioSubTel() {
-
-    }
-
-    public void receiveRadioSubTel() {
-
     }
 
 }
