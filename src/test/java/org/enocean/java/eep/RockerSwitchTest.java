@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import org.enocean.java.PacketFactory;
 import org.enocean.java.address.EnoceanId;
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.values.ButtonState;
+import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.Header;
 import org.enocean.java.packets.Payload;

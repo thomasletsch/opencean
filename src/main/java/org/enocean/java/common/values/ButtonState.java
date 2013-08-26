@@ -1,7 +1,7 @@
-package org.enocean.java.eep;
+package org.enocean.java.common.values;
 
-public enum ContactState implements Value {
-    OPEN, CLOSED;
+public enum ButtonState implements Value {
+    PRESSED, RELEASED;
 
     @Override
     public String toString() {
@@ -15,6 +15,7 @@ public enum ContactState implements Value {
 
     @Override
     public String getDisplayValue() {
-        return (this.equals(OPEN) ? "Open" : "Closed");
+        return (this.equals(PRESSED) ? "Pressed" : "Released");
     }
+
 }

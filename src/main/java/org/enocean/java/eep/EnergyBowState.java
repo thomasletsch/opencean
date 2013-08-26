@@ -1,5 +1,7 @@
 package org.enocean.java.eep;
 
+import org.enocean.java.common.values.Value;
+
 public enum EnergyBowState implements Value {
     RELEASED, PRESSED;
 

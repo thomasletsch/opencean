@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.values.NumberWithUnit;
+import org.enocean.java.common.values.Unit;
+import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacket4BS;
 

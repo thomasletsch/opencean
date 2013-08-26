@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.RadioPacket4BS;
 import org.junit.Test;
 

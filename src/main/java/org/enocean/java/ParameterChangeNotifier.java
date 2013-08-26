@@ -8,10 +8,10 @@ import java.util.Map;
 import org.enocean.java.address.EnoceanId;
 import org.enocean.java.address.EnoceanParameterAddress;
 import org.enocean.java.common.ParameterValueChangeListener;
+import org.enocean.java.common.values.Value;
 import org.enocean.java.eep.EEPId;
 import org.enocean.java.eep.EEPParser;
 import org.enocean.java.eep.EEPParserFactory;
-import org.enocean.java.eep.Value;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacket;
 

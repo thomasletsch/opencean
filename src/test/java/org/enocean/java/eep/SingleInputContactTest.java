@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.enocean.java.PacketFactory;
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.values.ContactState;
+import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.Header;
 import org.enocean.java.packets.Payload;

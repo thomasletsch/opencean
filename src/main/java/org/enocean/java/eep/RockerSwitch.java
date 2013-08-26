@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.values.ButtonState;
+import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacketRPS;
 import org.enocean.java.utils.Bits;
