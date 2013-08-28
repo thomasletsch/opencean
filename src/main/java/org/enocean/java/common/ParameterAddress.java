@@ -9,12 +9,13 @@ package org.enocean.java.common;
  */
 public interface ParameterAddress {
 
-    String getAsString();
-
     String getParameterId();
 
     String getDeviceId();
 
+    String getDeviceAsString();
+
     String getChannelId();
 
+    String getAsString();
 }

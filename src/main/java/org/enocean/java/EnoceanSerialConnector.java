@@ -48,7 +48,7 @@ public class EnoceanSerialConnector implements ProtocolConnector {
 
             out.flush();
 
-            buffer = new CircularByteBuffer(2048);
+            buffer = new CircularByteBuffer(Byte.MAX_VALUE * Byte.MAX_VALUE + 2 * Byte.MAX_VALUE);
             byteStreamPipe = new EnoceanByteStreamPipe(in, buffer);
             new Thread(byteStreamPipe).start();
 

@@ -20,6 +20,11 @@ public class EnoceanParameterAddress implements ParameterAddress {
     }
 
     @Override
+    public String getDeviceAsString() {
+        return "{" + "id=\"" + deviceId + "\"}";
+    }
+
+    @Override
     public String getAsString() {
         String str = "{" + "id=\"" + deviceId + "\"";
         if (channelId != null) {
