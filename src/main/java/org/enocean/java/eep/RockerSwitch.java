@@ -17,7 +17,7 @@ public class RockerSwitch implements EEPParser {
     private static Logger logger = LoggerFactory.getLogger(RockerSwitch.class);
 
     public static final EEPId EEP_ID_1 = new EEPId("F6:02:01");
-    public static final EEPId EEP_ID_2 = new EEPId("F6:02:01");
+    public static final EEPId EEP_ID_2 = new EEPId("F6:02:02");
     public static final String BUTTON_I = "I";
     public static final String BUTTON_O = "O";
     public static final String PRESSED = "PRESSED";

@@ -4,9 +4,9 @@ import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.enocean.java.common.ProtocolConnector;
 import org.enocean.java.utils.CircularByteBuffer;
@@ -23,7 +23,7 @@ public class EnoceanSerialConnector implements ProtocolConnector {
 
     private static final Logger logger = LoggerFactory.getLogger(EnoceanSerialConnector.class);
 
-    DataInputStream in = null;
+    InputStream in = null;
     DataOutputStream out = null;
     SerialPort serialPort = null;
     EnoceanByteStreamPipe byteStreamPipe = null;
@@ -43,7 +43,7 @@ public class EnoceanSerialConnector implements ProtocolConnector {
             serialPort = (SerialPort) commPort;
             serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
-            in = new DataInputStream(serialPort.getInputStream());
+            in = serialPort.getInputStream();
             out = new DataOutputStream(serialPort.getOutputStream());
 
             out.flush();

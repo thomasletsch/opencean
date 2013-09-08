@@ -17,5 +17,7 @@ public interface ParameterAddress {
 
     String getChannelId();
 
+    String getChannelAsString();
+
     String getAsString();
 }

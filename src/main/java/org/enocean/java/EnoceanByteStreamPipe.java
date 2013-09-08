@@ -1,7 +1,7 @@
 package org.enocean.java;
 
-import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.enocean.java.utils.CircularByteBuffer;
 import org.slf4j.Logger;
@@ -12,10 +12,10 @@ public class EnoceanByteStreamPipe implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(EnoceanByteStreamPipe.class);
 
     private boolean running = true;
-    private DataInputStream in = null;
+    private InputStream in = null;
     private CircularByteBuffer buffer;
 
-    public EnoceanByteStreamPipe(DataInputStream in, CircularByteBuffer buffer) {
+    public EnoceanByteStreamPipe(InputStream in, CircularByteBuffer buffer) {
         this.in = in;
         this.buffer = buffer;
     }
@@ -24,7 +24,7 @@ public class EnoceanByteStreamPipe implements Runnable {
     public void run() {
         while (running) {
             try {
-                byte readByte = in.readByte();
+                byte readByte = (byte) in.read();
                 logger.debug("Received " + readByte);
                 buffer.put(readByte);
             } catch (Exception e) {
