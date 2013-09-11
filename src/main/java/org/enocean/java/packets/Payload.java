@@ -1,7 +1,7 @@
 package org.enocean.java.packets;
 
 import org.enocean.java.common.ProtocolConnector;
-import org.enocean.java.utils.ByteArrayUtils;
+import org.enocean.java.utils.ByteArray;
 import org.enocean.java.utils.CRC8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class Payload {
     }
 
     public byte[] toBytes() {
-        ByteArrayWrapper bytes = new ByteArrayWrapper();
+        ByteArray bytes = new ByteArray();
         bytes.addBytes(getData());
         bytes.addBytes(getOptionalData());
         bytes.addByte(crc8);
@@ -69,8 +69,7 @@ public class Payload {
 
     @Override
     public String toString() {
-        return "Payload: " + "data=" + ByteArrayUtils.printByteArray(getData()) + ", optionaldata="
-                + ByteArrayUtils.printByteArray(getOptionalData()) + ", crc8d=" + crc8;
+        return "Payload: " + "data=" + new ByteArray(getData()) + ", optionaldata=" + new ByteArray(getOptionalData()) + ", crc8d=" + crc8;
     }
 
     private byte calculateCrc8() {

@@ -1,6 +1,7 @@
 package org.enocean.java.packets;
 
 import org.enocean.java.utils.Bits;
+import org.enocean.java.utils.ByteArray;
 import org.enocean.java.utils.ByteBitSet;
 
 public class RemoteCommand4BSTeachIn extends BasicPacket {
@@ -51,7 +52,7 @@ public class RemoteCommand4BSTeachIn extends BasicPacket {
     @Override
     protected void fillData() {
         super.fillData();
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addByte(rorg);
         ByteBitSet db_0 = new ByteBitSet();
         ByteBitSet db_1 = new ByteBitSet();

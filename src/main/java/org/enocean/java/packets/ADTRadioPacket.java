@@ -2,6 +2,8 @@ package org.enocean.java.packets;
 
 import java.nio.ByteBuffer;
 
+import org.enocean.java.utils.ByteArray;
+
 public class ADTRadioPacket extends RadioPacket {
 
     private byte[] userData;
@@ -45,7 +47,7 @@ public class ADTRadioPacket extends RadioPacket {
     @Override
     protected void fillData() {
         super.fillData();
-        ByteArrayWrapper data = new ByteArrayWrapper();
+        ByteArray data = new ByteArray();
         data.addByte(radioType);
         data.addBytes(userData);
         data.addInt(senderId);

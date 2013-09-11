@@ -2,6 +2,8 @@ package org.enocean.java.packets;
 
 import java.nio.ByteBuffer;
 
+import org.enocean.java.utils.ByteArray;
+
 public class ConfirmLearnEventResponsePacket extends ResponsePacket {
 
     /**
@@ -23,7 +25,7 @@ public class ConfirmLearnEventResponsePacket extends ResponsePacket {
 
     @Override
     protected void fillData() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addShort(responseTime);
         wrapper.addByte(confirmCode);
         payload.setData(wrapper.getArray());

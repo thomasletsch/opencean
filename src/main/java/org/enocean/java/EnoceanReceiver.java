@@ -2,7 +2,7 @@ package org.enocean.java;
 
 import org.enocean.java.packets.BasicPacket;
 
-public interface EnoceanMessageListener {
+public interface EnoceanReceiver {
 
     void receivePacket(BasicPacket packet);
 

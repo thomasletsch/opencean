@@ -1,7 +1,7 @@
 package org.enocean.java.packets;
 
 import org.enocean.java.common.ProtocolConnector;
-import org.enocean.java.utils.ByteArrayUtils;
+import org.enocean.java.utils.ByteArray;
 
 public class RawPacket {
 
@@ -26,7 +26,7 @@ public class RawPacket {
     }
 
     public byte[] toBytes() {
-        ByteArrayWrapper bytes = new ByteArrayWrapper();
+        ByteArray bytes = new ByteArray();
         bytes.addBytes(header.toBytes());
         bytes.addBytes(payload.toBytes());
         return bytes.getArray();
@@ -42,7 +42,7 @@ public class RawPacket {
 
     @Override
     public String toString() {
-        return ByteArrayUtils.printByteArray(toBytes());
+        return new ByteArray(toBytes()).toString();
     }
 
 }

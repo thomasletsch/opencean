@@ -1,6 +1,7 @@
 package org.enocean.java.packets;
 
 import org.enocean.java.common.ProtocolConnector;
+import org.enocean.java.utils.ByteArray;
 import org.enocean.java.utils.CRC8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class Header {
     }
 
     public byte[] toBytes() {
-        ByteArrayWrapper bytes = new ByteArrayWrapper();
+        ByteArray bytes = new ByteArray();
         bytes.addShort(getDataLength());
         bytes.addByte(getOptionalDataLength());
         bytes.addByte(getPacketType());

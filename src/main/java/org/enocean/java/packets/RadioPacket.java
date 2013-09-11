@@ -3,6 +3,7 @@ package org.enocean.java.packets;
 import java.nio.ByteBuffer;
 
 import org.enocean.java.address.EnoceanId;
+import org.enocean.java.utils.ByteArray;
 
 public class RadioPacket extends BasicPacket {
 
@@ -76,7 +77,7 @@ public class RadioPacket extends BasicPacket {
 
     @Override
     protected void fillOptionalData() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addByte(subTelNum);
         wrapper.addBytes(destinationId.toBytes());
         wrapper.addByte(dBm);

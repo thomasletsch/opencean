@@ -1,5 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.utils.ByteArray;
+
 public class ResponsePacket extends BasicPacket {
 
     public static final byte PACKET_TYPE = 0x02;
@@ -28,7 +30,7 @@ public class ResponsePacket extends BasicPacket {
 
     @Override
     protected void fillData() {
-        ByteArrayWrapper data = new ByteArrayWrapper();
+        ByteArray data = new ByteArray();
         data.addByte(getReturnCode());
         data.addBytes(getResponseData());
         payload.setData(data.getArray());

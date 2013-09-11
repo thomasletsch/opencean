@@ -6,6 +6,12 @@ import org.enocean.java.packets.QueryIdCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Stand-alone Application for reading EnOcean packages
+ * 
+ * @author Thomas Letsch (contact@thomas-letsch.de)
+ * 
+ */
 public class Application {
 
     private static Logger logger = LoggerFactory.getLogger(Application.class);

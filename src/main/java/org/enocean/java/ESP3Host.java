@@ -11,10 +11,10 @@ import org.enocean.java.packets.BasicPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ESP3Host implements Runnable {
+public class ESP3Host extends Thread {
     private static Logger logger = LoggerFactory.getLogger(ESP3Host.class);
 
-    private List<EnoceanMessageListener> messageListeners = new ArrayList<EnoceanMessageListener>();
+    private List<EnoceanReceiver> receivers = new ArrayList<EnoceanReceiver>();
 
     final ProtocolConnector connector;
 
@@ -24,11 +24,7 @@ public class ESP3Host implements Runnable {
         this.connector = connector;
         parameterChangeNotifier = new ParameterChangeNotifier();
         parameterChangeNotifier.addParameterValueChangeListener(new LoggingListener());
-        messageListeners.add(parameterChangeNotifier);
-    }
-
-    public void start() {
-        new Thread(this).start();
+        receivers.add(parameterChangeNotifier);
     }
 
     public void addDeviceProfile(EnoceanId id, EEPId epp) {
@@ -39,21 +35,21 @@ public class ESP3Host implements Runnable {
         parameterChangeNotifier.addParameterValueChangeListener(listener);
     }
 
-    public void addListener(EnoceanMessageListener listener) {
-        messageListeners.add(listener);
+    public void addListener(EnoceanReceiver receiver) {
+        this.receivers.add(receiver);
     }
 
-    public void removeListener(EnoceanMessageListener listener) {
-        messageListeners.remove(listener);
+    public void removeListener(EnoceanReceiver receiver) {
+        receivers.remove(receiver);
     }
 
     public void sendRadio(BasicPacket packet) {
         connector.write(packet.toBytes());
     }
 
-    private void notifyListeners(BasicPacket receivedPacket) {
-        for (EnoceanMessageListener listener : this.messageListeners) {
-            listener.receivePacket(receivedPacket);
+    private void notifyReceivers(BasicPacket receivedPacket) {
+        for (EnoceanReceiver receiver : this.receivers) {
+            receiver.receivePacket(receivedPacket);
         }
     }
 
@@ -68,13 +64,13 @@ public class ESP3Host implements Runnable {
     @Override
     public void run() {
         logger.info("starting receiveRadio.. ");
-        PacketReceiver receiver = new PacketReceiver(connector);
+        PacketStreamReader receiver = new PacketStreamReader(connector);
         while (true) {
             try {
-                BasicPacket receivedPacket = receiver.receive();
+                BasicPacket receivedPacket = receiver.read();
                 if (receivedPacket != null) {
                     logger.info(receivedPacket.toString());
-                    notifyListeners(receivedPacket);
+                    notifyReceivers(receivedPacket);
                 } else {
                     logger.debug("Sync byte received, but header not valid.");
                 }

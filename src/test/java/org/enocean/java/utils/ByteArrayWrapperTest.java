@@ -2,14 +2,13 @@ package org.enocean.java.utils;
 
 import static org.junit.Assert.assertEquals;
 
-import org.enocean.java.packets.ByteArrayWrapper;
 import org.junit.Test;
 
 public class ByteArrayWrapperTest {
 
     @Test
     public void testSetInt() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper(new byte[4]);
+        ByteArray wrapper = new ByteArray(new byte[4]);
         wrapper.setInt(10, 0);
         byte[] array = wrapper.getArray();
         assertEquals("length", 4, array.length);
@@ -21,7 +20,7 @@ public class ByteArrayWrapperTest {
 
     @Test
     public void testAddInt() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addInt(10);
         byte[] array = wrapper.getArray();
         assertEquals("length", 4, array.length);
@@ -33,7 +32,7 @@ public class ByteArrayWrapperTest {
 
     @Test
     public void testAddShort() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addShort((short) 10);
         byte[] array = wrapper.getArray();
         assertEquals("length", 2, array.length);
@@ -43,7 +42,7 @@ public class ByteArrayWrapperTest {
 
     @Test
     public void testSetByte() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper(new byte[1]);
+        ByteArray wrapper = new ByteArray(new byte[1]);
         wrapper.setByte((byte) 10, 0);
         byte[] array = wrapper.getArray();
         assertEquals("length", 1, array.length);
@@ -52,7 +51,7 @@ public class ByteArrayWrapperTest {
 
     @Test
     public void testAddBytes() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addBytes(new byte[] { 1, 2, 3 });
         byte[] array = wrapper.getArray();
         assertEquals("length", 3, array.length);
@@ -63,7 +62,7 @@ public class ByteArrayWrapperTest {
 
     @Test
     public void testAddByte() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addByte((byte) 10);
         byte[] array = wrapper.getArray();
         assertEquals("length", 1, array.length);

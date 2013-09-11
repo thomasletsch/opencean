@@ -15,7 +15,7 @@ import org.enocean.java.eep.EEPParserFactory;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacket;
 
-public class ParameterChangeNotifier implements EnoceanMessageListener {
+public class ParameterChangeNotifier implements EnoceanReceiver {
 
     private List<ParameterValueChangeListener> valueChangeListeners = new ArrayList<ParameterValueChangeListener>();
     private Map<EnoceanId, EEPId> deviceToEEP = new HashMap<EnoceanId, EEPId>();

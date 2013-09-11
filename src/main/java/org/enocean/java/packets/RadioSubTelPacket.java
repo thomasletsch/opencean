@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.enocean.java.utils.ByteArray;
+
 public class RadioSubTelPacket extends RadioPacket {
 
     private short timeStamp;
@@ -27,7 +29,7 @@ public class RadioSubTelPacket extends RadioPacket {
     @Override
     protected void fillOptionalData() {
         super.fillOptionalData();
-        ByteArrayWrapper optional = new ByteArrayWrapper(payload.getOptionalData());
+        ByteArray optional = new ByteArray(payload.getOptionalData());
         optional.addShort(timeStamp);
         for (SubTel subTel : subTels) {
             optional.addByte(subTel.getTick());

@@ -37,35 +37,37 @@ public class RockerSwitch implements EEPParser {
     @Override
     public Map<EnoceanParameterAddress, Value> parsePacket(BasicPacket packet) {
         Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
-        if (packet instanceof RadioPacketRPS) {
-            RadioPacketRPS radioPacketRPS = (RadioPacketRPS) packet;
-            byte statusByte = radioPacketRPS.getStatus();
-            byte dataByte = radioPacketRPS.getDataByte();
-            energyBow = EnergyBowState.values()[(dataByte & 0x10) >> 4];
-            nu = NUState.values()[(statusByte & 0x10) >> 4];
-            t21 = T21State.values()[(statusByte & 0x20) >> 5];
-            if (energyBow.equals(EnergyBowState.RELEASED)) {
-                releaseButton();
-                addButtonStateToParameters(map, radioPacketRPS);
-            } else {
-                if (NUState.UNASSIGNEDMESSAGE.equals(nu)) {
-                    logger.info("NU = 0 => unassigned pressed button message received. Not supported!");
-                    return map;
-                }
-                resetButtons();
-                byte rocker1 = (byte) ((dataByte & 0xE0) >> 5);
-                parseButtonStates(rocker1);
-                addButtonStateToParameters(map, radioPacketRPS);
-                boolean secondAction = Bits.isBitSet(dataByte, 0);
-                if (secondAction) {
-                    resetButtons();
-                    byte rocker2 = (byte) ((dataByte & 0x0E) >> 1);
-                    parseButtonStates(rocker2);
-                    addButtonStateToParameters(map, radioPacketRPS);
-                }
-            }
-
+        if (!(packet instanceof RadioPacketRPS)) {
+            return map;
         }
+        RadioPacketRPS radioPacketRPS = (RadioPacketRPS) packet;
+        byte statusByte = radioPacketRPS.getStatus();
+        byte dataByte = radioPacketRPS.getDataByte();
+        energyBow = EnergyBowState.values()[(dataByte & 0x10) >> 4];
+        nu = NUState.values()[(statusByte & 0x10) >> 4];
+        t21 = T21State.values()[(statusByte & 0x20) >> 5];
+        if (energyBow.equals(EnergyBowState.RELEASED)) {
+            releaseButton();
+            addButtonStateToParameters(map, radioPacketRPS);
+        } else {
+            if (NUState.UNASSIGNEDMESSAGE.equals(nu)) {
+                logger.info("NU = 0 => unassigned pressed button message received. Not supported!");
+                return map;
+            }
+            resetButtons();
+            byte rocker1 = (byte) ((dataByte & 0xE0) >> 5);
+            parseButtonStates(rocker1);
+            addButtonStateToParameters(map, radioPacketRPS);
+            boolean secondAction = Bits.isBitSet(dataByte, 0);
+            if (secondAction) {
+                logger.info("Second action received for id " + radioPacketRPS.getSenderId() + ". Not expected.");
+                resetButtons();
+                byte rocker2 = (byte) ((dataByte & 0x0E) >> 1);
+                parseButtonStates(rocker2);
+                addButtonStateToParameters(map, radioPacketRPS);
+            }
+        }
+        logger.info("Current State: " + this);
         return map;
     }
 
@@ -126,6 +128,11 @@ public class RockerSwitch implements EEPParser {
             break;
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "buttonAI=" + buttonAI + "buttonAO=" + buttonAO + "buttonBI=" + buttonBI + "buttonBO=" + buttonBO;
     }
 
     public enum NUState {

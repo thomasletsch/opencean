@@ -6,13 +6,13 @@ import org.enocean.java.packets.RawPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PacketReceiver {
+public class PacketStreamReader {
 
-    private static Logger logger = LoggerFactory.getLogger(PacketReceiver.class);
+    private static Logger logger = LoggerFactory.getLogger(PacketStreamReader.class);
 
     private ProtocolConnector connector;
 
-    public PacketReceiver(ProtocolConnector connector) {
+    public PacketStreamReader(ProtocolConnector connector) {
         this.connector = connector;
     }
 
@@ -23,7 +23,7 @@ public class PacketReceiver {
      * @return The received packet or null if header was incorrect (and that
      *         means no packet start was recognized)
      */
-    public BasicPacket receive() {
+    public BasicPacket read() {
         seekTillSyncByte();
         connector.mark();
         RawPacket rawPacket = new RawPacket();

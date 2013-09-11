@@ -2,6 +2,8 @@ package org.enocean.java.packets;
 
 import java.nio.ByteBuffer;
 
+import org.enocean.java.utils.ByteArray;
+
 /**
  * Informs Smart Ack client about the result of a previous sent learn request.
  * 
@@ -52,7 +54,7 @@ public class LearnAckEventPacket extends EventPacket {
 
     @Override
     public byte[] getEventData() {
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addShort(responseTime);
         wrapper.addByte(confirmCode);
         return wrapper.getArray();

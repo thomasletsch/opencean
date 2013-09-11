@@ -1,5 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.utils.ByteArray;
+
 public class EventPacket extends BasicPacket {
 
     public static final byte EVENT_CODE_SA_RECLAIM_NOT_SUCCESSFUL = 0x01;
@@ -25,7 +27,7 @@ public class EventPacket extends BasicPacket {
     @Override
     protected void fillData() {
         super.fillData();
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addByte(eventCode);
         wrapper.addBytes(getEventData());
         payload.setData(wrapper.getArray());

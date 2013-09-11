@@ -1,6 +1,6 @@
 package org.enocean.java.packets;
 
-import org.enocean.java.utils.ByteArrayUtils;
+import org.enocean.java.utils.ByteArray;
 
 public abstract class BasicPacket {
 
@@ -79,7 +79,7 @@ public abstract class BasicPacket {
     public byte[] toBytes() {
         fillPayload();
         fillHeader();
-        ByteArrayWrapper message = new ByteArrayWrapper();
+        ByteArray message = new ByteArray();
         message.addByte(SYNC_BYTE);
         message.addBytes(header.toBytes());
         message.addBytes(payload.toBytes());
@@ -100,7 +100,6 @@ public abstract class BasicPacket {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[header=" + header + ", payload=" + payload + "], raw="
-                + ByteArrayUtils.printByteArray(toBytes());
+        return getClass().getSimpleName() + "[header=" + header + ", payload=" + payload + "], raw=" + new ByteArray(toBytes());
     }
 }

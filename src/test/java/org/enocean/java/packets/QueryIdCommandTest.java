@@ -2,6 +2,7 @@ package org.enocean.java.packets;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import org.enocean.java.utils.ByteArray;
 import org.junit.Test;
 
 public class QueryIdCommandTest {
@@ -14,7 +15,7 @@ public class QueryIdCommandTest {
 
     @Test
     public void testToBytes() {
-        byte[] expected = new ByteArrayWrapper().addByte(BasicPacket.SYNC_BYTE).addBytes(testHeader).addBytes(testPayload).getArray();
+        byte[] expected = new ByteArray().addByte(BasicPacket.SYNC_BYTE).addBytes(testHeader).addBytes(testPayload).getArray();
         QueryIdCommand command = new QueryIdCommand();
         assertArrayEquals(expected, command.toBytes());
     }

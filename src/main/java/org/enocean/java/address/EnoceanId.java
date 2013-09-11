@@ -2,7 +2,7 @@ package org.enocean.java.address;
 
 import java.util.Arrays;
 
-import org.enocean.java.utils.ByteArrayUtils;
+import org.enocean.java.utils.ByteArray;
 
 public class EnoceanId {
 
@@ -15,7 +15,7 @@ public class EnoceanId {
     }
 
     public static EnoceanId fromInt(int idInt) {
-        return new EnoceanId(ByteArrayUtils.toByteArray(idInt));
+        return new EnoceanId(new ByteArray().addInt(idInt).getArray());
     }
 
     public static EnoceanId fromString(String idString) {

@@ -1,5 +1,7 @@
 package org.enocean.java.packets;
 
+import org.enocean.java.utils.ByteArray;
+
 public class QueryIdCommand extends BasicPacket {
 
     public static final byte PACKET_TYPE_REMOTE_MAN_COMMAND = (byte) 0x07;
@@ -21,7 +23,7 @@ public class QueryIdCommand extends BasicPacket {
     @Override
     protected void fillData() {
         super.fillData();
-        ByteArrayWrapper wrapper = new ByteArrayWrapper();
+        ByteArray wrapper = new ByteArray();
         wrapper.addShort(FUNCTION_CODE);
         wrapper.addShort(DEFAULT_MANUFACTURER_ID);
         wrapper.addInt(DESTINATION_ID_MULTICAST);
