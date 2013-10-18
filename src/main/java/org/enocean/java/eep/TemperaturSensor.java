@@ -1,7 +1,5 @@
 package org.enocean.java.eep;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,26 +8,40 @@ import org.enocean.java.common.values.NumberWithUnit;
 import org.enocean.java.common.values.Unit;
 import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.BasicPacket;
+import org.enocean.java.packets.LearnButtonState;
 import org.enocean.java.packets.RadioPacket4BS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TemperaturSensor implements EEPParser {
 
-    private static final float RANGE_MIN = 255;
-    private static final float RANGE_MAX = 0;
-
     public static final EEPId EEP_ID = new EEPId("A5:02:05");
 
+    public static final EEPId EEP_ID_3 = new EEPId("A5:07:03");
+
     public static final String PARAMETER_ID = "TEMPERATURE";
+    public static final String PARAMETER_ID2 = "BRIGHTNESS";
+    public static final String PARAMETER_ID3 = "BATTERY";
+    public static final String PARAMETER_ID4 = "MOVEMENT";
+
+    private static Logger logger = LoggerFactory.getLogger(TemperaturSensor.class);
+
+    private static final int RANGE_MIN = 255;
+    private static final int RANGE_MAX = 0;
 
     private int scaleMin;
-
     private int scaleMax;
 
-    private BigDecimal currentValue;
+    private EEPId eep;
+    private LearnButtonState learnButton;
 
-    public TemperaturSensor(int scaleMin, int scaleMax) {
+    private CalculationUtil calculationUtil = new CalculationUtil();
+
+    public TemperaturSensor(int scaleMin, int scaleMax, EEPId eep) {
         this.scaleMin = scaleMin;
         this.scaleMax = scaleMax;
+        this.eep = eep;
+        logger.info("new Temp sensor, eep " + eep.getId());
     }
 
     @Override
@@ -37,17 +49,10 @@ public class TemperaturSensor implements EEPParser {
         Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
         if (packet instanceof RadioPacket4BS) {
             RadioPacket4BS radioPacket4BS = (RadioPacket4BS) packet;
-            byte source = radioPacket4BS.getDb1();
-            calculateCurrentValue(source);
+            byte db1 = radioPacket4BS.getDb1();
             map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.DEGREE_CELSIUS,
-                    currentValue));
+                    calculationUtil.calculateRangeValue(db1, scaleMin, scaleMax, RANGE_MIN, RANGE_MAX, 3)));
         }
         return map;
-    }
-
-    private void calculateCurrentValue(byte source) {
-        int rawValue = source & 0xFF;
-        float multiplier = (scaleMax - scaleMin) / (RANGE_MAX - RANGE_MIN);
-        currentValue = new BigDecimal(multiplier * (rawValue - RANGE_MIN) + scaleMin, new MathContext(3));
     }
 }

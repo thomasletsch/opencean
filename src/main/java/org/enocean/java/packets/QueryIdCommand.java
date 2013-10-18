@@ -22,7 +22,6 @@ public class QueryIdCommand extends BasicPacket {
 
     @Override
     protected void fillData() {
-        super.fillData();
         ByteArray wrapper = new ByteArray();
         wrapper.addShort(FUNCTION_CODE);
         wrapper.addShort(DEFAULT_MANUFACTURER_ID);

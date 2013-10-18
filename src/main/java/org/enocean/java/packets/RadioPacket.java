@@ -76,6 +76,14 @@ public class RadioPacket extends BasicPacket {
     }
 
     @Override
+    protected void fillData() {
+        ByteArray wrapper = new ByteArray();
+        wrapper.addBytes(senderId.toBytes());
+        wrapper.addByte(status);
+        payload.setData(wrapper.getArray());
+    }
+
+    @Override
     protected void fillOptionalData() {
         ByteArray wrapper = new ByteArray();
         wrapper.addByte(subTelNum);

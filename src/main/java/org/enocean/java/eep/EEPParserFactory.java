@@ -8,7 +8,10 @@ public class EEPParserFactory {
     private Map<EEPId, EEPParser> parser = new HashMap<EEPId, EEPParser>();
 
     public EEPParserFactory() {
-        parser.put(TemperaturSensor.EEP_ID, new TemperaturSensor(0, 40));
+        parser.put(PowerSensor.EEP_ID, new PowerSensor(PowerSensor.EEP_ID));
+        parser.put(TemperaturSensor.EEP_ID, new TemperaturSensor(0, 40, TemperaturSensor.EEP_ID));
+        parser.put(LightTempertureAndOccupancySensor.EEP_ID, new LightTempertureAndOccupancySensor());
+        parser.put(OccupancySensor.EEP_ID, new OccupancySensor());
         parser.put(RockerSwitch.EEP_ID_1, new RockerSwitch());
         parser.put(RockerSwitch.EEP_ID_2, new RockerSwitch());
         parser.put(SingleInputContact.EEP_ID, new SingleInputContact());

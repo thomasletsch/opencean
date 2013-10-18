@@ -132,7 +132,7 @@ public class RockerSwitch implements EEPParser {
 
     @Override
     public String toString() {
-        return "buttonAI=" + buttonAI + "buttonAO=" + buttonAO + "buttonBI=" + buttonBI + "buttonBO=" + buttonBO;
+        return "buttonAI=" + buttonAI + ", buttonAO=" + buttonAO + ", buttonBI=" + buttonBI + ", buttonBO=" + buttonBO;
     }
 
     public enum NUState {

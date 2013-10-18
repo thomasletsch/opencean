@@ -14,7 +14,7 @@ public class TemperaturSensorTest {
 
     @Test
     public void readPacketMax() {
-        EEPParser sensor = new TemperaturSensor(0, 40);
+        EEPParser sensor = new TemperaturSensor(0, 40, TemperaturSensor.EEP_ID);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 255);
         Map<EnoceanParameterAddress, Value> values = sensor.parsePacket(packet);
@@ -24,7 +24,7 @@ public class TemperaturSensorTest {
 
     @Test
     public void readPacketMin() {
-        EEPParser sensor = new TemperaturSensor(0, 40);
+        EEPParser sensor = new TemperaturSensor(0, 40, TemperaturSensor.EEP_ID);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 0);
         Map<EnoceanParameterAddress, Value> values = sensor.parsePacket(packet);
@@ -34,7 +34,7 @@ public class TemperaturSensorTest {
 
     @Test
     public void readPacket112() {
-        EEPParser sensor = new TemperaturSensor(0, 40);
+        EEPParser sensor = new TemperaturSensor(0, 40, TemperaturSensor.EEP_ID);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 112);
         Map<EnoceanParameterAddress, Value> values = sensor.parsePacket(packet);
