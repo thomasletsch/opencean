@@ -25,7 +25,7 @@ public class EnoceanByteStreamPipe implements Runnable {
         while (running) {
             try {
                 byte readByte = (byte) in.read();
-                logger.debug("Received %02X", readByte);
+                logger.debug(String.format("Received %02X", readByte));
                 buffer.put(readByte);
             } catch (Exception e) {
                 logger.error("Error while reading from COM port. Stopping.", e);

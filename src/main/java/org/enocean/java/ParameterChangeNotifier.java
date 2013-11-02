@@ -14,8 +14,12 @@ import org.enocean.java.eep.EEPParser;
 import org.enocean.java.eep.EEPParserFactory;
 import org.enocean.java.packets.BasicPacket;
 import org.enocean.java.packets.RadioPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ParameterChangeNotifier implements EnoceanReceiver {
+
+    private static Logger logger = LoggerFactory.getLogger(ParameterChangeNotifier.class);
 
     private List<ParameterValueChangeListener> valueChangeListeners = new ArrayList<ParameterValueChangeListener>();
     private Map<EnoceanId, EEPId> deviceToEEP = new HashMap<EnoceanId, EEPId>();
@@ -52,6 +56,9 @@ public class ParameterChangeNotifier implements EnoceanReceiver {
             EEPParser parser = parserFactory.getParserFor(profile);
             if (profile != null && parser != null) {
                 return parser.parsePacket(radioPacket);
+            } else {
+                logger.info("Device with id=" + radioPacket.getSenderId() + " and eep=" + profile
+                        + " is not properly configured or not supported.");
             }
         }
         return new HashMap<EnoceanParameterAddress, Value>();

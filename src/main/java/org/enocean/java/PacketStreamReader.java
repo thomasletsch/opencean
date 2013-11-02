@@ -30,12 +30,14 @@ public class PacketStreamReader {
         rawPacket.readHeader(connector);
         if (!rawPacket.getHeader().isValid()) {
             connector.reset();
+            logger.debug("Header not valid. Resetting.");
             return null;
         }
         rawPacket.readPayload(connector);
         if (!rawPacket.getPayload().isValid()) {
             logger.warn("Payload CRC not correct! Package received: " + rawPacket);
             connector.reset();
+            logger.debug("Payload not valid. Resetting.");
             return null;
         }
         BasicPacket packet = PacketFactory.createFrom(rawPacket);

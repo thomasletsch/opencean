@@ -10,6 +10,10 @@ public class Bits {
         return ((b >> pos) & 1);
     }
 
+    public static boolean getBool(byte b, int pos) {
+        return ((b >> pos) & 1) == 1;
+    }
+
     public static boolean isBitSet(short s, int pos) {
         return ((s >> pos) & 1) == 1;
     }
