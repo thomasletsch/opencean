@@ -16,10 +16,7 @@ import org.enocean.java.packets.RadioPacket4BS;
  * 
  * spec from enoluz_co2_enocean_868_230Vac_datasheet.pdf
  * 
- * EnOcean EEP profile A5:09:04
- * Databyte 2 (scale  0…255) 
- * 0 bit : 400 ppm
- * 255 bit 2550 ppm
+ * EnOcean EEP profile A5:09:04 Databyte 2(scale 0-255) 0: 400 ppm 255: 2550 ppm
  * 
  * Scale is different from official spec (0ppm...2550ppm) (and called range on
  * datasheet)
@@ -51,8 +48,8 @@ public class SimpleCO2Sensor implements EEPParser {
      *            the scale max
      */
     public SimpleCO2Sensor(float scaleMin, float scaleMax) {
-	this.scaleMin = scaleMin;
-	this.scaleMax = scaleMax;
+        this.scaleMin = scaleMin;
+        this.scaleMax = scaleMax;
 
     }
 
@@ -71,13 +68,11 @@ public class SimpleCO2Sensor implements EEPParser {
      *            the byte range max
      * @return the value in the scale
      */
-    private float calculateValue(byte source, float scaleMin, float scaleMax,
-	    float byteRangeMin, float byteRangeMax) {
-	int rawValue = source & 0xFF;
+    private float calculateValue(byte source, float scaleMin, float scaleMax, float byteRangeMin, float byteRangeMax) {
+        int rawValue = source & 0xFF;
 
-	float multiplier = (scaleMax - scaleMin)
-		/ (byteRangeMax - byteRangeMin);
-	return multiplier * (rawValue - byteRangeMin) + scaleMin;
+        float multiplier = (scaleMax - scaleMin) / (byteRangeMax - byteRangeMin);
+        return multiplier * (rawValue - byteRangeMin) + scaleMin;
     }
 
     /**
@@ -85,19 +80,17 @@ public class SimpleCO2Sensor implements EEPParser {
      */
     @Override
     public Map<EnoceanParameterAddress, Value> parsePacket(BasicPacket packet) {
-	Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
-	if (packet instanceof RadioPacket4BS) {
-	    RadioPacket4BS radioPacket4BS = (RadioPacket4BS) packet;
-	    byte source = radioPacket4BS.getDb2();
+        Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
+        if (packet instanceof RadioPacket4BS) {
+            RadioPacket4BS radioPacket4BS = (RadioPacket4BS) packet;
+            byte source = radioPacket4BS.getDb2();
 
-	    this.currentValue = this.calculateValue(source, this.scaleMin,
-		    this.scaleMax, BYTE_RANGE_MIN, BYTE_RANGE_MAX);
+            this.currentValue = this.calculateValue(source, this.scaleMin, this.scaleMax, BYTE_RANGE_MIN, BYTE_RANGE_MAX);
 
-	    map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(),
-		    PARAMETER_ID), new NumberWithUnit(Unit.LUX,
-		    (int) this.currentValue));
-	}
-	return map;
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.LUX,
+                    (int) this.currentValue));
+        }
+        return map;
     }
 
 }
