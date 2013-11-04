@@ -99,8 +99,14 @@ public class Header {
 
     @Override
     public String toString() {
-        return "Header: " + "dataLength=" + getDataLength() + ", optionalDataLength=" + getOptionalDataLength() + ", packetType="
-                + getPacketType() + ", crc8h=" + crc8;
+        StringBuilder sb = new StringBuilder("[");
+        sb.append("Header: ");
+        sb.append(String.format("dataLength=%02X", getDataLength()));
+        sb.append(String.format(", optionalDataLength=%02X", getOptionalDataLength()));
+        sb.append(String.format(", packetType=%02X", getPacketType()));
+        sb.append(String.format(", crc8h=%02X", crc8));
+        sb.append("]");
+        return sb.toString();
     }
 
 }
