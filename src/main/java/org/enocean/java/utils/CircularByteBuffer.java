@@ -28,7 +28,7 @@ public class CircularByteBuffer {
         buffer = new byte[size];
     }
 
-    public byte get() {
+    public synchronized byte get() {
         waitForData();
         byte result = buffer[readPos];
         currentSize--;
@@ -63,7 +63,7 @@ public class CircularByteBuffer {
         }
     }
 
-    public void put(byte b) {
+    public synchronized void put(byte b) {
         buffer[writePos] = b;
         writePos++;
         currentSize++;
