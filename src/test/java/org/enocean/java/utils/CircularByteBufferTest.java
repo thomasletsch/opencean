@@ -69,6 +69,7 @@ public class CircularByteBufferTest {
         assertEquals(2, buffer.get());
         buffer.reset();
         assertEquals(2, buffer.get());
+        assertEquals(3, buffer.get());
     }
 
 }

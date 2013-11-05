@@ -77,6 +77,7 @@ public class CircularByteBuffer {
     }
 
     public void reset() {
+        currentSize += Math.abs(readPos - markedPos);
         readPos = markedPos;
     }
 
