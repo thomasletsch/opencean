@@ -19,7 +19,7 @@ import org.enocean.java.packets.RadioPacket4BS;
  * 
  * @author Nicolas Bonnefond INRIA
  */
-public class OfficialVOCSensor implements EEPParser {
+public class VOCSensor implements EEPParser {
     public static final EEPId EEP_ID = new EEPId("A5:09:05");
 
     private static final float OFFICIAL_CONCENTRATION_BYTE_RANGE_MIN = 0f;
@@ -91,7 +91,7 @@ public class OfficialVOCSensor implements EEPParser {
     /**
      * Instantiates a new official voc sensor with official scale values
      */
-    public OfficialVOCSensor() {
+    public VOCSensor() {
         this.scaleMin = OFFICIAL_CONCENTRATION_SCALE_MIN;
         this.scaleMax = OFFICIAL_CONCENTRATION_SCALE_MAX;
     }

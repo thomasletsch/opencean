@@ -23,9 +23,9 @@ import org.enocean.java.packets.RadioPacket4BS;
  * 
  * @author Nicolas Bonnefond INRIA
  */
-public class SimpleCO2Sensor implements EEPParser {
+public class EnoluzCO2Sensor implements EEPParser {
 
-    public static final EEPId EEP_ID = new EEPId("A5:09:04");
+    public static final EEPId EEP_ID = new EEPId("A5:09:04", "enoluz");
 
     private static final float BYTE_RANGE_MIN = 0;
 
@@ -47,7 +47,7 @@ public class SimpleCO2Sensor implements EEPParser {
      * @param scaleMax
      *            the scale max
      */
-    public SimpleCO2Sensor(float scaleMin, float scaleMax) {
+    public EnoluzCO2Sensor(float scaleMin, float scaleMax) {
         this.scaleMin = scaleMin;
         this.scaleMax = scaleMax;
 

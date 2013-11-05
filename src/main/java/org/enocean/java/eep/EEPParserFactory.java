@@ -17,8 +17,8 @@ public class EEPParserFactory {
         parser.put(SingleInputContact.EEP_ID, new SingleInputContact());
         this.parser.put(EltakoLumSensor.EEP_ID, new EltakoLumSensor());
         // parser.put(SimpleCO2Sensor.EEP_ID, new SimpleCO2Sensor(400f, 2550f));
-        this.parser.put(OfficialCO2Sensor.EEP_ID, new OfficialCO2Sensor());
-        this.parser.put(OfficialVOCSensor.EEP_ID, new OfficialVOCSensor());
+        this.parser.put(CO2Sensor.EEP_ID, new CO2Sensor());
+        this.parser.put(VOCSensor.EEP_ID, new VOCSensor());
     }
 
     public EEPParser getParserFor(EEPId profile) {

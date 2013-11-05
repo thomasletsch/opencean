@@ -2,7 +2,8 @@ package org.enocean.java.common.values;
 
 public enum Unit {
 
-    DEGREE_CELSIUS("°C"), LUX("lx"), HUMIDITY("%"), PPB("ppb"), PPM("ppm"), VOLTAGE("Volt"), WATT("W");
+    DEGREE_CELSIUS("°C"), LUX("lx"), HUMIDITY("%"), PPB("ppb - parts per billion"), PPM("ppm - parts per million"), VOLTAGE("Volt"), WATT(
+            "W");
 
     private String displayName;
 
