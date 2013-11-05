@@ -24,9 +24,6 @@ public class PowerSensor implements EEPParser {
      */
     public static final EEPId EEP_ID = new EEPId("D2:01:08");
 
-    public static final String PARAMETER_ID = "POWER";
-    public static final String PARAMETER_ID2 = "CONTACT_STATE";
-
     private BigDecimal currentValue;
     private EEPId eep;
 
@@ -43,7 +40,7 @@ public class PowerSensor implements EEPParser {
             RadioPacketVLD radioPacketVLD = (RadioPacketVLD) packet;
             if (radioPacketVLD.getCMDByte() == 0x07) {
                 currentValue = new BigDecimal(radioPacketVLD.getMValue(), new MathContext(3));
-                map.put(new EnoceanParameterAddress(radioPacketVLD.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.DEGREE_CELSIUS,
+                map.put(new EnoceanParameterAddress(radioPacketVLD.getSenderId(), Parameter.POWER), new NumberWithUnit(Unit.WATT,
                         currentValue));
             } else if (radioPacketVLD.getCMDByte() == 0x04) {
                 byte value = radioPacketVLD.getStateByte();
@@ -52,7 +49,7 @@ public class PowerSensor implements EEPParser {
                 }
                 ContactState contact = ContactState.values()[value];
                 logger.info("State " + value + " " + contact.toString());
-                map.put(new EnoceanParameterAddress(radioPacketVLD.getSenderId(), PARAMETER_ID2), contact);
+                map.put(new EnoceanParameterAddress(radioPacketVLD.getSenderId(), Parameter.CONTACT_STATE), contact);
             }
         }
         return map;

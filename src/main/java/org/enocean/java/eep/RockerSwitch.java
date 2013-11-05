@@ -18,10 +18,6 @@ public class RockerSwitch implements EEPParser {
 
     public static final EEPId EEP_ID_1 = new EEPId("F6:02:01");
     public static final EEPId EEP_ID_2 = new EEPId("F6:02:02");
-    public static final String BUTTON_I = "I";
-    public static final String BUTTON_O = "O";
-    public static final String PRESSED = "PRESSED";
-    public static final String RELEASED = "RELEASED";
     public static final String CHANNEL_A = "A";
     public static final String CHANNEL_B = "B";
 
@@ -73,16 +69,16 @@ public class RockerSwitch implements EEPParser {
 
     private void addButtonStateToParameters(Map<EnoceanParameterAddress, Value> map, RadioPacketRPS radioPacketRPS) {
         if (buttonAO != null) {
-            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_O), buttonAO);
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, Parameter.O), buttonAO);
         }
         if (buttonAI != null) {
-            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, BUTTON_I), buttonAI);
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_A, Parameter.I), buttonAI);
         }
         if (buttonBO != null) {
-            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_O), buttonBO);
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, Parameter.O), buttonBO);
         }
         if (buttonBI != null) {
-            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, BUTTON_I), buttonBI);
+            map.put(new EnoceanParameterAddress(radioPacketRPS.getSenderId(), CHANNEL_B, Parameter.I), buttonBI);
         }
     }
 

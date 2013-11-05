@@ -30,8 +30,6 @@ public class VOCSensor implements EEPParser {
 
     private static final float OFFICIAL_CONCENTRATION_SCALE_MAX = 65535f;
 
-    public static final String PARAMETER_ID_CONCENTRATION = "VOC_CONCENTRATION";
-
     private static final Map<Integer, Float> SCALE_MULTIPLIER_MAP = Collections.unmodifiableMap(new HashMap<Integer, Float>() {
         private static final long serialVersionUID = 1L;
 
@@ -178,7 +176,7 @@ public class VOCSensor implements EEPParser {
 
             this.currentValueScaleMultiplier = this.getScaleMultiplier(radioPacket4BS.getDb0() & 0x03);
 
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID_CONCENTRATION + "_"
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.VOC_CONCENTRATION + "_"
                     + this.currentValueIdentification), new NumberWithUnit(Unit.PPB, this.currentValueConcentration
                     * this.currentValueScaleMultiplier));
         }

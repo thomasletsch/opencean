@@ -1,5 +1,6 @@
 package org.enocean.java.eep;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,73 +21,46 @@ public class CO2Sensor implements EEPParser {
 
     public static final EEPId EEP_ID = new EEPId("A5:09:04");
 
-    public static final String PARAMETER_CO2 = "CO2_CONCENTRATION";
+    public static int OFFICIAL_SCALE_MIN = 0;
+    public static int OFFICIAL_SCALE_MAX_HUMIDITY = 100;
+    public static int OFFICIAL_SCALE_MAX_C02 = 2250;
+    public static int OFFICIAL_SCALE_MAX_TEMP = 51;
+    private static final int OFFICIAL_BYTE_RANGE_MIN = 0;
+    private static final int OFFICIAL_BYTE_RANGE_MAX_CO2_TEMP = 255;
+    private static final int OFFICIAL_BYTE_RANGE_MAX_HUMIDITY = 200;
 
-    public static final String PARAMETER_HUMIDITY = "HUMIDITY";
+    private int rangeMinCO2;
+    private int rangeMaxCO2;
+    private int rangeMinTemp;
+    private int rangeMaxTemp;
+    private int rangeMinHumidity;
+    private int rangeMaxHumidity;
+    private int scaleMinCO2;
+    private int scaleMaxCO2;
+    private int scaleMinTemp;
+    private int scaleMaxTemp;
+    private int scaleMinHumidity;
+    private int scaleMaxHumidity;
 
-    public static final String PARAMETER_TEMPERATURE = "TEMPERATURE";
-
-    public static float OFFICIAL_SCALE_MIN = 0;
-
-    public static float OFFICIAL_SCALE_MAX_HUMIDITY = 100;
-
-    public static float OFFICIAL_SCALE_MAX_C02 = 2250;
-
-    public static float OFFICIAL_SCALE_MAX_TEMP = 51;
-
-    private static final float OFFICIAL_BYTE_RANGE_MIN = 0;
-
-    private static final float OFFICIAL_BYTE_RANGE_MAX_CO2_TEMP = 255f;
-
-    private static final float OFFICIAL_BYTE_RANGE_MAX_HUMIDITY = 200f;
-
-    private float rangeMinCO2;
-
-    private float rangeMaxCO2;
-
-    private float rangeMinTemp;
-
-    private float rangeMaxTemp;
-
-    private float rangeMinHumidity;
-
-    private float rangeMaxHumidity;
-
-    private float scaleMinCO2;
-
-    private float scaleMaxCO2;
-
-    private float scaleMinTemp;
-
-    private float scaleMaxTemp;
-
-    private float scaleMinHumidity;
-
-    private float scaleMaxHumidity;
-
-    private float currentValueC02;
-
-    private float currentValueHumidity;
-
-    private float currentValueTemperature;
+    private CalculationUtil calculationUtil = new CalculationUtil();
 
     /**
      * Instantiates a new official co2 sensor with official enocean spec scales
      */
     public CO2Sensor() {
-        this.rangeMaxCO2 = OFFICIAL_BYTE_RANGE_MAX_CO2_TEMP;
-        this.rangeMinCO2 = OFFICIAL_BYTE_RANGE_MIN;
-        this.rangeMaxHumidity = OFFICIAL_BYTE_RANGE_MAX_HUMIDITY;
-        this.rangeMinHumidity = OFFICIAL_BYTE_RANGE_MIN;
-        this.rangeMaxTemp = OFFICIAL_BYTE_RANGE_MAX_CO2_TEMP;
-        this.rangeMinTemp = OFFICIAL_BYTE_RANGE_MIN;
+        rangeMaxCO2 = OFFICIAL_BYTE_RANGE_MAX_CO2_TEMP;
+        rangeMinCO2 = OFFICIAL_BYTE_RANGE_MIN;
+        rangeMaxHumidity = OFFICIAL_BYTE_RANGE_MAX_HUMIDITY;
+        rangeMinHumidity = OFFICIAL_BYTE_RANGE_MIN;
+        rangeMaxTemp = OFFICIAL_BYTE_RANGE_MAX_CO2_TEMP;
+        rangeMinTemp = OFFICIAL_BYTE_RANGE_MIN;
 
-        this.scaleMaxCO2 = OFFICIAL_SCALE_MAX_C02;
-        this.scaleMinCO2 = OFFICIAL_SCALE_MIN;
-        this.scaleMaxHumidity = OFFICIAL_SCALE_MAX_HUMIDITY;
-        this.scaleMinHumidity = OFFICIAL_SCALE_MIN;
-        this.scaleMaxTemp = OFFICIAL_SCALE_MAX_TEMP;
-        this.scaleMinTemp = OFFICIAL_SCALE_MIN;
+        scaleMaxCO2 = OFFICIAL_SCALE_MAX_C02;
+        scaleMinCO2 = OFFICIAL_SCALE_MIN;
+        scaleMaxHumidity = OFFICIAL_SCALE_MAX_HUMIDITY;
+        scaleMinHumidity = OFFICIAL_SCALE_MIN;
+        scaleMaxTemp = OFFICIAL_SCALE_MAX_TEMP;
+        scaleMinTemp = OFFICIAL_SCALE_MIN;
     }
 
     /**
@@ -117,9 +91,8 @@ public class CO2Sensor implements EEPParser {
      * @param scaleMaxHumidity
      *            the scale max humidity
      */
-    public CO2Sensor(float rangeMinCO2, float rangeMaxCO2, float rangeMinTemp, float rangeMaxTemp, float rangeMinHumidity,
-            float rangeMaxHumidity, float scaleMinCO2, float scaleMaxCO2, float scaleMinTemp, float scaleMaxTemp, float scaleMinHumidity,
-            float scaleMaxHumidity) {
+    public CO2Sensor(int rangeMinCO2, int rangeMaxCO2, int rangeMinTemp, int rangeMaxTemp, int rangeMinHumidity, int rangeMaxHumidity,
+            int scaleMinCO2, int scaleMaxCO2, int scaleMinTemp, int scaleMaxTemp, int scaleMinHumidity, int scaleMaxHumidity) {
 
         this.rangeMinCO2 = rangeMinCO2;
         this.rangeMaxCO2 = rangeMaxCO2;
@@ -136,28 +109,6 @@ public class CO2Sensor implements EEPParser {
     }
 
     /**
-     * Calculates linear value of byte in the scale
-     * 
-     * @param source
-     *            the source
-     * @param scaleMin
-     *            the scale min
-     * @param scaleMax
-     *            the scale max
-     * @param byteRangeMin
-     *            the byte range min
-     * @param byteRangeMax
-     *            the byte range max
-     * @return the value in the scale
-     */
-    private float calculateValue(byte source, float scaleMin, float scaleMax, float byteRangeMin, float byteRangeMax) {
-
-        int rawValue = source & 0xFF;
-        float multiplier = (scaleMax - scaleMin) / (byteRangeMax - byteRangeMin);
-        return multiplier * (rawValue - byteRangeMin) + scaleMin;
-    }
-
-    /**
      * Parses DB2 for CO2 , DB3 for Humidity , DB1 for Temperature
      */
     @Override
@@ -165,26 +116,17 @@ public class CO2Sensor implements EEPParser {
         Map<EnoceanParameterAddress, Value> map = new HashMap<EnoceanParameterAddress, Value>();
         if (packet instanceof RadioPacket4BS) {
             RadioPacket4BS radioPacket4BS = (RadioPacket4BS) packet;
-
-            byte source = radioPacket4BS.getDb2();
-            this.currentValueC02 = this.calculateValue(source, this.scaleMinCO2, this.scaleMaxCO2, this.rangeMinCO2, this.rangeMaxCO2);
-
-            source = radioPacket4BS.getDb1();
-            this.currentValueTemperature = this.calculateValue(source, this.scaleMinTemp, this.scaleMaxTemp, this.rangeMinTemp,
-                    this.rangeMaxTemp);
-
-            source = radioPacket4BS.getDb3();
-            this.currentValueHumidity = this.calculateValue(source, this.scaleMinHumidity, this.scaleMaxHumidity, this.rangeMinHumidity,
-                    this.rangeMaxHumidity);
-
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_CO2), new NumberWithUnit(Unit.PPM,
-                    (int) this.currentValueC02));
-
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_TEMPERATURE), new NumberWithUnit(
-                    Unit.DEGREE_CELSIUS, (int) this.currentValueTemperature));
-
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_HUMIDITY), new NumberWithUnit(Unit.HUMIDITY,
-                    (int) this.currentValueHumidity));
+            BigDecimal co2 = calculationUtil.rangeValue(radioPacket4BS.getDb2(), scaleMinCO2, scaleMaxCO2, rangeMinCO2, rangeMaxCO2, 4);
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.CO2_CONCENTRATION), new NumberWithUnit(Unit.PPM,
+                    co2));
+            BigDecimal temperature = calculationUtil.rangeValue(radioPacket4BS.getDb1(), scaleMinTemp, scaleMaxTemp, rangeMinTemp,
+                    rangeMaxTemp, 3);
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.TEMPERATURE), new NumberWithUnit(
+                    Unit.DEGREE_CELSIUS, temperature));
+            BigDecimal humidity = calculationUtil.rangeValue(radioPacket4BS.getDb2(), scaleMinHumidity, scaleMaxHumidity, rangeMinHumidity,
+                    rangeMaxHumidity, 3);
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.HUMIDITY), new NumberWithUnit(Unit.HUMIDITY,
+                    humidity));
         }
         return map;
     }

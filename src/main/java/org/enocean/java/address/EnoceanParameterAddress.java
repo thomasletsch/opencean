@@ -1,6 +1,7 @@
 package org.enocean.java.address;
 
 import org.enocean.java.common.ParameterAddress;
+import org.enocean.java.eep.Parameter;
 
 public class EnoceanParameterAddress implements ParameterAddress {
 
@@ -13,9 +14,16 @@ public class EnoceanParameterAddress implements ParameterAddress {
         this.parameterId = parameterId;
     }
 
+    public EnoceanParameterAddress(EnoceanId enoceanId, Parameter parameter) {
+        this(enoceanId, parameter.name());
+    }
+
+    public EnoceanParameterAddress(EnoceanId enoceanId, String channelId, Parameter parameter) {
+        this(enoceanId, channelId, parameter.name());
+    }
+
     public EnoceanParameterAddress(EnoceanId enoceanId, String channelId, String parameterId) {
-        this.deviceId = enoceanId;
-        this.channelId = channelId;
+        this(enoceanId, parameterId);
         this.parameterId = parameterId;
     }
 

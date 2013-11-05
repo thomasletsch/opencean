@@ -31,8 +31,6 @@ public class EnoluzCO2Sensor implements EEPParser {
 
     private static final float BYTE_RANGE_MAX = 255f;
 
-    public static final String PARAMETER_ID = "CO2_CONCENTRATION";
-
     private float scaleMin;
 
     private float scaleMax;
@@ -50,7 +48,6 @@ public class EnoluzCO2Sensor implements EEPParser {
     public EnoluzCO2Sensor(float scaleMin, float scaleMax) {
         this.scaleMin = scaleMin;
         this.scaleMax = scaleMax;
-
     }
 
     /**
@@ -87,7 +84,7 @@ public class EnoluzCO2Sensor implements EEPParser {
 
             this.currentValue = this.calculateValue(source, this.scaleMin, this.scaleMax, BYTE_RANGE_MIN, BYTE_RANGE_MAX);
 
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.LUX,
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.CO2_CONCENTRATION), new NumberWithUnit(Unit.PPM,
                     (int) this.currentValue));
         }
         return map;

@@ -18,11 +18,6 @@ public class LightTempertureAndOccupancySensor implements EEPParser {
 
     public static final EEPId EEP_ID = new EEPId("A5:08:02");
 
-    public static final String PARAMETER_ID = "TEMPERATURE";
-    public static final String PARAMETER_ID2 = "ILLUMINATION";
-    public static final String PARAMETER_ID3 = "SUPPLY_VOLTAGE";
-    public static final String PARAMETER_ID4 = "MOVEMENT";
-
     private static Logger logger = LoggerFactory.getLogger(LightTempertureAndOccupancySensor.class);
 
     private LearnButtonState learnButton;
@@ -39,14 +34,14 @@ public class LightTempertureAndOccupancySensor implements EEPParser {
             byte db2 = radioPacket4BS.getDb2();
             byte db3 = radioPacket4BS.getDb3();
 
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.DEGREE_CELSIUS,
-                    calculationUtil.calculateRangeValue(db1, 0, 51, 0, 255, 3)));
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID2),
-                    new NumberWithUnit(Unit.LUX, calculationUtil.calculateRangeValue(db2, 0, 1020, 0, 255, 4)));
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID3), new NumberWithUnit(Unit.VOLTAGE,
-                    calculationUtil.calculateRangeValue(db3, 0, 5.1, 0, 255, 2)));
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.TEMPERATURE), new NumberWithUnit(
+                    Unit.DEGREE_CELSIUS, calculationUtil.rangeValue(db1, 0, 51, 0, 255, 3)));
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.ILLUMINANCE), new NumberWithUnit(Unit.LUX,
+                    calculationUtil.rangeValue(db2, 0, 1020, 0, 255, 4)));
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.POWER), new NumberWithUnit(Unit.VOLTAGE,
+                    calculationUtil.rangeValue(db3, 0, 5.1, 0, 255, 2)));
             ContactState contact = ContactState.values()[(db0 & 0x02) >> 1];
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID4), contact);
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.MOVEMENT), contact);
             learnButton = LearnButtonState.values()[(db0 & 0x08) >> 3];
         }
         return map;

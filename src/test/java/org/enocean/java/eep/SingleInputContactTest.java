@@ -33,8 +33,8 @@ public class SingleInputContactTest {
         SingleInputContact sic = new SingleInputContact();
         Map<EnoceanParameterAddress, Value> values = sic.parsePacket(basicPacket);
         assertEquals("size", 2, values.size());
-        assertContainsReturnValue(values, ContactState.OPEN, SingleInputContact.PARAMETER_ID);
-        assertContainsReturnValue(values, ButtonState.RELEASED, SingleInputContact.PARAMETER_LEARN_BUTTON);
+        assertContainsReturnValue(values, ContactState.OPEN, Parameter.CONTACT_STATE.name());
+        assertContainsReturnValue(values, ButtonState.RELEASED, Parameter.LEARN_BUTTON.name());
     }
 
     @Test
@@ -44,8 +44,8 @@ public class SingleInputContactTest {
         SingleInputContact sic = new SingleInputContact();
         Map<EnoceanParameterAddress, Value> values = sic.parsePacket(basicPacket);
         assertEquals("size", 2, values.size());
-        assertContainsReturnValue(values, ContactState.CLOSED, SingleInputContact.PARAMETER_ID);
-        assertContainsReturnValue(values, ButtonState.RELEASED, SingleInputContact.PARAMETER_LEARN_BUTTON);
+        assertContainsReturnValue(values, ContactState.CLOSED, Parameter.CONTACT_STATE.name());
+        assertContainsReturnValue(values, ButtonState.RELEASED, Parameter.LEARN_BUTTON.name());
     }
 
     private void assertContainsReturnValue(Map<EnoceanParameterAddress, Value> values, Value expectedValue, String expectedParameterId) {

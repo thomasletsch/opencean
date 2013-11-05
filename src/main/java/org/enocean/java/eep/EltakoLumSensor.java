@@ -45,8 +45,6 @@ public class EltakoLumSensor implements EEPParser {
 
     public static final String MANUFACTURER_ID = "16#00D";
 
-    public static final String PARAMETER_ID = "LUMINOSITY";
-
     private float scaleMin;
 
     private float scaleMax;
@@ -127,7 +125,7 @@ public class EltakoLumSensor implements EEPParser {
                         BYTE_RANGE_MIN, BYTE_RANGE_MAX);
             }
 
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.LUX,
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.ILLUMINANCE), new NumberWithUnit(Unit.LUX,
                     (int) this.currentValue));
         }
         return map;

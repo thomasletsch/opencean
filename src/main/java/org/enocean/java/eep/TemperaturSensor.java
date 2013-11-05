@@ -19,11 +19,6 @@ public class TemperaturSensor implements EEPParser {
 
     public static final EEPId EEP_ID_3 = new EEPId("A5:07:03");
 
-    public static final String PARAMETER_ID = "TEMPERATURE";
-    public static final String PARAMETER_ID2 = "BRIGHTNESS";
-    public static final String PARAMETER_ID3 = "BATTERY";
-    public static final String PARAMETER_ID4 = "MOVEMENT";
-
     private static Logger logger = LoggerFactory.getLogger(TemperaturSensor.class);
 
     private static final int RANGE_MIN = 255;
@@ -50,8 +45,8 @@ public class TemperaturSensor implements EEPParser {
         if (packet instanceof RadioPacket4BS) {
             RadioPacket4BS radioPacket4BS = (RadioPacket4BS) packet;
             byte db1 = radioPacket4BS.getDb1();
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), PARAMETER_ID), new NumberWithUnit(Unit.DEGREE_CELSIUS,
-                    calculationUtil.calculateRangeValue(db1, scaleMin, scaleMax, RANGE_MIN, RANGE_MAX, 3)));
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.TEMPERATURE), new NumberWithUnit(
+                    Unit.DEGREE_CELSIUS, calculationUtil.rangeValue(db1, scaleMin, scaleMax, RANGE_MIN, RANGE_MAX, 3)));
         }
         return map;
     }
