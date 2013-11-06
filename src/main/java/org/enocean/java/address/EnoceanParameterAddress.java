@@ -9,8 +9,12 @@ public class EnoceanParameterAddress implements ParameterAddress {
     private String channelId;
     private String parameterId;
 
-    public EnoceanParameterAddress(EnoceanId enoceanId, String parameterId) {
+    public EnoceanParameterAddress(EnoceanId enoceanId) {
         this.deviceId = enoceanId;
+    }
+
+    public EnoceanParameterAddress(EnoceanId enoceanId, String parameterId) {
+        this(enoceanId);
         this.parameterId = parameterId;
     }
 
@@ -24,7 +28,7 @@ public class EnoceanParameterAddress implements ParameterAddress {
 
     public EnoceanParameterAddress(EnoceanId enoceanId, String channelId, String parameterId) {
         this(enoceanId, parameterId);
-        this.parameterId = parameterId;
+        this.channelId = channelId;
     }
 
     @Override
