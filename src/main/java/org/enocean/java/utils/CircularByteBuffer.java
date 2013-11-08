@@ -28,13 +28,16 @@ public class CircularByteBuffer {
         buffer = new byte[size];
     }
 
-    public synchronized byte get() {
+    public byte get() {
         waitForData();
-        byte result = buffer[readPos];
-        currentSize--;
-        readPos++;
-        if (readPos >= buffer.length) {
-            readPos = 0;
+        byte result;
+        synchronized (buffer) {
+            result = buffer[readPos];
+            currentSize--;
+            readPos++;
+            if (readPos >= buffer.length) {
+                readPos = 0;
+            }
         }
         return result;
     }
@@ -63,12 +66,14 @@ public class CircularByteBuffer {
         }
     }
 
-    public synchronized void put(byte b) {
-        buffer[writePos] = b;
-        writePos++;
-        currentSize++;
-        if (writePos >= buffer.length) {
-            writePos = 0;
+    public void put(byte b) {
+        synchronized (buffer) {
+            buffer[writePos] = b;
+            writePos++;
+            currentSize++;
+            if (writePos >= buffer.length) {
+                writePos = 0;
+            }
         }
     }
 

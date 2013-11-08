@@ -16,6 +16,52 @@ public class CircularByteBufferTest {
     }
 
     @Test
+    public void testReadAndWriteParallel() {
+        WriteThreeBytesThread writeThread = new WriteThreeBytesThread(buffer);
+        writeThread.start();
+        assertEquals(10, buffer.get());
+        assertEquals(20, buffer.get());
+        assertEquals(30, buffer.get());
+    }
+
+    @Test
+    public void testReadWriteAndResetParallel() {
+        WriteThreeBytesThread writeThread = new WriteThreeBytesThread(buffer);
+        writeThread.start();
+        assertEquals(10, buffer.get());
+        buffer.reset();
+        assertEquals(10, buffer.get());
+        assertEquals(20, buffer.get());
+        assertEquals(30, buffer.get());
+    }
+
+    private static class WriteThreeBytesThread extends Thread {
+
+        private CircularByteBuffer buffer;
+
+        public WriteThreeBytesThread(CircularByteBuffer buffer) {
+            this.buffer = buffer;
+        }
+
+        @Override
+        public void run() {
+            buffer.put((byte) 10);
+            sleep();
+            buffer.put((byte) 20);
+            sleep();
+            buffer.put((byte) 30);
+        }
+
+        private void sleep() {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+            }
+        }
+
+    }
+
+    @Test
     public void testGet() {
         byte i = 5;
         buffer.put(i);
