@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.EEPId;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.ContactState;
 import org.enocean.java.common.values.NumberWithUnit;
 import org.enocean.java.common.values.Unit;
@@ -18,12 +20,6 @@ import org.slf4j.LoggerFactory;
 public class PowerSensor implements EEPParser {
 
     private static Logger logger = LoggerFactory.getLogger(PowerSensor.class);
-    /**
-     * Electronic switches and Type dimmers 0x08 (description: with Energy
-     * Measurement see table) and Local Control
-     */
-    public static final EEPId EEP_ID = new EEPId("D2:01:08");
-
     private BigDecimal currentValue;
     private EEPId eep;
 

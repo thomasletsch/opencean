@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.NumberWithUnit;
 import org.enocean.java.common.values.Unit;
 import org.enocean.java.common.values.Value;
@@ -20,8 +21,6 @@ import org.enocean.java.packets.RadioPacket4BS;
  * @author Nicolas Bonnefond INRIA
  */
 public class VOCSensor implements EEPParser {
-    public static final EEPId EEP_ID = new EEPId("A5:09:05");
-
     private static final float OFFICIAL_CONCENTRATION_BYTE_RANGE_MIN = 0f;
 
     private static final float OFFICIAL_CONCENTRATION_BYTE_RANGE_MAX = 65535f;

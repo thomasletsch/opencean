@@ -1,7 +1,7 @@
 package org.enocean.java.address;
 
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.ParameterAddress;
-import org.enocean.java.eep.Parameter;
 
 public class EnoceanParameterAddress implements ParameterAddress {
 

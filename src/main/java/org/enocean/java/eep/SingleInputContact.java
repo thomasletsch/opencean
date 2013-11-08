@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.ButtonState;
 import org.enocean.java.common.values.ContactState;
 import org.enocean.java.common.values.Value;
@@ -12,8 +13,6 @@ import org.enocean.java.packets.RadioPacket1BS;
 import org.enocean.java.utils.Bits;
 
 public class SingleInputContact implements EEPParser {
-
-    public static final EEPId EEP_ID = new EEPId("D5:00:01");
 
     @Override
     public Map<EnoceanParameterAddress, Value> parsePacket(BasicPacket packet) {

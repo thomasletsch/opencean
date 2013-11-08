@@ -1,6 +1,22 @@
-package org.enocean.java.eep;
+package org.enocean.java.common;
 
 public class EEPId {
+
+    /** Deprecated EEP_ID but still sent by captor (EltakoLumSensor) */
+    public static final EEPId EEP_07_06_01 = new EEPId("07:06:01");
+    public static final EEPId EEP_A5_02_05 = new EEPId("A5:02:05");
+    public static final EEPId EEP_A5_07_03 = new EEPId("A5:07:03");
+    public static final EEPId EEP_A5_08_02 = new EEPId("A5:08:02");
+    public static final EEPId EEP_A5_09_04_enoluz = new EEPId("A5:09:04", "enoluz");
+    public static final EEPId EEP_A5_09_05 = new EEPId("A5:09:05");
+    /**
+     * Electronic switches and Type dimmers 0x08 (description: with Energy
+     * Measurement see table) and Local Control
+     */
+    public static final EEPId EEP_D2_01_08 = new EEPId("D2:01:08");
+    public static final EEPId EEP_D5_00_01 = new EEPId("D5:00:01");
+    public static final EEPId EEP_F6_02_01 = new EEPId("F6:02:01");
+    public static final EEPId EEP_F6_02_02 = new EEPId("F6:02:02");
 
     private String id;
 

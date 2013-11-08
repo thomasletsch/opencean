@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.EEPId;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.NumberWithUnit;
 import org.enocean.java.common.values.Unit;
 import org.enocean.java.common.values.Value;
@@ -14,10 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TemperaturSensor implements EEPParser {
-
-    public static final EEPId EEP_ID = new EEPId("A5:02:05");
-
-    public static final EEPId EEP_ID_3 = new EEPId("A5:07:03");
 
     private static Logger logger = LoggerFactory.getLogger(TemperaturSensor.class);
 

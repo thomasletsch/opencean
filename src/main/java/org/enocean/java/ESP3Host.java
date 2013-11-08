@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.enocean.java.address.EnoceanId;
+import org.enocean.java.common.EEPId;
 import org.enocean.java.common.ParameterValueChangeListener;
 import org.enocean.java.common.ProtocolConnector;
-import org.enocean.java.eep.EEPId;
 import org.enocean.java.packets.BasicPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.enocean.java.PacketFactory;
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.ButtonState;
 import org.enocean.java.common.values.ContactState;
 import org.enocean.java.common.values.Value;

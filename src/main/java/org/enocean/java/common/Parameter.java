@@ -1,4 +1,4 @@
-package org.enocean.java.eep;
+package org.enocean.java.common;
 
 public enum Parameter {
 

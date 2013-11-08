@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.EEPId;
 import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.RadioPacket4BS;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class TemperaturSensorTest {
 
     @Test
     public void readPacketMax() {
-        EEPParser sensor = new TemperaturSensor(0, 40, TemperaturSensor.EEP_ID);
+        EEPParser sensor = new TemperaturSensor(0, 40, EEPId.EEP_A5_02_05);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 255);
         Map<EnoceanParameterAddress, Value> values = sensor.parsePacket(packet);
@@ -24,7 +25,7 @@ public class TemperaturSensorTest {
 
     @Test
     public void readPacketMin() {
-        EEPParser sensor = new TemperaturSensor(0, 40, TemperaturSensor.EEP_ID);
+        EEPParser sensor = new TemperaturSensor(0, 40, EEPId.EEP_A5_02_05);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 0);
         Map<EnoceanParameterAddress, Value> values = sensor.parsePacket(packet);
@@ -34,7 +35,7 @@ public class TemperaturSensorTest {
 
     @Test
     public void readPacket112() {
-        EEPParser sensor = new TemperaturSensor(0, 40, TemperaturSensor.EEP_ID);
+        EEPParser sensor = new TemperaturSensor(0, 40, EEPId.EEP_A5_02_05);
         RadioPacket4BS packet = new RadioPacket4BS();
         packet.setDb1((byte) 112);
         Map<EnoceanParameterAddress, Value> values = sensor.parsePacket(packet);

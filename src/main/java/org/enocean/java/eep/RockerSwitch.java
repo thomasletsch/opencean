@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.ButtonState;
 import org.enocean.java.common.values.Value;
 import org.enocean.java.packets.BasicPacket;
@@ -16,8 +17,6 @@ public class RockerSwitch implements EEPParser {
 
     private static Logger logger = LoggerFactory.getLogger(RockerSwitch.class);
 
-    public static final EEPId EEP_ID_1 = new EEPId("F6:02:01");
-    public static final EEPId EEP_ID_2 = new EEPId("F6:02:02");
     public static final String CHANNEL_A = "A";
     public static final String CHANNEL_B = "B";
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.NumberWithUnit;
 import org.enocean.java.common.values.Unit;
 import org.enocean.java.common.values.Value;
@@ -27,9 +28,6 @@ import org.enocean.java.packets.RadioPacket4BS;
  * @author Nicolas Bonnefond INRIA
  */
 public class EltakoLumSensor implements EEPParser {
-
-    /** Deprecated EEP_ID but still sent by captor */
-    public static final EEPId EEP_ID = new EEPId("07:06:01");
 
     private static final float BYTE_RANGE_MIN = 0f;
 

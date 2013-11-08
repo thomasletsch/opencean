@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.enocean.java.address.EnoceanParameterAddress;
+import org.enocean.java.common.Parameter;
 import org.enocean.java.common.values.NumberWithUnit;
 import org.enocean.java.common.values.Unit;
 import org.enocean.java.common.values.Value;
@@ -24,8 +25,6 @@ import org.enocean.java.packets.RadioPacket4BS;
  * @author Nicolas Bonnefond INRIA
  */
 public class EnoluzCO2Sensor implements EEPParser {
-
-    public static final EEPId EEP_ID = new EEPId("A5:09:04", "enoluz");
 
     private static final float BYTE_RANGE_MIN = 0;
 
