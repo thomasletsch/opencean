@@ -21,7 +21,7 @@ public class SingleInputContact implements EEPParser {
             RadioPacket1BS radioPacket1BS = (RadioPacket1BS) packet;
             ContactState contact = ContactState.values()[Bits.getBit(radioPacket1BS.getDataByte(), 0)];
             map.put(new EnoceanParameterAddress(radioPacket1BS.getSenderId(), Parameter.CONTACT_STATE), contact);
-            ButtonState learnButton = Bits.getBool(radioPacket1BS.getDataByte(), 4) ? ButtonState.PRESSED : ButtonState.RELEASED;
+            ButtonState learnButton = Bits.getBool(radioPacket1BS.getDataByte(), 3) ? ButtonState.RELEASED : ButtonState.PRESSED;
             map.put(new EnoceanParameterAddress(radioPacket1BS.getSenderId(), Parameter.LEARN_BUTTON), learnButton);
         }
         return map;
