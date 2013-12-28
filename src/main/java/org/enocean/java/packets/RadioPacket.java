@@ -9,9 +9,6 @@ public class RadioPacket extends BasicPacket {
 
     public static final byte PACKET_TYPE = 0x01;
 
-    public static final byte RADIO_TYPE_4BS = (byte) 0xA5;
-    public static final byte RADIO_TYPE_VLD = (byte) 0xD2;
-
     private EnoceanId senderId;
     private int repeaterCount;
     private byte status;
@@ -64,6 +61,7 @@ public class RadioPacket extends BasicPacket {
         this.dBm = dBm;
         this.securityLevel = securityLevel;
         header.setPacketType(PACKET_TYPE);
+        fillOptionalData();
     }
 
     @Override
@@ -73,14 +71,6 @@ public class RadioPacket extends BasicPacket {
         senderId = EnoceanId.fromByteArray(data, length - 5);
         status = data[length - 1];
         repeaterCount = (status & 0x0F);
-    }
-
-    @Override
-    protected void fillData() {
-        ByteArray wrapper = new ByteArray();
-        wrapper.addBytes(senderId.toBytes());
-        wrapper.addByte(status);
-        payload.setData(wrapper.getArray());
     }
 
     @Override

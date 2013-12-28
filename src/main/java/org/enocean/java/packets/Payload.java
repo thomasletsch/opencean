@@ -26,7 +26,8 @@ public class Payload {
     }
 
     public Payload() {
-
+        data = new byte[] {};
+        optionalData = new byte[] {};
     }
 
     public void initCRC8() {
@@ -71,7 +72,7 @@ public class Payload {
     public String toString() {
         return "Payload: " + "data=" + new ByteArray(getData()) + ", optionaldata=" + new ByteArray(getOptionalData()) + ", crc8d=" + crc8;
     }
-
+    
     private byte calculateCrc8() {
         CRC8 crc8 = new CRC8();
         if (data != null) {
