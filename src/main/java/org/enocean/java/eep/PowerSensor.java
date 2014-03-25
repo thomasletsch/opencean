@@ -25,7 +25,6 @@ public class PowerSensor implements EEPParser {
 
     public PowerSensor(EEPId eep) {
         this.eep = eep;
-        logger.info("new Power sensor, eep " + eep.getId());
     }
 
     @Override

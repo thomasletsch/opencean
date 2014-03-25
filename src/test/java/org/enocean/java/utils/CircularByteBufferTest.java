@@ -26,9 +26,9 @@ public class CircularByteBufferTest {
 
     @Test
     public void testReadWriteAndResetParallel() {
+        buffer.mark();
         WriteThreeBytesThread writeThread = new WriteThreeBytesThread(buffer);
         writeThread.start();
-        buffer.mark();
         assertEquals(10, buffer.get());
         buffer.reset();
         assertEquals(10, buffer.get());

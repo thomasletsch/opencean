@@ -32,7 +32,6 @@ public class TemperaturSensor extends RadioPacket4BSParser {
         this.scaleMin = scaleMin;
         this.scaleMax = scaleMax;
         this.eep = eep;
-        logger.info("new Temp sensor, eep " + eep.getId());
     }
 
     @Override
