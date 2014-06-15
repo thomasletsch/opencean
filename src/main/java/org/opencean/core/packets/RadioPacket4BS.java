@@ -51,7 +51,7 @@ public class RadioPacket4BS extends RadioPacket {
     }
 
     public boolean isTeachInMode() {
-        return Bits.isBitSet(db0, 4);
+        return !Bits.isBitSet(db0, 3);
     }
 
     @Override

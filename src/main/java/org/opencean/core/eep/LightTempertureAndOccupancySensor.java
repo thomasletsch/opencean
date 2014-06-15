@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.opencean.core.address.EnoceanParameterAddress;
 import org.opencean.core.common.Parameter;
-import org.opencean.core.common.values.ContactState;
 import org.opencean.core.common.values.NumberWithUnit;
+import org.opencean.core.common.values.OnOffState;
 import org.opencean.core.common.values.Unit;
 import org.opencean.core.common.values.Value;
 import org.opencean.core.packets.BasicPacket;
@@ -39,11 +39,10 @@ public class LightTempertureAndOccupancySensor implements EEPParser {
                     calculationUtil.rangeValue(db2, 0, 1020, 0, 255, 4)));
             map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.POWER), new NumberWithUnit(Unit.VOLTAGE,
                     calculationUtil.rangeValue(db3, 0, 5.1, 0, 255, 2)));
-            ContactState contact = ContactState.values()[(db0 & 0x02) >> 1];
-            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.MOVEMENT), contact);
+            OnOffState movement = OnOffState.values()[(db0 & 0x02) >> 1];
+            map.put(new EnoceanParameterAddress(radioPacket4BS.getSenderId(), Parameter.MOVEMENT), movement);
             learnButton = LearnButtonState.values()[(db0 & 0x08) >> 3];
         }
         return map;
     }
-
 }
