@@ -48,4 +48,30 @@ public class Bits {
         return mask;
     }
 
+    /**
+     * Get a range of bits from a byte.
+     *
+     * @param in The input byte the bit range should be taken from.
+     * @param startBit The bit position the one(s) should begin. The value must
+     * be between 0 and 7, and be at least as large as @endBit.
+     * @param endBit The bit position the one(s) should begin. The value must be
+     * between 0 and 7, and must not be greater then @startBit.
+     * @param shift Flag if the output should be shifted, so the extracted range
+     * started on bit 0.
+     * @return Return a range of bits extracted from a input byte.
+     */
+    public static byte getBitsFromByte(final byte in, int startBit, int endBit, boolean shift) {
+        assert startBit <= 7;
+        assert endBit <= 7;
+        assert startBit >= endBit;
+
+        byte out = (byte) (in & getSetBits(startBit, endBit));
+        if (shift) {
+            /* We need to do an unsigned byte shift. */
+            out = (byte) ((out & 0xFF) >>> endBit);
+        }
+
+        return out;
+    }
+
 }
