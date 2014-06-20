@@ -27,4 +27,25 @@ public class Bits {
         return b;
     }
 
+    /**
+     * Generate a byte with given bit range set and rest bits unset.
+     *
+     * @param startBit The bit position the one(s) should begin. The value must
+     * be between 0 and 7, and be at least as large as @endBit.
+     * @param endBit The bit position the one(s) should begin. The value must be
+     * between 0 and 7, and must not be greater then @startBit.
+     * @return Return a byte with only given bit range set.
+     */
+    public static byte getSetBits(int startBit, int endBit) {
+        assert startBit <= 7;
+        assert endBit <= 7;
+        assert startBit >= endBit;
+
+        final byte mask1 = (byte) ((1 << (startBit + 1)) - 1);
+        final byte mask2 = (byte) ((1 << (endBit)) - 1);
+        final byte mask = (byte) (mask1 ^ mask2);
+
+        return mask;
+    }
+
 }

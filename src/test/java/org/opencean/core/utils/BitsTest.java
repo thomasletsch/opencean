@@ -56,4 +56,15 @@ public class BitsTest {
         assertEquals(1, Bits.setBit(b, 1, false));
     }
 
+    @Test
+    public void testGetOneBits() {
+        assertEquals((byte) 0xFF, Bits.getSetBits(7, 0));
+        assertEquals((byte) 0xFE, Bits.getSetBits(7, 1));
+        assertEquals((byte) 0x7F, Bits.getSetBits(6, 0));
+        assertEquals((byte) 0x3C, Bits.getSetBits(5, 2));
+        assertEquals((byte) 0x80, Bits.getSetBits(7, 7));
+        assertEquals((byte) 0x10, Bits.getSetBits(4, 4));
+        assertEquals((byte) 0x01, Bits.getSetBits(0, 0));
+    }
+
 }
