@@ -21,7 +21,7 @@ public class PacketDataEEPA50802 extends PacketData4BS {
     public static final Unit SUPPLY_VOLTAGE_UNIT = Unit.VOLTAGE;
 
     public static final int ILLUMINATION_RANGE_MIN = 0;
-    public static final int ILLUMINATION_RANGE_MAX = 1020;
+    public static final int ILLUMINATION_RANGE_MAX = 255;
     public static final double ILLUMINATION_SCALE_MIN = 0;
     public static final double ILLUMINATION_SCALE_MAX = 510;
     public static final Unit ILLUMINATION_UNIT = Unit.LUX;
