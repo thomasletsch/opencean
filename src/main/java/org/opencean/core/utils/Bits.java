@@ -113,4 +113,49 @@ public class Bits {
         return extr;
     }
 
+    private static long setBitsOfBytesUtil(long value, byte[] data, int pos, int startBit, int endBit) {
+        int numOfBits = startBit + 1 - endBit;
+        data[pos] &= ~getSetBits(startBit, endBit);
+        long mask = 0xFF & getSetBits(numOfBits - 1, 0);
+        data[pos] |= (value & mask) << endBit;
+        return value >>> numOfBits;
+    }
+
+    /**
+     * Set a value in to a range of bits in a byte array.
+     *
+     * @param value The value that should be stored in the byte array.
+     * @param data The byte array that should be modified.
+     * @param startByte The byte position the insertion should be begin.
+     * @param startBit The bit position in the start byte the insertion should be begin.
+     * @param endByte The byte position the insertion should be end.
+     * @param endBit The bit position of in the end byte the insertion should be end.
+     * @return Return true if the whole value could be stored.
+     */
+    public static boolean setBitsOfBytes(long value, byte[] data, int startByte, int startBit, int endByte, int endBit) {
+        if (startByte == endByte) {
+            value = setBitsOfBytesUtil(value, data, startByte, startBit, endBit);
+        } else {
+            for (int i = endByte; i >= startByte; --i) {
+                int localStartBit;
+                int localEndBit;
+
+                if (i == startByte) {
+                    localStartBit = startBit;
+                    localEndBit = 0;
+                } else if (i == endByte) {
+                    localStartBit = 7;
+                    localEndBit = endBit;
+                } else {
+                    localStartBit = 7;
+                    localEndBit = 0;
+                }
+
+                value = setBitsOfBytesUtil(value, data, i, localStartBit, localEndBit);
+            }
+        }
+
+        return value == 0;
+    }
+
 }
