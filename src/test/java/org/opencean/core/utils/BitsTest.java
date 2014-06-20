@@ -79,4 +79,23 @@ public class BitsTest {
         assertEquals((byte) 0x02, Bits.getBitsFromByte((byte) 0x03, 1, 1, false));
     }
 
+    @Test
+    public void testGetBitsInRange() {
+        /*
+         * 0b10110110 = 0xB6
+         * 0b01001110 = 0x4E
+         */
+
+        final byte[] testInput = {(byte) 0xB6, (byte) 0x4E};
+
+        assertEquals(0xB64E, Bits.getBitsFromBytes(testInput, 0, 7, 1, 0));
+        assertEquals(0xB6, Bits.getBitsFromBytes(testInput, 0, 7, 0, 0));
+        assertEquals(0x4E, Bits.getBitsFromBytes(testInput, 1, 7, 1, 0));
+        assertEquals(0x64, Bits.getBitsFromBytes(testInput, 0, 3, 1, 4));
+        assertEquals(0x0B, Bits.getBitsFromBytes(testInput, 0, 7, 0, 4));
+        assertEquals(0x06, Bits.getBitsFromBytes(testInput, 0, 3, 0, 0));
+        assertEquals(0x04, Bits.getBitsFromBytes(testInput, 1, 7, 1, 4));
+        assertEquals(0x0E, Bits.getBitsFromBytes(testInput, 1, 3, 1, 0));
+    }
+
 }

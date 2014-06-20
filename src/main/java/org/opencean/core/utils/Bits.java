@@ -74,4 +74,43 @@ public class Bits {
         return out;
     }
 
+    /**
+     * Get a range of bits from a byte array.
+     *
+     * @param data The input byte the bit range should be taken from.
+     * @param startByte The byte position the extraction should be begin.
+     * @param startBit The bit position in the start byte the extraction should be begin.
+     * @param endByte The byte position the extraction should be end.
+     * @param endBit The bit position of in the end byte the extraction should be end.
+     * @return Return a value that should contain the bits in the given range.
+     */
+    public static long getBitsFromBytes(final byte[] data, int startByte, int startBit, int endByte, int endBit) {
+        long extr = 0;
+
+        if (startByte == endByte) {
+            extr = 0xFF & getBitsFromByte(data[startByte], startBit, endBit, true);
+        } else {
+            for (int i = startByte; i <= endByte; ++i) {
+                extr <<= 8;
+
+                if (i == startByte) {
+                    /*
+                     * Use all bits lower and equal then startBit.
+                     */
+                    extr |= 0xFF & getBitsFromByte(data[i], startBit, 0, true);
+                } else if (i == endByte) {
+                    /*
+                     * Use all bits higher and equal then endBit.
+                     */
+                    extr |= 0xFF & getBitsFromByte(data[i], 7, endBit, false);
+                    extr >>>= endBit;
+                } else {
+                    extr |= 0xFF & data[i];
+                }
+            }
+        }
+
+        return extr;
+    }
+
 }
