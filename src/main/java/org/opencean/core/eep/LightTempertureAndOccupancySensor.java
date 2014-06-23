@@ -14,7 +14,9 @@ import org.opencean.core.common.values.Value;
 import org.opencean.core.packets.BasicPacket;
 import org.opencean.core.packets.RadioPacket4BS;
 import org.opencean.core.packets.data.PacketDataEEPA508;
+import org.opencean.core.packets.data.PacketDataEEPA50801;
 import org.opencean.core.packets.data.PacketDataEEPA50802;
+import org.opencean.core.packets.data.PacketDataEEPA50803;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +38,12 @@ public class LightTempertureAndOccupancySensor implements EEPParser {
 
             PacketDataEEPA508 eepA508;
 
-            if (eep == EEPId.EEP_A5_08_02) {
+            if (eep == EEPId.EEP_A5_08_01) {
+                eepA508 = new PacketDataEEPA50801(radioPacket4BS.getEEPData());
+            } else if (eep == EEPId.EEP_A5_08_02) {
                 eepA508 = new PacketDataEEPA50802(radioPacket4BS.getEEPData());
+            } else if (eep == EEPId.EEP_A5_08_03) {
+                eepA508 = new PacketDataEEPA50803(radioPacket4BS.getEEPData());
             } else {
                 logger.warn(String.format("Unknown EEP (%s).", eep.getId()));
                 return map;
