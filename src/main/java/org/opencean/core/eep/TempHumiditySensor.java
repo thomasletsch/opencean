@@ -18,7 +18,7 @@ public class TempHumiditySensor extends RadioPacket4BSParser {
     private static final Logger logger = LoggerFactory.getLogger(TempHumiditySensor.class);
 
     private static final int RANGE_MIN = 0;
-    private static final int RANGE_MAX = 255;
+    private static final int RANGE_MAX = 250;
 
     private final int scaleMinHum;
     private final int scaleMaxHum;
