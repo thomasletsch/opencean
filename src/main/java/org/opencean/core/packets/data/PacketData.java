@@ -42,7 +42,7 @@ public class PacketData {
         return Bits.getBitsFromBytes(data, realStartByte, startBit, realEndByte, endBit);
     }
     
-    protected boolean setDataRange(long value, int startDB, int startBit, int endDB, int endBit) {
+    protected void setDataRange(long value, int startDB, int startBit, int endDB, int endBit) {
         // e.g. db3.5 ... db2.7
         assert startDB >= endDB || (startDB == endDB && startBit >= endBit);
         assert startDB <= data.length - 1;
@@ -50,6 +50,6 @@ public class PacketData {
         final int realStartByte = convPosDbToReal(startDB);
         final int realEndByte = convPosDbToReal(endDB);
 
-        return Bits.setBitsOfBytes(value, data, realStartByte, startBit, realEndByte, endBit);
+        Bits.setBitsOfBytes(value, data, realStartByte, startBit, realEndByte, endBit);
     }
 }
