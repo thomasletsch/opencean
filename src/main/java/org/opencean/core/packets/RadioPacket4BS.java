@@ -8,12 +8,10 @@ public class RadioPacket4BS extends RadioPacket {
 
     public static final int DATA_LENGTH = 10;
 
-    private byte db0;
-    private byte db1;
-    private byte db2;
-    private byte db3;
+    private byte[] db;
 
     public RadioPacket4BS() {
+        db = new byte[4];
     }
 
     public RadioPacket4BS(RawPacket rawPacket) {
@@ -24,39 +22,53 @@ public class RadioPacket4BS extends RadioPacket {
     protected void parseData() {
         super.parseData();
         byte[] data = payload.getData();
-        db3 = data[1];
-        db2 = data[2];
-        db1 = data[3];
-        db0 = data[4];
+        db[0] = data[1];
+        db[1] = data[2];
+        db[2] = data[3];
+        db[3] = data[4];
+        //db = Arrays.copyOfRange(data, 1, 5);
     }
 
     public byte getDb0() {
-        return db0;
+        return db[3];
+    }
+
+    private void setDb0(final byte db0) {
+        db[3] = db0;
     }
 
     public byte getDb1() {
-        return db1;
+        return db[2];
+    }
+
+    private void setDb1(final byte db1) {
+        db[2] = db1;
     }
 
     public byte getDb2() {
-        return db2;
+        return db[1];
     }
 
     public byte getDb3() {
-        return db3;
+        return db[0];
     }
 
-    public void setDb1(byte db1) {
-        this.db1 = db1;
+    public byte[] getEEPData() {
+        return db;
+    }
+
+    public void setTestData(byte db0, byte db1) {
+        setDb1(db1);
+        setDb0(db0);
     }
 
     public boolean isTeachInMode() {
-        return !Bits.isBitSet(db0, 3);
+        return !Bits.isBitSet(getDb0(), 3);
     }
 
     @Override
     public String toString() {
         return super.toString()
-                + String.format(", [db0=%02X, db1=%02X, db2=%02X, db3=%02X, teachIn=%s]", db0, db1, db2, db3, isTeachInMode());
+                + String.format(", [db0=%02X, db1=%02X, db2=%02X, db3=%02X, teachIn=%s]", getDb0(), getDb1(), getDb2(), getDb3(), isTeachInMode());
     }
 }
