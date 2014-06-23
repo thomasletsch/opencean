@@ -123,16 +123,16 @@ public class Bits {
 
     /**
      * Set a value in to a range of bits in a byte array.
-     *
+     * The value must not be larger then bit range could encode.
      * @param value The value that should be stored in the byte array.
      * @param data The byte array that should be modified.
      * @param startByte The byte position the insertion should be begin.
      * @param startBit The bit position in the start byte the insertion should be begin.
      * @param endByte The byte position the insertion should be end.
      * @param endBit The bit position of in the end byte the insertion should be end.
-     * @return Return true if the whole value could be stored.
+     * @throws IllegalArgumentException The value does not fit in the given bit range.
      */
-    public static boolean setBitsOfBytes(long value, byte[] data, int startByte, int startBit, int endByte, int endBit) {
+    public static void setBitsOfBytes(long value, byte[] data, int startByte, int startBit, int endByte, int endBit) {
         if (startByte == endByte) {
             value = setBitsOfBytesUtil(value, data, startByte, startBit, endBit);
         } else {
@@ -155,7 +155,9 @@ public class Bits {
             }
         }
 
-        return value == 0;
+        if (value != 0) {
+            throw new IllegalArgumentException(String.format("The value does not fit in the bit range (remaining: %d)", value));
+        }
     }
 
 }
