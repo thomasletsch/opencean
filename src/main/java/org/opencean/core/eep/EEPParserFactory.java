@@ -19,11 +19,11 @@ public class EEPParserFactory {
         parser.put(EEPId.EEP_A5_08_03, new LightTempertureAndOccupancySensor(EEPId.EEP_A5_08_03));
         parser.put(EEPId.EEP_A5_07_03, new OccupancySensor(EEPId.EEP_A5_07_03));
         parser.put(EEPId.EEP_A5_09_04, new CO2Sensor(EEPId.EEP_A5_09_04));
+        parser.put(EEPId.EEP_A5_09_05, new VOCSensor(EEPId.EEP_A5_09_05));
         parser.put(EEPId.EEP_F6_02_01, new RockerSwitch());
         parser.put(EEPId.EEP_F6_02_02, new RockerSwitch());
         parser.put(EEPId.EEP_D5_00_01, new SingleInputContact());
         parser.put(EEPId.EEP_07_06_01, new EltakoLumSensor());
-        parser.put(EEPId.EEP_A5_09_05, new VOCSensor());
     }
 
     public EEPParser getParserFor(EEPId profile) {
