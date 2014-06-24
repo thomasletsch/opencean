@@ -17,7 +17,7 @@ public class EEPParserFactory {
         parser.put(EEPId.EEP_A5_08_01, new LightTempertureAndOccupancySensor(EEPId.EEP_A5_08_01));
         parser.put(EEPId.EEP_A5_08_02, new LightTempertureAndOccupancySensor(EEPId.EEP_A5_08_02));
         parser.put(EEPId.EEP_A5_08_03, new LightTempertureAndOccupancySensor(EEPId.EEP_A5_08_03));
-        parser.put(EEPId.EEP_A5_07_03, new OccupancySensor());
+        parser.put(EEPId.EEP_A5_07_03, new OccupancySensor(EEPId.EEP_A5_07_03));
         parser.put(EEPId.EEP_F6_02_01, new RockerSwitch());
         parser.put(EEPId.EEP_F6_02_02, new RockerSwitch());
         parser.put(EEPId.EEP_D5_00_01, new SingleInputContact());
