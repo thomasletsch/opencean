@@ -21,10 +21,8 @@ public class TemperaturSensor extends RadioPacket4BSParser {
 
     private static final Logger logger = LoggerFactory.getLogger(TemperaturSensor.class);
 
-    private final EEPId eep;
-
     public TemperaturSensor(EEPId eep) {
-        this.eep = eep;
+        super(eep);
     }
 
     @Override

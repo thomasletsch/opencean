@@ -20,10 +20,8 @@ public class TempHumiditySensor extends RadioPacket4BSParser {
 
     private static final Logger logger = LoggerFactory.getLogger(TempHumiditySensor.class);
 
-    private final EEPId eep;
-
     public TempHumiditySensor(EEPId eep) {
-        this.eep = eep;
+        super(eep);
     }
 
     @Override
