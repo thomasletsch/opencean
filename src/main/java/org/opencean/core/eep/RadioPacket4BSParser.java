@@ -4,11 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.opencean.core.address.EnoceanParameterAddress;
+import org.opencean.core.common.EEPId;
 import org.opencean.core.common.values.Value;
 import org.opencean.core.packets.BasicPacket;
 import org.opencean.core.packets.RadioPacket4BS;
 
-public abstract class RadioPacket4BSParser implements EEPParser {
+public abstract class RadioPacket4BSParser extends RadioPacketParser {
+
+    public RadioPacket4BSParser(EEPId eep) {
+        super(eep);
+    }
 
     protected abstract void parsePacket(Map<EnoceanParameterAddress, Value> values, RadioPacket4BS packet);
 
