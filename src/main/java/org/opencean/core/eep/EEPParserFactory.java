@@ -22,7 +22,7 @@ public class EEPParserFactory {
         parser.put(EEPId.EEP_F6_02_02, new RockerSwitch());
         parser.put(EEPId.EEP_D5_00_01, new SingleInputContact());
         parser.put(EEPId.EEP_07_06_01, new EltakoLumSensor());
-        parser.put(CO2Sensor.EEP_ID, new CO2Sensor());
+        parser.put(EEPId.EEP_A5_09_04, new CO2Sensor());
         parser.put(EEPId.EEP_A5_09_05, new VOCSensor());
     }
 

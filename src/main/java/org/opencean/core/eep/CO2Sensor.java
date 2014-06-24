@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.opencean.core.address.EnoceanParameterAddress;
-import org.opencean.core.common.EEPId;
 import org.opencean.core.common.Parameter;
 import org.opencean.core.common.values.NumberWithUnit;
 import org.opencean.core.common.values.Unit;
@@ -20,8 +19,6 @@ import org.opencean.core.packets.RadioPacket4BS;
  * @author Nicolas Bonnefond INRIA
  */
 public class CO2Sensor implements EEPParser {
-
-    public static final EEPId EEP_ID = new EEPId("A5:09:04");
 
     public static int OFFICIAL_SCALE_MIN = 0;
     public static int OFFICIAL_SCALE_MAX_HUMIDITY = 100;
