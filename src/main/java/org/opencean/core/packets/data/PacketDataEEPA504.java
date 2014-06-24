@@ -31,7 +31,7 @@ public class PacketDataEEPA504 extends PacketData4BS {
         this.temperatureScaleMax = temperatureScaleMax;
     }
 
-    public double getHumidity() {
+    public double getHumidity() throws PacketDataScaleValueException {
         return getScaleValue(2, 7, 2, 0, HUMIDITY_RANGE_MIN, HUMIDITY_RANGE_MAX, humidityScaleMin, humidityScaleMax);
     }
 
@@ -39,7 +39,7 @@ public class PacketDataEEPA504 extends PacketData4BS {
         return HUMIDITY_UNIT;
     }
 
-    public double getTemperature() {
+    public double getTemperature() throws PacketDataScaleValueException {
         return getScaleValue(1, 7, 1, 0, TEMPERATURE_RANGE_MIN, TEMPERATURE_RANGE_MAX, temperatureScaleMin, temperatureScaleMax);
     }
 

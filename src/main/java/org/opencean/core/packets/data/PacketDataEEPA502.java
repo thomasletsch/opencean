@@ -33,7 +33,7 @@ public class PacketDataEEPA502 extends PacketData4BS {
         this.tempScaleMax = tempScaleMax;
     }
 
-    public double getTemperature() {
+    public double getTemperature() throws PacketDataScaleValueException {
         return getScaleValue(tempStartDB, tempStartBit, tempEndDB, tempEndBit,
                 tempRangeMin, tempRangeMax,
                 tempScaleMin, tempScaleMax);

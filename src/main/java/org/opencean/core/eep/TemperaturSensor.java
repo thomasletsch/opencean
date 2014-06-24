@@ -13,6 +13,7 @@ import org.opencean.core.packets.RadioPacket4BS;
 import org.opencean.core.packets.data.PacketDataEEPA502;
 import org.opencean.core.packets.data.PacketDataEEPA50205;
 import org.opencean.core.packets.data.PacketDataEEPA50220;
+import org.opencean.core.packets.data.PacketDataScaleValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,12 @@ public class TemperaturSensor extends RadioPacket4BSParser {
             return;
         }
 
-        values.put(new EnoceanParameterAddress(packet.getSenderId(), Parameter.TEMPERATURE),
-                new NumberWithUnit(PacketDataEEPA502.TEMPERATURE_UNIT, new BigDecimal(eepA502.getTemperature(), new MathContext(3))));
+        try {
+            values.put(new EnoceanParameterAddress(packet.getSenderId(), Parameter.TEMPERATURE),
+                       new NumberWithUnit(PacketDataEEPA502.TEMPERATURE_UNIT, new BigDecimal(eepA502.getTemperature(), new MathContext(3))));
+        } catch (PacketDataScaleValueException ex) {
+            logger.warn("Temperature failed", ex);
+        }
+
     }
 }

@@ -12,6 +12,7 @@ import org.opencean.core.common.values.Value;
 import org.opencean.core.packets.RadioPacket4BS;
 import org.opencean.core.packets.data.PacketDataEEPA504;
 import org.opencean.core.packets.data.PacketDataEEPA50401;
+import org.opencean.core.packets.data.PacketDataScaleValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +41,20 @@ public class TempHumiditySensor extends RadioPacket4BSParser {
             return;
         }
 
-        values.put(new EnoceanParameterAddress(packet.getSenderId(), Parameter.HUMIDITY),
-                   new NumberWithUnit(msg.getHumidityUnit(), new BigDecimal(msg.getHumidity(), new MathContext(3))));
+        try {
+            values.put(new EnoceanParameterAddress(packet.getSenderId(), Parameter.HUMIDITY),
+                       new NumberWithUnit(msg.getHumidityUnit(), new BigDecimal(msg.getHumidity(), new MathContext(3))));
+        } catch (PacketDataScaleValueException ex) {
+            logger.warn("Humidity failed", ex);
+        }
 
         if (msg.isTemperatureAvailable()) {
-            values.put(new EnoceanParameterAddress(packet.getSenderId(), Parameter.TEMPERATURE),
-                       new NumberWithUnit(msg.getTemperatureUnit(), new BigDecimal(msg.getTemperature(), new MathContext(3))));
+            try {
+                values.put(new EnoceanParameterAddress(packet.getSenderId(), Parameter.TEMPERATURE),
+                           new NumberWithUnit(msg.getTemperatureUnit(), new BigDecimal(msg.getTemperature(), new MathContext(3))));
+            } catch (PacketDataScaleValueException ex) {
+                logger.warn("Temperature failed", ex);
+            }
         }
     }
 }
