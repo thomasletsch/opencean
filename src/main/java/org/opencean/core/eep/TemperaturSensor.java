@@ -12,6 +12,7 @@ import org.opencean.core.common.values.Value;
 import org.opencean.core.packets.RadioPacket4BS;
 import org.opencean.core.packets.data.PacketDataEEPA502;
 import org.opencean.core.packets.data.PacketDataEEPA50205;
+import org.opencean.core.packets.data.PacketDataEEPA50220;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,8 @@ public class TemperaturSensor extends RadioPacket4BSParser {
 
         if (eep == EEPId.EEP_A5_02_05) {
             eepA502 = new PacketDataEEPA50205(packet.getEEPData());
+        } else if (eep == EEPId.EEP_A5_02_20) {
+            eepA502 = new PacketDataEEPA50220(packet.getEEPData());
         } else {
             logger.warn(String.format("Unknown EEP (%s).", eep.getId()));
             return;
