@@ -20,7 +20,9 @@ public class EEPId {
     public static final EEPId EEP_D5_00_01 = new EEPId("D5:00:01");
     public static final EEPId EEP_F6_02_01 = new EEPId("F6:02:01");
     public static final EEPId EEP_F6_02_02 = new EEPId("F6:02:02");
-
+    /** window handle */
+    public static final EEPId EEP_F6_10_00 = new EEPId("F6:10:00");
+    
     private String id;
 
     /**
