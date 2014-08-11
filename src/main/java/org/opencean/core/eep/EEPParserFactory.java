@@ -20,6 +20,7 @@ public class EEPParserFactory {
         parser.put(EEPId.EEP_07_06_01, new EltakoLumSensor());
         parser.put(CO2Sensor.EEP_ID, new CO2Sensor());
         parser.put(EEPId.EEP_A5_09_05, new VOCSensor());
+        parser.put(EEPId.EEP_A5_11_04, new ExtendedLightingStatus());
     }
 
     public EEPParser getParserFor(EEPId profile) {

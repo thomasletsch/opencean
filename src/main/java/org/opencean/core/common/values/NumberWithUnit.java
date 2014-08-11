@@ -10,6 +10,10 @@ public class NumberWithUnit implements Value {
         this.unit = unit;
         this.value = value;
     }
+    
+    public Unit getUnit() {
+    	return unit;
+    }
 
     @Override
     public Object getValue() {

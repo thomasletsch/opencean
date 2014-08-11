@@ -18,8 +18,11 @@ public class EEPId {
     public static final EEPId EEP_F6_02_01 = new EEPId("F6:02:01");
     public static final EEPId EEP_F6_02_02 = new EEPId("F6:02:02");
 
-    private String id;
+    public static final EEPId EEP_A5_11_04 = new EEPId("A5:11:04");
+    
+    
 
+    private String id;
     /**
      * Some devices do not behave exactly as specified in the EEP. They get a
      * variant (mostly manufacturer name) to separate them from the real EEP
