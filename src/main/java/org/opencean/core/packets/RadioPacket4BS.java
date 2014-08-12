@@ -22,6 +22,7 @@ public class RadioPacket4BS extends RadioPacket {
     protected void parseData() {
         super.parseData();
         byte[] data = payload.getData();
+        db = new byte[4];
         db[0] = data[1];
         db[1] = data[2];
         db[2] = data[3];
