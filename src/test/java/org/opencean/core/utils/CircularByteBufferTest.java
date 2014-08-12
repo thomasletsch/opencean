@@ -52,6 +52,7 @@ public class CircularByteBufferTest {
             buffer.put((byte) 20);
             sleep();
             buffer.put((byte) 30);
+            buffer.stop();
         }
 
         private void sleep() {
