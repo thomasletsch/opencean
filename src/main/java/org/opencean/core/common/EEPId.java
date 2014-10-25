@@ -20,11 +20,12 @@ public class EEPId {
     public static final EEPId EEP_D5_00_01 = new EEPId("D5:00:01");
     public static final EEPId EEP_F6_02_01 = new EEPId("F6:02:01");
     public static final EEPId EEP_F6_02_02 = new EEPId("F6:02:02");
+    public static final EEPId EEP_A5_11_04 = new EEPId("A5:11:04");
+
     /** window handle */
     public static final EEPId EEP_F6_10_00 = new EEPId("F6:10:00");
     
     private String id;
-
     /**
      * Some devices do not behave exactly as specified in the EEP. They get a
      * variant (mostly manufacturer name) to separate them from the real EEP
