@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.opencean.core.packets.data;
 
+import org.opencean.core.eep.CalculationUtil;
 import org.opencean.core.utils.Bits;
 
 /**
@@ -41,7 +37,7 @@ public class PacketData {
 
         return Bits.getBitsFromBytes(data, realStartByte, startBit, realEndByte, endBit);
     }
-    
+
     protected void setDataRange(long value, int startDB, int startBit, int endDB, int endBit) {
         // e.g. db3.5 ... db2.7
         assert startDB >= endDB || (startDB == endDB && startBit >= endBit);
@@ -51,5 +47,13 @@ public class PacketData {
         final int realEndByte = convPosDbToReal(endDB);
 
         Bits.setBitsOfBytes(value, data, realStartByte, startBit, realEndByte, endBit);
+    }
+
+    protected double getScaleValue(int startDB, int startBit, int endDB, int endBit,
+                                   long rangeMin, long rangeMax,
+                                   double scaleMin, double scaleMax) {
+        final long range = getDataRange(startDB, startBit, endDB, endBit);
+        final double scale = CalculationUtil.rangeToScale(range, rangeMin, rangeMax, scaleMin, scaleMax);
+        return scale;
     }
 }

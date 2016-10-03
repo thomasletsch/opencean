@@ -5,6 +5,7 @@ public class EEPId {
     /** Deprecated EEP_ID but still sent by captor (EltakoLumSensor) */
     public static final EEPId EEP_07_06_01 = new EEPId("07:06:01");
     public static final EEPId EEP_A5_02_05 = new EEPId("A5:02:05");
+    public static final EEPId EEP_A5_02_20 = new EEPId("A5:02:20");
     public static final EEPId EEP_A5_04_01 = new EEPId("A5:04:01");
     public static final EEPId EEP_A5_07_03 = new EEPId("A5:07:03");
     public static final EEPId EEP_A5_08_01 = new EEPId("A5:08:01");
